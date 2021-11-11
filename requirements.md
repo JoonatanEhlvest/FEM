@@ -24,8 +24,6 @@
 -   FR-C-4 - As an user, I want to see a label on the midpoint of a **connection**, to see the type of relationships between a **process** and an **asset**.
 -   FR-C-5 - As an user, I want to be able to standardize the naming of **connection** labels by providing a set of relationships, so that I can imporve the understandability of models.
 
----
-
 ## Non-functional requirements
 
 -   NFR-1 - Files should be draggable from the users filesystem to the browser for upload.

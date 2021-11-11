@@ -18,8 +18,6 @@
 
 ## Front-end
 
----
-
 ### UI
 
 -   **React** - https://www.npmjs.com/package/react
@@ -40,8 +38,6 @@
 
 ## Back-end
 
----
-
 -   **Express** - https://expressjs.com/
     -   Minimal, flexible web application framework
     -   Big variety of HTTP utilities
@@ -51,8 +47,6 @@
 -   How to make a div act like an infinitely scrollable canvas.
 -   User authentication, authorization?
 -   Persist XML files?
-
----
 
 ## Version control
 
