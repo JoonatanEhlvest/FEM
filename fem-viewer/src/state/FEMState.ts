@@ -1,11 +1,13 @@
+import Model from "./types/Model";
+
 export default interface FEMState {
-	count: number;
-	title: string;
+	models: Array<Model>;
+	currentModel: Model | undefined;
 }
 
 const initialState: FEMState = {
-	count: 0,
-	title: "FEM viewer",
+	models: [],
+	currentModel: undefined,
 };
 
 export { initialState };

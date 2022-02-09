@@ -2,11 +2,17 @@ import React from "react";
 import useFEM from "../state/useFEM";
 
 const ModelTree = () => {
-	const { count, title } = useFEM();
+	const { getModelTree, setCurrentModel } = useFEM();
+
 	return (
 		<div>
-			<h1>{title}</h1>
-			<p>same count: {count}</p>
+			{getModelTree().map((model) => (
+				<div>
+					<p onClick={() => setCurrentModel(model.id)}>
+						{model.name}
+					</p>
+				</div>
+			))}
 		</div>
 	);
 };
