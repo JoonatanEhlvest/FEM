@@ -1,10 +1,12 @@
 import axios from "axios";
 import { XMLParser } from "fast-xml-parser";
 import React, { useEffect } from "react";
-import ModelTree from "./ModelTree";
-import Viewer from "./Viewer";
-import XMLData from "../assets/BMI.xml";
-import useFEM from "../state/useFEM";
+import ModelTree from "../modelTree/ModelTree";
+import Viewer from "../viewer/Viewer";
+import XMLData from "../../assets/BMI.xml";
+import useFEM from "../../state/useFEM";
+import styles from "./appContainer.module.css";
+import Details from "../details/Details";
 
 const getModelAttrs = (jObj: any) => {
 	const names: { [key: string]: number } = {};
@@ -46,9 +48,10 @@ const AppContainer = () => {
 	}, []);
 
 	return (
-		<div>
+		<div className={styles["app-container-container"]}>
 			<ModelTree />
 			<Viewer />
+			<Details />
 		</div>
 	);
 };

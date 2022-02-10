@@ -1,5 +1,5 @@
 import "./App.css";
-import AppContainer from "./components/AppContainer";
+import AppContainer from "./components/appContainer/AppContainer";
 import FEMProvider from "./state/FEMProvider";
 
 function App() {

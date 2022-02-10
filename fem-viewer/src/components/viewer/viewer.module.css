@@ -1,0 +1,5 @@
+.viewer-container {
+	background-color: teal;
+	grid-row: 1 / -1;
+	grid-column: 3 / -1;
+}

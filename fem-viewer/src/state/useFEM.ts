@@ -64,6 +64,9 @@ const useFEM = () => {
 	};
 
 	const setCurrentModel = (id: Model["id"]) => {
+		if (id === getCurrentModel()?.id) {
+			return;
+		}
 		setState((prevState) => ({
 			...prevState,
 			currentModel: state.models.find((m) => m.id === id),
