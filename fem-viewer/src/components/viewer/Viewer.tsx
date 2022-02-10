@@ -1,4 +1,3 @@
-import React from "react";
 import useFEM from "../../state/useFEM";
 import styles from "./viewer.module.css";
 

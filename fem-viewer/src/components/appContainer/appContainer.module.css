@@ -1,9 +1,25 @@
 .app-container-container {
 	height: 100%;
 	width: 100%;
+	display: flex;
+	flex-direction: row;
+}
 
-	display: grid;
-	grid-template-columns: repeat(6, 1fr);
-	grid-template-rows: 1fr 1fr 1fr;
-	grid-auto-flow: row;
+.app-container-sidebar-container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	position: relative;
+	/* To resize with acutal pixels using react-resizable */
+	flex-grow: 0;
+	flex-shrink: 0;
+}
+
+.model-tree-handle {
+	position: absolute;
+	right: 0;
+	top: calc(50% - 50px);
+	width: 10px;
+	height: 100px;
+	background-color: black;
 }

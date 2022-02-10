@@ -1,5 +1,6 @@
 .details-container {
-	background-color: yellow;
-	grid-row: 3 / 4;
-	grid-column: 1 / 3;
+	width: 100%;
+	height: 100%;
+	background-color: yellowgreen;
+	position: relative;
 }

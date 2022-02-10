@@ -1,8 +1,11 @@
-import React from "react";
 import styles from "./details.module.css";
 
 const Details = () => {
-	return <div className={styles["details-container"]}>Details</div>;
+	return (
+		<div style={{ flexGrow: 1 }}>
+			<div className={styles["details-container"]}>Details</div>
+		</div>
+	);
 };
 
 export default Details;

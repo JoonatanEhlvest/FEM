@@ -1,12 +1,13 @@
 import axios from "axios";
 import { XMLParser } from "fast-xml-parser";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ModelTree from "../modelTree/ModelTree";
 import Viewer from "../viewer/Viewer";
 import XMLData from "../../assets/BMI.xml";
 import useFEM from "../../state/useFEM";
 import styles from "./appContainer.module.css";
 import Details from "../details/Details";
+import { Resizable, ResizeCallbackData } from "react-resizable";
 
 const getModelAttrs = (jObj: any) => {
 	const names: { [key: string]: number } = {};
@@ -28,6 +29,13 @@ const getModelAttrs = (jObj: any) => {
 const AppContainer = () => {
 	const { addModel } = useFEM();
 
+	const [state, setState] = useState(() => {
+		const appWidth = window.innerWidth;
+		return {
+			width: appWidth * 0.25,
+		};
+	});
+
 	const options = {
 		ignoreAttributes: false,
 		attributeNamePrefix: "@_",
@@ -47,11 +55,36 @@ const AppContainer = () => {
 		});
 	}, []);
 
+	const onResize = (
+		event: React.SyntheticEvent,
+		data: ResizeCallbackData
+	) => {
+		setState((prevState) => {
+			return {
+				...prevState,
+				width: data.size.width,
+			};
+		});
+	};
+
 	return (
 		<div className={styles["app-container-container"]}>
-			<ModelTree />
+			<Resizable
+				height={0}
+				width={state.width}
+				handle={<div className={styles["model-tree-handle"]}></div>}
+				onResize={onResize}
+			>
+				<div
+					className={styles["app-container-sidebar-container"]}
+					style={{ flexBasis: state.width }}
+				>
+					<ModelTree />
+					<Details />
+				</div>
+			</Resizable>
+
 			<Viewer />
-			<Details />
 		</div>
 	);
 };
