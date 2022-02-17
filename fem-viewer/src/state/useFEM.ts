@@ -5,6 +5,10 @@ import Connector from "./types/Connector";
 import Instance from "./types/Instance";
 import Model from "./types/Model";
 
+type XMLObj = {
+	[key: string]: string | number;
+};
+
 const useFEM = () => {
 	const [state, setState] = useContext(FEMContext);
 
@@ -14,39 +18,51 @@ const useFEM = () => {
 		);
 	}
 
-	const tryGetAttr = (jsonObj: { [key: string]: string }, attr: string) => {
+	const tryGetStrAttr = (jsonObj: XMLObj, attr: string): string => {
 		const attrWithPrefix = "@_" + attr;
 		if (jsonObj[attrWithPrefix] !== undefined) {
-			return jsonObj[attrWithPrefix];
+			const value = jsonObj[attrWithPrefix];
+			return String(value);
 		} else {
 			return "";
 		}
 	};
 
-	const getInstances = (instances: {
-		[key: string]: string | number;
-	}): Array<Instance> => {
+	const tryGetNumAttr = (jsonObj: XMLObj, attr: string): number => {
+		const attrWithPrefix = "@_" + attr;
+		if (jsonObj[attrWithPrefix] !== undefined) {
+			const value = jsonObj[attrWithPrefix];
+			return Number(value);
+		} else {
+			return 0;
+		}
+	};
+
+	const getInstances = (instances: Array<XMLObj>): Array<Instance> => {
+		instances.forEach((XMLInstance) => {
+			// const instance: Instance = {
+			// 	id: tryGetStrAttr(XMLInstance, "id"),
+			// 	fontSize: tryGetNumAttr(XMLInstance, "fontSize"),
+			// };
+		});
 		return [];
 	};
 
-	const getConnectors = (instances: {
-		[key: string]: string | number;
-	}): Array<Connector> => {
+	const getConnectors = (connectors: Array<XMLObj>): Array<Connector> => {
 		return [];
 	};
 
 	const addModel = (model: any) => {
 		const modelToAdd: Model = {
-			id: tryGetAttr(model, "id"),
-			applib: tryGetAttr(model, "applib"),
-			modeltype: tryGetAttr(model, "modeltype"),
-			name: tryGetAttr(model, "name"),
-			version: tryGetAttr(model, "version"),
-			libtype: tryGetAttr(model, "libtype"),
-			connectors: getConnectors(model),
-			instances: getInstances(model),
+			id: tryGetStrAttr(model, "id"),
+			applib: tryGetStrAttr(model, "applib"),
+			modeltype: tryGetStrAttr(model, "modeltype"),
+			name: tryGetStrAttr(model, "name"),
+			version: tryGetStrAttr(model, "version"),
+			libtype: tryGetStrAttr(model, "libtype"),
+			connectors: getConnectors(model.CONNECTOR),
+			instances: getInstances(model.INSTANCE),
 		};
-		console.log(modelToAdd);
 		setState((prevState) => {
 			return {
 				...prevState,

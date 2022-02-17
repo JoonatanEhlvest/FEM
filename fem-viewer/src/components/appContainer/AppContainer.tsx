@@ -1,5 +1,3 @@
-import axios from "axios";
-import { XMLParser } from "fast-xml-parser";
 import React, { useEffect, useState } from "react";
 import ModelTree from "../modelTree/ModelTree";
 import Viewer from "../viewer/Viewer";
@@ -8,23 +6,8 @@ import useFEM from "../../state/useFEM";
 import styles from "./appContainer.module.css";
 import Details from "../details/Details";
 import { Resizable, ResizeCallbackData } from "react-resizable";
-
-const getModelAttrs = (jObj: any) => {
-	const names: { [key: string]: number } = {};
-	jObj.ADOXML.MODELS.MODEL.forEach((element: any) => {
-		const attrs = element.MODELATTRIBUTES.ATTRIBUTE;
-		attrs.forEach((attr: any) => {
-			const name = attr["@_name"];
-			if (names[name]) {
-				names[name] += 1;
-			} else {
-				names[name] = 1;
-			}
-		});
-	});
-
-	console.log(names);
-};
+import Parser from "../../parser";
+import createParser from "../../parser";
 
 const AppContainer = () => {
 	const { addModel } = useFEM();
@@ -36,23 +19,22 @@ const AppContainer = () => {
 		};
 	});
 
-	const options = {
-		ignoreAttributes: false,
-		attributeNamePrefix: "@_",
-	};
-	const parser = new XMLParser(options);
-
 	useEffect(() => {
-		axios.get(XMLData).then((res) => {
-			const xml: string = res.data;
-			const jObj = parser.parse(xml);
+		createParser(XMLData)
+			.then((parser) => {
+				if (parser == null) {
+					console.error("Couldn't create parser");
+					return;
+				}
+				console.log(parser._parsedXML);
 
-			const models: Array<any> = jObj.ADOXML.MODELS.MODEL;
-
-			models.forEach((model) => {
-				addModel(model);
+				parser.getModels().forEach((model: any) => {
+					addModel(model);
+				});
+			})
+			.catch((err) => {
+				console.log(err);
 			});
-		});
 	}, []);
 
 	const onResize = (

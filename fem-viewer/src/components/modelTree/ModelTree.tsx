@@ -33,7 +33,7 @@ const ModelTree = () => {
 					style={{ height: state.height }}
 				>
 					{getModelTree().map((model) => (
-						<div>
+						<div key={model.id}>
 							<p onClick={() => setCurrentModel(model.id)}>
 								{model.name}
 							</p>
