@@ -40,4 +40,5 @@ export default interface ModelAttributes {
 	type: string;
 	zoom: number;
 	worldArea: string;
+	viewableArea: string;
 }

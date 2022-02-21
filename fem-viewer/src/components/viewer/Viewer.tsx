@@ -1,4 +1,5 @@
 import useFEM from "../../state/useFEM";
+import Model from "../Model";
 import styles from "./viewer.module.css";
 
 const Viewer = () => {
@@ -8,7 +9,7 @@ const Viewer = () => {
 
 	return (
 		<div className={styles["viewer-container"]}>
-			Current Model: {model && <div>{model.name}</div>}
+			Current Model: {model && <Model model={model} />}
 		</div>
 	);
 };

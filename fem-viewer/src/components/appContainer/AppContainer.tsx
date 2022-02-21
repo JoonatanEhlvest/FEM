@@ -6,7 +6,6 @@ import useFEM from "../../state/useFEM";
 import styles from "./appContainer.module.css";
 import Details from "../details/Details";
 import { Resizable, ResizeCallbackData } from "react-resizable";
-import Parser from "../../parser";
 import createParser from "../../parser";
 
 const AppContainer = () => {

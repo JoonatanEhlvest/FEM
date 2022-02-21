@@ -10,6 +10,6 @@ export default interface Model {
 	name: string;
 	version: string;
 	connectors: Array<Connector>;
-	// attributes: Partial<ModelAttributes>;
+	attributes: Partial<ModelAttributes>;
 	instances: Array<Instance>;
 }

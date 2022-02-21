@@ -13,8 +13,15 @@ export default interface Instance {
 	fontSize: number;
 	fontStyle: string;
 
-	borderColor: string;
 	individualBGColor: string;
 	individualGhostBGColor: string;
-	reference: Reference;
+
+	// borderColor: string;
+	// reference: Reference;
 }
+
+const INSTANCE_DEFAULTS: { [key: string]: number | string } = {
+	fontsize: 10,
+};
+
+export { INSTANCE_DEFAULTS };

@@ -1,12 +1,15 @@
 import { useContext } from "react";
+import { addXMLAttrPrefix } from "../utlitity";
 import FEMContext from "./FEMContext";
 import FEMState from "./FEMState";
 import Connector from "./types/Connector";
-import Instance from "./types/Instance";
+import Instance, { INSTANCE_DEFAULTS } from "./types/Instance";
+import InstanceClass from "./types/InstanceClass";
 import Model from "./types/Model";
+import ModelAttributes from "./types/ModelAttributes";
 
 type XMLObj = {
-	[key: string]: string | number;
+	[key: string]: string | number | XMLObj;
 };
 
 const useFEM = () => {
@@ -18,8 +21,8 @@ const useFEM = () => {
 		);
 	}
 
-	const tryGetStrAttr = (jsonObj: XMLObj, attr: string): string => {
-		const attrWithPrefix = "@_" + attr;
+	const tryGetStrProperty = (jsonObj: XMLObj, attr: string): string => {
+		const attrWithPrefix = addXMLAttrPrefix(attr);
 		if (jsonObj[attrWithPrefix] !== undefined) {
 			const value = jsonObj[attrWithPrefix];
 			return String(value);
@@ -28,7 +31,7 @@ const useFEM = () => {
 		}
 	};
 
-	const tryGetNumAttr = (jsonObj: XMLObj, attr: string): number => {
+	const tryGetNumProperty = (jsonObj: XMLObj, attr: string): number => {
 		const attrWithPrefix = "@_" + attr;
 		if (jsonObj[attrWithPrefix] !== undefined) {
 			const value = jsonObj[attrWithPrefix];
@@ -38,30 +41,141 @@ const useFEM = () => {
 		}
 	};
 
+	const tryGetBoolAttr = (XMLattribute: XMLObj, attr: string): boolean => {
+		const attrWithPrefix = "@_" + attr;
+		const value = XMLattribute[attrWithPrefix];
+		if (value !== undefined && typeof value === "object") {
+			return value["#text"] === "Yes" ? true : false;
+		} else {
+			return false;
+		}
+	};
+
+	const tryGetStrAttr = (XMLattribute: XMLObj, attr: string): string => {
+		const value = XMLattribute[attr];
+		if (value !== undefined && typeof value === "object") {
+			return value["#text"] as string;
+		} else {
+			return "";
+		}
+	};
+
+	const tryGetNumAttr = (XMLattribute: XMLObj, attr: string): number => {
+		const value = XMLattribute[attr];
+		if (value !== undefined && typeof value === "object") {
+			return Number(value["#text"]);
+		} else {
+			return INSTANCE_DEFAULTS.hasOwnProperty(attr)
+				? Number(INSTANCE_DEFAULTS[attr])
+				: 0;
+		}
+	};
+
 	const getInstances = (instances: Array<XMLObj>): Array<Instance> => {
-		instances.forEach((XMLInstance) => {
-			// const instance: Instance = {
-			// 	id: tryGetStrAttr(XMLInstance, "id"),
-			// 	fontSize: tryGetNumAttr(XMLInstance, "fontSize"),
-			// };
+		const ret: Array<Instance> = instances.map((XMLInstance) => {
+			const attributes = XMLInstance.ATTRIBUTE as XMLObj;
+			const instance: Instance = {
+				id: tryGetStrProperty(XMLInstance, "id"),
+				class: tryGetStrProperty(XMLInstance, "class") as InstanceClass,
+				name: tryGetStrProperty(XMLInstance, "name"),
+				isGhost: tryGetBoolAttr(attributes, "isghost"),
+				isGroup: tryGetBoolAttr(attributes, "isgroup"),
+				position: tryGetStrAttr(attributes, "position"),
+				applyArchetype: tryGetStrAttr(attributes, "applyArchetype"),
+				description: tryGetStrAttr(attributes, "description"),
+				fontSize: tryGetNumAttr(attributes, "fontsize"),
+				fontStyle: tryGetStrAttr(attributes, "fontStyle"),
+				individualBGColor: tryGetStrAttr(
+					attributes,
+					"individualbackgroundcolor"
+				),
+				individualGhostBGColor: tryGetStrAttr(
+					attributes,
+					"individualghostbackgroundcolort"
+				),
+			};
+			return instance;
 		});
-		return [];
+		return ret;
 	};
 
 	const getConnectors = (connectors: Array<XMLObj>): Array<Connector> => {
-		return [];
+		const ret: Array<Connector> = connectors.map((XMLconnector) => {
+			const attributes = XMLconnector.ATTRIBUTE as XMLObj;
+			const from = XMLconnector.FROM as XMLObj;
+			const to = XMLconnector.TO as XMLObj;
+			const connector: Connector = {
+				id: tryGetStrProperty(XMLconnector, "id"),
+				class: tryGetStrProperty(XMLconnector, "class"),
+				fromId: tryGetStrProperty(from, "instance"),
+				toId: tryGetStrProperty(to, "instance"),
+				positions: tryGetStrAttr(attributes, "positions"),
+				appearance: tryGetStrAttr(attributes, "appearance"),
+				processType: tryGetStrAttr(attributes, "processtype"),
+			};
+			return connector;
+		});
+		return ret;
+	};
+
+	const getModelAttributes = (
+		modelAttributes: XMLObj
+	): Partial<ModelAttributes> => {
+		const f = (s: string): string => tryGetStrAttr(modelAttributes, s);
+
+		const ret: Partial<ModelAttributes> = {
+			accessState: f("accessstate"),
+			assetBGColor: f("assetbackgroundcolor"),
+			assetGhostBGColor: f("assetghostbackgroundcolor"),
+			assetGroupBGColor: f("assetgroupbackgroundcolor"),
+			Author: f("author"),
+			baseName: f("basename"),
+			changeCounter: tryGetNumAttr(modelAttributes, "changecounter"),
+			comment: f("comment"),
+			connectorMarks: f("connectormarks"),
+			contextOfVersion: f("contextofversion"),
+			creationDate: f("creationdate"),
+			currentMode: f("currentmode"),
+			currentPageLayout: f("currentpagelayout"),
+			lastChanged: f("datelastchanged"),
+			description: f("description"),
+			externalActorBGColor: f("externalactorbackgroundcolor"),
+			externalActorGhostBGColor: f("externalactorghostbackgroundcolor"),
+			externalActorGroupBGColor: f("externalactorgroupbackgroundcolor"),
+			fontSize: tryGetNumAttr(modelAttributes, "fontsize"),
+			lastUser: f("lastuser"),
+			modelType: f("modeltype"),
+			noteBGColor: f("notebackgroundcolor"),
+			noteGhostBGColor: f("noteghostbackgroundcolor"),
+			noteGroupBGColor: f("notegroupbackgroundcolor"),
+			PoolBGColor: f("poolbackgroundcolor"),
+			PoolGhostBGColor: f("poolghostbackgroundcolor"),
+			PoolGroupBGColor: f("poolgroupbackgroundcolor"),
+			position: f("position"),
+			ProcessBGColor: f("processbackgroundcolor"),
+			ProcessGhostBGColor: f("processghostbackgroundcolor"),
+			ProcessGroupBGColor: f("processgroupbackgroundcolor"),
+			state: f("state"),
+			type: f("type"),
+			worldArea: f("worldarea"),
+			viewableArea: f("viewablearea"),
+			zoom: tryGetNumAttr(modelAttributes, "zoom"),
+		};
+
+		return ret;
 	};
 
 	const addModel = (model: any) => {
 		const modelToAdd: Model = {
-			id: tryGetStrAttr(model, "id"),
-			applib: tryGetStrAttr(model, "applib"),
-			modeltype: tryGetStrAttr(model, "modeltype"),
-			name: tryGetStrAttr(model, "name"),
-			version: tryGetStrAttr(model, "version"),
-			libtype: tryGetStrAttr(model, "libtype"),
+			id: tryGetStrProperty(model, "id"),
+			applib: tryGetStrProperty(model, "applib"),
+			modeltype: tryGetStrProperty(model, "modeltype"),
+			name: tryGetStrProperty(model, "name"),
+			version: tryGetStrProperty(model, "version"),
+			libtype: tryGetStrProperty(model, "libtype"),
 			connectors: getConnectors(model.CONNECTOR),
 			instances: getInstances(model.INSTANCE),
+			attributes: getModelAttributes(model.MODELATTRIBUTES),
 		};
 		setState((prevState) => {
 			return {

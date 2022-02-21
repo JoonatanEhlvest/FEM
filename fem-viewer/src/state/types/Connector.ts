@@ -1,9 +1,11 @@
+import Instance from "./Instance";
+
 export default interface Connector {
 	id: string;
 	class: string;
-	fromId: string;
-	toId: string;
+	fromId: Instance["id"];
+	toId: Instance["id"];
 	positions: string;
 	appearance: string;
-	type: string;
+	processType: string;
 }
