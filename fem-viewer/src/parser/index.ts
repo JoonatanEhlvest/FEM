@@ -14,10 +14,10 @@ class Parser {
 	 * Remove whitespace and anything between brackets
 	 * Some attributes are in the form "Process Background Color (Process Background Color Hex Color)"
 	 * So to use them as object keys they need to be changed
-	 * @param s input string to sanitize
+	 * @param s input string to normalize
 	 * @returns santized string
 	 */
-	_sanitize(s: string): string {
+	_normalize(s: string): string {
 		return s.replace(/((\s)+)|(\(.*\))/g, "").toLowerCase();
 	}
 
@@ -27,14 +27,14 @@ class Parser {
 		const nameAttr = addXMLAttrPrefix("name");
 		if (Array.isArray(attributes)) {
 			attributes.forEach((attr: any) => {
-				const sanitizedName = this._sanitize(attr[nameAttr]);
-				flattened[sanitizedName] = attr;
-				delete flattened[sanitizedName][nameAttr];
+				const normalizedName = this._normalize(attr[nameAttr]);
+				flattened[normalizedName] = attr;
+				delete flattened[normalizedName][nameAttr];
 			});
 		} else if (typeof attributes === "object") {
-			const sanitizedName = this._sanitize(attributes[nameAttr]);
-			flattened[sanitizedName] = attributes;
-			delete flattened[sanitizedName][nameAttr];
+			const normalizedName = this._normalize(attributes[nameAttr]);
+			flattened[normalizedName] = attributes;
+			delete flattened[normalizedName][nameAttr];
 		}
 		return flattened;
 	}
