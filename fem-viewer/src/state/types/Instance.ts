@@ -24,6 +24,9 @@ export default interface Instance {
 	individualBGColor: string;
 	individualGhostBGColor: string;
 
+	denomination: string,
+	referencedDenomination: string;
+
 	// borderColor: string;
 	// reference: Reference;
 }

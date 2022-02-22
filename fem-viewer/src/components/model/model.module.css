@@ -1,5 +1,6 @@
 .instance {
 	position: absolute;
 	/* font-size: 10px; */
-	background-color: wheat;
+	background-color: transparent;
+	z-index: 100;
 }

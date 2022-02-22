@@ -133,6 +133,11 @@ const useFEM = () => {
 					attributes,
 					"individualghostbackgroundcolort"
 				),
+				denomination: tryGetStrAttr(attributes, "denomination"),
+				referencedDenomination: tryGetStrAttr(
+					attributes,
+					"referenceddenomination"
+				),
 			};
 			return instance;
 		});
@@ -244,11 +249,27 @@ const useFEM = () => {
 		}));
 	};
 
+	const getCurrentInstance = (): Instance | undefined => {
+		return state.currentInstance;
+	};
+
+	const setCurrentInstance = (instance: Instance) => {
+		if (instance.id === getCurrentInstance()?.id) {
+			return;
+		}
+		setState((prevState) => ({
+			...prevState,
+			currentInstance: instance,
+		}));
+	};
+
 	return {
 		getModelTree,
 		addModel,
 		getCurrentModel,
 		setCurrentModel,
+		getCurrentInstance,
+		setCurrentInstance,
 	};
 };
 
