@@ -14,6 +14,7 @@ type Props = {
 };
 
 // Position instances and apply shared styles
+// FIXME: Apply positions relative to the model worldArea and parent size
 const getStyle = (i: Instance): CSSProperties => {
 	const cmToPx = 37.7952755906;
 	if (i.position) {
@@ -53,7 +54,7 @@ const renderInstanceType = (instance: Instance) => {
  * Instance classes (Process, Asset, Pool etc.) are responsible for actually visualizing an instance.
  */
 const Model: FC<Props> = ({ model, parentDimensions }) => {
-	const {setCurrentInstance} = useFEM();
+	const { setCurrentInstance } = useFEM();
 	return (
 		<div key={model.id}>
 			<div>{model.name}</div>
