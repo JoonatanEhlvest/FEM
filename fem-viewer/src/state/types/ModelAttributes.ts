@@ -1,3 +1,10 @@
+export interface WorldArea {
+	width: number;
+	height: number;
+	minWidth: number;
+	minHeight: number;
+}
+
 export default interface ModelAttributes {
 	assetBGColor: string;
 	assetGhostBGColor: string;
@@ -39,6 +46,6 @@ export default interface ModelAttributes {
 	state: string;
 	type: string;
 	zoom: number;
-	worldArea: string;
+	worldArea: WorldArea | undefined;
 	viewableArea: string;
 }

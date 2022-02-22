@@ -3,10 +3,11 @@ import { addXMLAttrPrefix } from "../utlitity";
 import FEMContext from "./FEMContext";
 import FEMState from "./FEMState";
 import Connector from "./types/Connector";
+import InstancePosition from "./types/Instance";
 import Instance, { INSTANCE_DEFAULTS } from "./types/Instance";
 import InstanceClass from "./types/InstanceClass";
 import Model from "./types/Model";
-import ModelAttributes from "./types/ModelAttributes";
+import ModelAttributes, { WorldArea } from "./types/ModelAttributes";
 
 type XMLObj = {
 	[key: string]: string | number | XMLObj;
@@ -71,16 +72,55 @@ const useFEM = () => {
 		}
 	};
 
+	const findFloatsFromString = (s: string): number[] | undefined => {
+		return s.match(/[+-]?\d+(\.\d+)?/g)?.map((f) => parseFloat(f));
+	};
+
+	const parseInstancePosition = (s: string): Instance["position"] => {
+		const match = findFloatsFromString(s);
+		if (match === undefined) {
+			return undefined;
+		}
+		const ret: Instance["position"] = {
+			x: match[0],
+			y: match[1],
+			width: match[2],
+			height: match[3],
+			index: match[4],
+		};
+
+		return ret;
+	};
+
+	const parseWorldArea = (s: string): ModelAttributes["worldArea"] => {
+		const match = findFloatsFromString(s);
+		if (match === undefined) {
+			return undefined;
+		}
+
+		const ret: ModelAttributes["worldArea"] = {
+			width: match[0],
+			height: match[1],
+			minWidth: match[2],
+			minHeight: match[3],
+		};
+
+		return ret;
+	};
+
 	const getInstances = (instances: Array<XMLObj>): Array<Instance> => {
 		const ret: Array<Instance> = instances.map((XMLInstance) => {
 			const attributes = XMLInstance.ATTRIBUTE as XMLObj;
+			const position = parseInstancePosition(
+				tryGetStrAttr(attributes, "position")
+			);
 			const instance: Instance = {
 				id: tryGetStrProperty(XMLInstance, "id"),
 				class: tryGetStrProperty(XMLInstance, "class") as InstanceClass,
 				name: tryGetStrProperty(XMLInstance, "name"),
 				isGhost: tryGetBoolAttr(attributes, "isghost"),
 				isGroup: tryGetBoolAttr(attributes, "isgroup"),
-				position: tryGetStrAttr(attributes, "position"),
+				position: position,
 				applyArchetype: tryGetStrAttr(attributes, "applyArchetype"),
 				description: tryGetStrAttr(attributes, "description"),
 				fontSize: tryGetNumAttr(attributes, "fontsize"),
@@ -123,6 +163,7 @@ const useFEM = () => {
 	): Partial<ModelAttributes> => {
 		const f = (s: string): string => tryGetStrAttr(modelAttributes, s);
 
+		const worldArea = parseWorldArea(f("worldarea"));
 		const ret: Partial<ModelAttributes> = {
 			accessState: f("accessstate"),
 			assetBGColor: f("assetbackgroundcolor"),
@@ -157,7 +198,7 @@ const useFEM = () => {
 			ProcessGroupBGColor: f("processgroupbackgroundcolor"),
 			state: f("state"),
 			type: f("type"),
-			worldArea: f("worldarea"),
+			worldArea: worldArea,
 			viewableArea: f("viewablearea"),
 			zoom: tryGetNumAttr(modelAttributes, "zoom"),
 		};

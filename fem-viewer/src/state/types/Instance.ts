@@ -1,11 +1,19 @@
 import InstanceClass from "./InstanceClass";
 import Reference from "./Reference";
 
+export interface InstancePosition {
+	x: number;
+	y: number;
+	width: number;
+	height: number;
+	index: number;
+}
+
 export default interface Instance {
 	id: string;
 	name: string;
 	class: InstanceClass;
-	position: string;
+	position: InstancePosition | undefined;
 	isGroup: boolean;
 	isGhost: boolean;
 	applyArchetype: string;
