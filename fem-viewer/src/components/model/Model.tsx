@@ -57,7 +57,6 @@ const Model: FC<Props> = ({ model, parentDimensions }) => {
 	const { setCurrentInstance } = useFEM();
 	return (
 		<div key={model.id}>
-			<div>{model.name}</div>
 			{model.instances.map((i) => (
 				<div
 					className={styles["instance"]}

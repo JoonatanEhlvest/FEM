@@ -1,0 +1,11 @@
+.header-container {
+	border-bottom: solid black 2px;
+}
+
+.header-content {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	padding-left: 5%;
+	padding-right: 5%;
+}

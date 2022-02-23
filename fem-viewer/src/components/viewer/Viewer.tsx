@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import useFEM from "../../state/useFEM";
 import Model from "../model/Model";
+import Header from "./Header";
 import styles from "./viewer.module.css";
 
 const Viewer = () => {
@@ -29,9 +30,14 @@ const Viewer = () => {
 	const model = getCurrentModel();
 
 	return (
-		<div className={styles["viewer-container"]} ref={viewerContainerRef}>
-			Current Model:{" "}
-			{model && <Model model={model} parentDimensions={dimensions} />}
+		<div style={{ width: "100%" }}>
+			<Header model={model} />
+			<div
+				className={styles["viewer-container"]}
+				ref={viewerContainerRef}
+			>
+				{model && <Model model={model} parentDimensions={dimensions} />}
+			</div>
 		</div>
 	);
 };
