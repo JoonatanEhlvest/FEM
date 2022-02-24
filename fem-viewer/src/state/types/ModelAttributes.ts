@@ -1,3 +1,5 @@
+import InstanceClass, { BaseInstanceClass } from "./InstanceClass";
+
 export interface WorldArea {
 	width: number;
 	height: number;
@@ -5,26 +7,24 @@ export interface WorldArea {
 	minHeight: number;
 }
 
-export default interface ModelAttributes {
-	assetBGColor: string;
-	assetGhostBGColor: string;
-	assetGroupBGColor: string;
+export type ModelAttributeColors = {
+	[key in BaseInstanceClass]: {
+		[key in "ghost" | "group" | "default"]: string;
+	};
+};
 
+export default interface ModelAttributes {
+	colors: ModelAttributeColors;
+
+	// TODO: move these into ModelAttributeColors
 	externalActorBGColor: string;
 	externalActorGhostBGColor: string;
 	externalActorGroupBGColor: string;
 
+	// TODO: move these into ModelAttributeColors
 	noteBGColor: string;
 	noteGhostBGColor: string;
 	noteGroupBGColor: string;
-
-	PoolBGColor: string;
-	PoolGhostBGColor: string;
-	PoolGroupBGColor: string;
-
-	ProcessBGColor: string;
-	ProcessGhostBGColor: string;
-	ProcessGroupBGColor: string;
 
 	accessState: string;
 	Author: string;

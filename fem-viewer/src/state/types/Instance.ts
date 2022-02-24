@@ -1,4 +1,4 @@
-import InstanceClass from "./InstanceClass";
+import InstanceClass, { InstanceSubclass } from "./InstanceClass";
 import Reference from "./Reference";
 
 export interface InstancePosition {
@@ -8,6 +8,8 @@ export interface InstancePosition {
 	height: number;
 	index: number;
 }
+
+export type ColorPicker = "Default" | "Individual" | "Subclass";
 
 export default interface Instance {
 	id: string;
@@ -24,10 +26,14 @@ export default interface Instance {
 	individualBGColor: string;
 	individualGhostBGColor: string;
 
-	denomination: string,
-	referencedDenomination: string;
+	referencedBGColor: string;
+	referencedGhostBGColor: string;
 
-	// borderColor: string;
+	denomination: string;
+	referencedDenomination: string;
+	colorPicker: ColorPicker;
+
+	borderColor: string;
 	// reference: Reference;
 }
 
@@ -35,4 +41,9 @@ const INSTANCE_DEFAULTS: { [key: string]: number | string } = {
 	fontsize: 10,
 };
 
-export { INSTANCE_DEFAULTS };
+const isSubclass = (i: Instance): boolean => {
+	const subclasses: InstanceClass[] = ["Asset_Subclass", "Process_Subclass"];
+	return subclasses.includes(i.class);
+};
+
+export { INSTANCE_DEFAULTS, isSubclass };

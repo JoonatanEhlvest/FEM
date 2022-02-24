@@ -1,9 +1,10 @@
 import { useContext } from "react";
+import { DEFAULT_COLOR } from "../parser/preprocessing";
 import { addXMLAttrPrefix } from "../utlitity";
 import FEMContext from "./FEMContext";
 import FEMState from "./FEMState";
 import Connector from "./types/Connector";
-import InstancePosition from "./types/Instance";
+import InstancePosition, { ColorPicker } from "./types/Instance";
 import Instance, { INSTANCE_DEFAULTS } from "./types/Instance";
 import InstanceClass from "./types/InstanceClass";
 import Model from "./types/Model";
@@ -43,9 +44,12 @@ const useFEM = () => {
 	};
 
 	const tryGetBoolAttr = (XMLattribute: XMLObj, attr: string): boolean => {
-		const attrWithPrefix = "@_" + attr;
-		const value = XMLattribute[attrWithPrefix];
-		if (value !== undefined && typeof value === "object") {
+		const value = XMLattribute[attr];
+		if (
+			value !== undefined &&
+			typeof value === "object" &&
+			value["#text"] !== undefined
+		) {
 			return value["#text"] === "Yes" ? true : false;
 		} else {
 			return false;
@@ -54,7 +58,11 @@ const useFEM = () => {
 
 	const tryGetStrAttr = (XMLattribute: XMLObj, attr: string): string => {
 		const value = XMLattribute[attr];
-		if (value !== undefined && typeof value === "object") {
+		if (
+			value !== undefined &&
+			typeof value === "object" &&
+			value["#text"] !== undefined
+		) {
 			return value["#text"] as string;
 		} else {
 			return "";
@@ -63,7 +71,11 @@ const useFEM = () => {
 
 	const tryGetNumAttr = (XMLattribute: XMLObj, attr: string): number => {
 		const value = XMLattribute[attr];
-		if (value !== undefined && typeof value === "object") {
+		if (
+			value !== undefined &&
+			typeof value === "object" &&
+			value["#text"] !== undefined
+		) {
 			return Number(value["#text"]);
 		} else {
 			return INSTANCE_DEFAULTS.hasOwnProperty(attr)
@@ -73,7 +85,7 @@ const useFEM = () => {
 	};
 
 	const findFloatsFromString = (s: string): number[] | undefined => {
-		return s.match(/[+-]?\d+(\.\d+)?/g)?.map((f) => parseFloat(f));
+		return s.match(/[+-]?([0-9]*[.])?[0-9]+/g)?.map((f) => parseFloat(f));
 	};
 
 	const parseInstancePosition = (s: string): Instance["position"] => {
@@ -108,12 +120,23 @@ const useFEM = () => {
 		return ret;
 	};
 
+	const extractHexColor = (s: string): string => {
+		const pattern = /val:"(\$?[a-zA-Z0-9]+)"/;
+		const match = s.match(pattern);
+
+		if (match == null || match.length < 2) {
+			return "";
+		}
+		return match[1];
+	};
+
 	const getInstances = (instances: Array<XMLObj>): Array<Instance> => {
 		const ret: Array<Instance> = instances.map((XMLInstance) => {
 			const attributes = XMLInstance.ATTRIBUTE as XMLObj;
 			const position = parseInstancePosition(
 				tryGetStrAttr(attributes, "position")
 			);
+
 			const instance: Instance = {
 				id: tryGetStrProperty(XMLInstance, "id"),
 				class: tryGetStrProperty(XMLInstance, "class") as InstanceClass,
@@ -131,13 +154,24 @@ const useFEM = () => {
 				),
 				individualGhostBGColor: tryGetStrAttr(
 					attributes,
-					"individualghostbackgroundcolort"
+					"individualghostbackgroundcolor"
+				),
+				referencedBGColor: extractHexColor(
+					tryGetStrAttr(attributes, "referencedcolor")
+				),
+				referencedGhostBGColor: extractHexColor(
+					tryGetStrAttr(attributes, "referencedghostcolor")
 				),
 				denomination: tryGetStrAttr(attributes, "denomination"),
 				referencedDenomination: tryGetStrAttr(
 					attributes,
 					"referenceddenomination"
 				),
+				colorPicker: tryGetStrAttr(
+					attributes,
+					"colorpicker"
+				) as ColorPicker,
+				borderColor: tryGetStrAttr(attributes, "bordercolor"),
 			};
 			return instance;
 		});
@@ -171,9 +205,29 @@ const useFEM = () => {
 		const worldArea = parseWorldArea(f("worldarea"));
 		const ret: Partial<ModelAttributes> = {
 			accessState: f("accessstate"),
-			assetBGColor: f("assetbackgroundcolor"),
-			assetGhostBGColor: f("assetghostbackgroundcolor"),
-			assetGroupBGColor: f("assetgroupbackgroundcolor"),
+			colors: {
+				Asset: {
+					ghost: f("assetghostbackgroundcolor"),
+					group: f("assetgroupbackgroundcolor"),
+					default: f("assetbackgroundcolor"),
+				},
+				Pool: {
+					ghost: f("poolghostbackgroundcolor"),
+					group: f("poolgroupbackgroundcolor"),
+					default: f("poolbackgroundcolor"),
+				},
+				Process: {
+					ghost: f("processghostbackgroundcolor"),
+					group: f("processgroupbackgroundcolor"),
+					default: f("processbackgroundcolor"),
+				},
+				Note: {
+					ghost: f("noteghostbackgroundcolor"),
+					group: f("notegroupbackgroundcolor"),
+					default: f("notebackgroundcolor"),
+				},
+			},
+
 			Author: f("author"),
 			baseName: f("basename"),
 			changeCounter: tryGetNumAttr(modelAttributes, "changecounter"),
@@ -194,13 +248,8 @@ const useFEM = () => {
 			noteBGColor: f("notebackgroundcolor"),
 			noteGhostBGColor: f("noteghostbackgroundcolor"),
 			noteGroupBGColor: f("notegroupbackgroundcolor"),
-			PoolBGColor: f("poolbackgroundcolor"),
-			PoolGhostBGColor: f("poolghostbackgroundcolor"),
-			PoolGroupBGColor: f("poolgroupbackgroundcolor"),
+
 			position: f("position"),
-			ProcessBGColor: f("processbackgroundcolor"),
-			ProcessGhostBGColor: f("processghostbackgroundcolor"),
-			ProcessGroupBGColor: f("processgroupbackgroundcolor"),
 			state: f("state"),
 			type: f("type"),
 			worldArea: worldArea,

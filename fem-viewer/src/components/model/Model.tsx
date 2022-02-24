@@ -1,50 +1,34 @@
-import React, { CSSProperties, FC, useEffect } from "react";
-import Instance, { InstancePosition } from "../../state/types/Instance";
-import InstanceClass from "../../state/types/InstanceClass";
+import React, { CSSProperties, FC } from "react";
+import Instance from "../../state/types/Instance";
 import ModelType from "../../state/types/Model";
-import Asset from "../asset/Asset";
-import Pool from "../pool/Pool";
-import Process from "../../process/Process";
+import Asset from "../instances/asset/Asset";
+import Pool from "../instances/pool/Pool";
+import Process from "../instances/process/Process";
 import styles from "./model.module.css";
 import useFEM from "../../state/useFEM";
+import { getStyle } from "../../parser/preprocessing";
+import Note from "../instances/note/Note";
 
 type Props = {
 	model: ModelType;
 	parentDimensions: DOMRectReadOnly | null;
 };
 
-// Position instances and apply shared styles
-// FIXME: Apply positions relative to the model worldArea and parent size
-const getStyle = (i: Instance): CSSProperties => {
-	const cmToPx = 37.7952755906;
-	if (i.position) {
-		const left = i.position.x * cmToPx;
-		const top = i.position.y * cmToPx;
-		const width = i.position.width * cmToPx;
-		const height = i.position.height * cmToPx;
-
-		return {
-			left,
-			top,
-			width,
-			height,
-			fontSize: i.fontSize,
-		};
-	}
-	return {};
-};
-
 // FIXME: Rendering for referenced instances
-const renderInstanceType = (instance: Instance) => {
+const renderInstanceType = (instance: Instance, model: ModelType) => {
+	const sharedStyles: CSSProperties = getStyle(instance, model);
+
 	switch (instance.class) {
 		case "Pool":
-			return <Pool instance={instance} />;
+			return <Pool instance={instance} sharedStyles={sharedStyles} />;
 		case "Process":
-			return <Process instance={instance} />;
+			return <Process instance={instance} sharedStyles={sharedStyles} />;
 		case "Asset":
-			return <Asset instance={instance} />;
+			return <Asset instance={instance} sharedStyles={sharedStyles} />;
+		case "Note":
+			return <Note instance={instance} sharedStyles={sharedStyles} />;
 		default:
-			return <div>Unknown class</div>;
+			return <div style={sharedStyles}>Unknown class</div>;
 	}
 };
 
@@ -59,11 +43,14 @@ const Model: FC<Props> = ({ model, parentDimensions }) => {
 		<div key={model.id}>
 			{model.instances.map((i) => (
 				<div
+					key={i.id}
 					className={styles["instance"]}
-					style={getStyle(i)}
-					onClick={() => setCurrentInstance(i)}
+					onClick={() => {
+						console.log(i);
+						setCurrentInstance(i);
+					}}
 				>
-					{renderInstanceType(i)}
+					{renderInstanceType(i, model)}
 				</div>
 			))}
 		</div>

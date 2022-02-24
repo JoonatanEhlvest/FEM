@@ -1,5 +1,6 @@
 import Connector from "./Connector";
-import Instance from "./Instance";
+import Instance, { isSubclass } from "./Instance";
+import { BaseInstanceClass, InstanceSubclass } from "./InstanceClass";
 import ModelAttributes from "./ModelAttributes";
 
 export default interface Model {
