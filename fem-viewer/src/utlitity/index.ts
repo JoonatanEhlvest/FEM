@@ -1,4 +1,4 @@
-const ATTR_PREFIX = "@_";
+const ATTR_PREFIX = "";
 
 const addXMLAttrPrefix = (s: string): string => {
 	return `${ATTR_PREFIX}${s}`;

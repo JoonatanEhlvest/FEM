@@ -40,7 +40,7 @@ const renderInstanceType = (instance: Instance, model: ModelType) => {
 const Model: FC<Props> = ({ model, parentDimensions }) => {
 	const { setCurrentInstance } = useFEM();
 	return (
-		<div key={model.id}>
+		<div key={model.id} className={styles["model-container"]}>
 			{model.instances.map((i) => (
 				<div
 					key={i.id}

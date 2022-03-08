@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import ModelTree from "../modelTree/ModelTree";
 import Viewer from "../viewer/Viewer";
-import XMLData from "../../assets/BMI.xml";
 import useFEM from "../../state/useFEM";
 import styles from "./appContainer.module.css";
 import Details from "../details/Details";
 import { Resizable, ResizeCallbackData } from "react-resizable";
 import createParser from "../../parser";
+import FileUpload from "../fileUpload/FileUpload";
 
 const AppContainer = () => {
 	const { addModel } = useFEM();
+	const [filesUploaded, setFilesUploaded] = useState(false);
 
 	const [state, setState] = useState(() => {
 		const appWidth = window.innerWidth;
@@ -18,23 +19,23 @@ const AppContainer = () => {
 		};
 	});
 
-	useEffect(() => {
-		createParser(XMLData)
-			.then((parser) => {
-				if (parser == null) {
-					console.error("Couldn't create parser");
-					return;
-				}
-				console.log(parser._parsedXML);
+	// useEffect(() => {
+	// 	createParser(XMLData)
+	// 		.then((parser) => {
+	// 			if (parser == null) {
+	// 				console.error("Couldn't create parser");
+	// 				return;
+	// 			}
+	// 			console.log(parser._parsedXML);
 
-				parser.getModels().forEach((model: any) => {
-					addModel(model);
-				});
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	}, []);
+	// 			parser.getModels().forEach((model: any) => {
+	// 				addModel(model);
+	// 			});
+	// 		})
+	// 		.catch((err) => {
+	// 			console.log(err);
+	// 		});
+	// }, []);
 
 	const onResize = (
 		event: React.SyntheticEvent,
@@ -50,20 +51,24 @@ const AppContainer = () => {
 
 	return (
 		<div className={styles["app-container-container"]}>
-			<Resizable
-				height={0}
-				width={state.width}
-				handle={<div className={styles["model-tree-handle"]}></div>}
-				onResize={onResize}
-			>
-				<div
-					className={styles["app-container-sidebar-container"]}
-					style={{ flexBasis: state.width }}
+			{filesUploaded ? (
+				<Resizable
+					height={0}
+					width={state.width}
+					handle={<div className={styles["model-tree-handle"]}></div>}
+					onResize={onResize}
 				>
-					<ModelTree />
-					<Details />
-				</div>
-			</Resizable>
+					<div
+						className={styles["app-container-sidebar-container"]}
+						style={{ flexBasis: state.width }}
+					>
+						<ModelTree />
+						<Details />
+					</div>
+				</Resizable>
+			) : (
+				<FileUpload toggleViewer={setFilesUploaded} />
+			)}
 
 			<Viewer />
 		</div>

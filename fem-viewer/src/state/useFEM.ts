@@ -1,14 +1,15 @@
 import { useContext } from "react";
-import { DEFAULT_COLOR } from "../parser/preprocessing";
 import { addXMLAttrPrefix } from "../utlitity";
 import FEMContext from "./FEMContext";
 import FEMState from "./FEMState";
 import Connector from "./types/Connector";
-import InstancePosition, { ColorPicker } from "./types/Instance";
+import { ColorPicker } from "./types/Instance";
 import Instance, { INSTANCE_DEFAULTS } from "./types/Instance";
 import InstanceClass from "./types/InstanceClass";
 import Model from "./types/Model";
-import ModelAttributes, { WorldArea } from "./types/ModelAttributes";
+import ModelAttributes from "./types/ModelAttributes";
+import { XMLParser } from "fast-xml-parser";
+import { svgXML } from "../components/svgrenderer";
 
 type XMLObj = {
 	[key: string]: string | number | XMLObj;
@@ -261,6 +262,12 @@ const useFEM = () => {
 	};
 
 	const addModel = (model: any) => {
+		const options = {
+			ignoreAttributes: false,
+			attributeNamePrefix: "",
+		};
+		const parser = new XMLParser(options);
+
 		const modelToAdd: Model = {
 			id: tryGetStrProperty(model, "id"),
 			applib: tryGetStrProperty(model, "applib"),
@@ -272,10 +279,20 @@ const useFEM = () => {
 			instances: getInstances(model.INSTANCE),
 			attributes: getModelAttributes(model.MODELATTRIBUTES),
 		};
+
 		setState((prevState) => {
 			return {
 				...prevState,
 				models: [...prevState.models, modelToAdd],
+			};
+		});
+	};
+
+	const addSvg = (name: string, svg: svgXML) => {
+		setState((prevState) => {
+			return {
+				...prevState,
+				svgs: { ...prevState.svgs, [name]: svg },
 			};
 		});
 	};
@@ -312,6 +329,16 @@ const useFEM = () => {
 		}));
 	};
 
+	const getModelSvg = (
+		modelName: Model["name"]
+	): FEMState["svgs"][keyof FEMState["svgs"]] => {
+		return state.svgs[modelName];
+	};
+
+	const test = () => {
+		console.log(state.svgs);
+	};
+
 	return {
 		getModelTree,
 		addModel,
@@ -319,6 +346,9 @@ const useFEM = () => {
 		setCurrentModel,
 		getCurrentInstance,
 		setCurrentInstance,
+		getModelSvg,
+		addSvg,
+		test,
 	};
 };
 

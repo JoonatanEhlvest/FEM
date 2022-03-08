@@ -101,23 +101,16 @@ class Parser {
 	}
 }
 
-const createParser = (XMLData: any): Promise<Parser | null> => {
+const createParser = (XMLData: any): Parser => {
 	const options = {
 		ignoreAttributes: false,
 		attributeNamePrefix: ATTR_PREFIX,
 	};
 	const parser = new XMLParser(options);
 
-	return axios
-		.get(XMLData)
-		.then((res) => {
-			const xml: string = res.data;
-			const jObj = parser.parse(xml);
-			return new Parser(jObj);
-		})
-		.catch((err) => {
-			return err;
-		});
+	const xml: string = XMLData;
+	const jObj = parser.parse(xml);
+	return new Parser(jObj);
 };
 
 export default createParser;

@@ -5,3 +5,8 @@
 	position: relative;
 	overflow: auto;
 }
+
+svg {
+	width: 100%;
+	height: auto;
+}
