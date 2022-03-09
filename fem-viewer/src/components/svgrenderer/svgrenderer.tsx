@@ -57,7 +57,6 @@ const getStyleObjectFromString = (str: string) => {
 
 const renderSVG = (image: svgXML | null): ReactElement => {
 	if (image) {
-		console.log(image);
 		const svgTag = getObjProp(image, "svg");
 		const g = getObjProp(svgTag, "g");
 		const ellipses = getArrProp(g, "ellipse");

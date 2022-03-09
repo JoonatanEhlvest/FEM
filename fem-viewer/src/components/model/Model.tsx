@@ -1,13 +1,13 @@
 import React, { CSSProperties, FC } from "react";
 import Instance from "../../state/types/Instance";
 import ModelType from "../../state/types/Model";
-import Asset from "../instances/asset/Asset";
-import Pool from "../instances/pool/Pool";
-import Process from "../instances/process/Process";
+import Asset from "../hitboxes/asset/Asset";
+import Pool from "../hitboxes/pool/Pool";
+import Process from "../hitboxes/process/Process";
 import styles from "./model.module.css";
 import useFEM from "../../state/useFEM";
 import { getStyle } from "../../parser/preprocessing";
-import Note from "../instances/note/Note";
+import Note from "../hitboxes/note/Note";
 
 type Props = {
 	model: ModelType;

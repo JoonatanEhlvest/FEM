@@ -6,7 +6,7 @@ import Header from "./Header";
 import styles from "./viewer.module.css";
 
 const Viewer = () => {
-	const { getCurrentModel, getModelSvg } = useFEM();
+	const { getCurrentModel, getModelSvg, getCurrentSvgElement } = useFEM();
 	const viewerContainerRef = useRef<HTMLDivElement>(null);
 	const [dimensions, setDimensions] = useState<DOMRectReadOnly | null>(null);
 
@@ -29,6 +29,7 @@ const Viewer = () => {
 	}, [viewerContainerRef, observer]);
 
 	const model = getCurrentModel();
+	const svg = getCurrentSvgElement();
 
 	return (
 		<div style={{ width: "100%" }}>
@@ -37,7 +38,7 @@ const Viewer = () => {
 				className={styles["viewer-container"]}
 				ref={viewerContainerRef}
 			>
-				{model && renderSVG(getModelSvg(model?.name))}
+				{svg && getCurrentSvgElement()}
 				{model && <Model model={model} parentDimensions={dimensions} />}
 			</div>
 		</div>

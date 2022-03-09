@@ -80,6 +80,14 @@ const getBorderColor = (i: Instance): CSSProperties["borderColor"] => {
 	return i.borderColor;
 };
 
+const getTransform = (i: Instance): CSSProperties["transform"] => {
+	if (i.class === "Note") {
+		return "";
+	}
+
+	return "translateX(-50%) translateY(-50%)";
+};
+
 // Position instances and apply shared styles
 // FIXME: Apply positions relative to the model worldArea and parent size
 const getStyle = (i: Instance, model: Model): CSSProperties => {
@@ -97,7 +105,7 @@ const getStyle = (i: Instance, model: Model): CSSProperties => {
 		const height = i.position.height * cmToPx;
 		return {
 			left,
-			transform: "translateX(-50%) translateY(-50%)",
+			transform: getTransform(i),
 			top,
 			width,
 			height,

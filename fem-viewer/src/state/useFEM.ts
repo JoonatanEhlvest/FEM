@@ -9,7 +9,7 @@ import InstanceClass from "./types/InstanceClass";
 import Model from "./types/Model";
 import ModelAttributes from "./types/ModelAttributes";
 import { XMLParser } from "fast-xml-parser";
-import { svgXML } from "../components/svgrenderer/svgrenderer";
+import renderSVG, { svgXML } from "../components/svgrenderer/svgrenderer";
 
 type XMLObj = {
 	[key: string]: string | number | XMLObj;
@@ -315,7 +315,7 @@ const useFEM = () => {
 		}));
 	};
 
-	const getCurrentInstance = (): Instance | undefined => {
+	const getCurrentInstance = (): FEMState["currentInstance"] => {
 		return state.currentInstance;
 	};
 
@@ -326,6 +326,18 @@ const useFEM = () => {
 		setState((prevState) => ({
 			...prevState,
 			currentInstance: instance,
+		}));
+	};
+
+	const getCurrentSvgElement = (): FEMState["currentSvgElement"] => {
+		return state.currentSvgElement;
+	};
+
+	const setCurrentSvgElement = (modelName: Model["name"]) => {
+		const svg = renderSVG(getModelSvg(modelName));
+		setState((prevState) => ({
+			...prevState,
+			currentSvgElement: svg,
 		}));
 	};
 
@@ -344,6 +356,8 @@ const useFEM = () => {
 		setCurrentInstance,
 		getModelSvg,
 		addSvg,
+		getCurrentSvgElement,
+		setCurrentSvgElement,
 	};
 };
 

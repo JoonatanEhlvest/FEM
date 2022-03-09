@@ -8,6 +8,7 @@ export default interface FEMState {
 	currentModel: Model | undefined;
 	currentInstance: Instance | undefined;
 	svgs: { [key: Model["name"]]: svgXML };
+	currentSvgElement: ReactElement | undefined;
 }
 
 const initialState: FEMState = {
@@ -15,6 +16,7 @@ const initialState: FEMState = {
 	currentModel: undefined,
 	currentInstance: undefined,
 	svgs: {},
+	currentSvgElement: undefined,
 };
 
 export { initialState };
