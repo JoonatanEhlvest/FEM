@@ -6,10 +6,7 @@ interface Props extends SharedInstanceProps {}
 
 const Asset: FC<Props> = ({ instance, sharedStyles }) => {
 	return (
-		<div className={styles["asset-container"]} style={sharedStyles}>
-			<div>{instance.class}</div>
-			<div>{instance.denomination}</div>
-		</div>
+		<div className={styles["asset-container"]} style={sharedStyles}></div>
 	);
 };
 

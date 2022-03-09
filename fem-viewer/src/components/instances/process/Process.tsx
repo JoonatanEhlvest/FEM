@@ -7,10 +7,7 @@ interface Props extends SharedInstanceProps {}
 
 const Process: FC<Props> = ({ instance, sharedStyles }) => {
 	return (
-		<div className={styles["process-container"]} style={sharedStyles}>
-			<div>{instance.class}</div>
-			<div>{instance.denomination}</div>
-		</div>
+		<div className={styles["process-container"]} style={sharedStyles}></div>
 	);
 };
 

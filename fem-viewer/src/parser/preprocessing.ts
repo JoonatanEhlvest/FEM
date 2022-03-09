@@ -85,6 +85,7 @@ const getBorderColor = (i: Instance): CSSProperties["borderColor"] => {
 const getStyle = (i: Instance, model: Model): CSSProperties => {
 	const backgroundColor = getBgColor(i, model);
 	const cmToPx = 37.7952755906;
+
 	let zIndex = 100;
 	if (i.isGroup) zIndex -= 50;
 	if (i.isGhost) zIndex -= 50;
@@ -96,14 +97,16 @@ const getStyle = (i: Instance, model: Model): CSSProperties => {
 		const height = i.position.height * cmToPx;
 		return {
 			left,
+			transform: "translateX(-50%) translateY(-50%)",
 			top,
 			width,
 			height,
 			fontSize: i.fontSize,
-			backgroundColor,
+			backgroundColor: "transparent",
 			zIndex,
-			borderColor: getBorderColor(i),
-			borderWidth: "1px",
+			// borderColor: getBorderColor(i),
+			borderColor: "rgb(255, 0, 160)",
+			borderWidth: "3px",
 			borderStyle: "solid",
 			// width: "100%",
 			// height: "100%",

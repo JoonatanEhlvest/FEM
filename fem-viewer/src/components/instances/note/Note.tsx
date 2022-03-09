@@ -6,9 +6,7 @@ interface Props extends SharedInstanceProps {}
 
 const Note: FC<Props> = ({ instance, sharedStyles }) => {
 	return (
-		<div className={styles["note-container"]} style={sharedStyles}>
-			<div>{instance.description}</div>
-		</div>
+		<div className={styles["note-container"]} style={sharedStyles}></div>
 	);
 };
 

@@ -9,7 +9,7 @@ import InstanceClass from "./types/InstanceClass";
 import Model from "./types/Model";
 import ModelAttributes from "./types/ModelAttributes";
 import { XMLParser } from "fast-xml-parser";
-import { svgXML } from "../components/svgrenderer";
+import { svgXML } from "../components/svgrenderer/svgrenderer";
 
 type XMLObj = {
 	[key: string]: string | number | XMLObj;
@@ -335,10 +335,6 @@ const useFEM = () => {
 		return state.svgs[modelName];
 	};
 
-	const test = () => {
-		console.log(state.svgs);
-	};
-
 	return {
 		getModelTree,
 		addModel,
@@ -348,7 +344,6 @@ const useFEM = () => {
 		setCurrentInstance,
 		getModelSvg,
 		addSvg,
-		test,
 	};
 };
 

@@ -9,12 +9,11 @@ type Props = {
 };
 
 const FileUpload: FC<Props> = ({ toggleViewer }) => {
-	const { addModel, addSvg, test } = useFEM();
+	const { addModel, addSvg } = useFEM();
 	const [uploadError, setUploadError] = useState<string | null>(null);
 	const onSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		toggleViewer(true);
-		test();
 	};
 
 	const onXMLChange = (e: ChangeEvent<HTMLInputElement>) => {

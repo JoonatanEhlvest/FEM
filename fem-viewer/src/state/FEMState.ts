@@ -1,5 +1,5 @@
 import { ReactElement } from "react";
-import { svgXML } from "../components/svgrenderer";
+import { svgXML } from "../components/svgrenderer/svgrenderer";
 import Instance from "./types/Instance";
 import Model from "./types/Model";
 
