@@ -1,4 +1,3 @@
-import axios from "axios";
 import { XMLParser } from "fast-xml-parser";
 import { addXMLAttrPrefix, ATTR_PREFIX } from "../utlitity";
 

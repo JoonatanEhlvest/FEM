@@ -1,7 +1,6 @@
-import { ReactElement, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useFEM from "../../state/useFEM";
 import Model from "../model/Model";
-import renderSVG, { svgXML } from "../svgrenderer/svgrenderer";
 import Header from "./Header";
 import styles from "./viewer.module.css";
 

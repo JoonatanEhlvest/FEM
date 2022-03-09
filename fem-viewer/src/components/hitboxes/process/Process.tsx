@@ -1,6 +1,5 @@
 import React, { CSSProperties, FC } from "react";
 import SharedInstanceProps from "../../shared/SharedInstanceProps";
-import Instance from "../../../state/types/Instance";
 import styles from "./process.module.css";
 
 interface Props extends SharedInstanceProps {}

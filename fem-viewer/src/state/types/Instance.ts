@@ -1,4 +1,4 @@
-import InstanceClass, { InstanceSubclass } from "./InstanceClass";
+import InstanceClass from "./InstanceClass";
 import Reference from "./Reference";
 
 export interface InstancePosition {

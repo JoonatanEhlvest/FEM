@@ -1,4 +1,4 @@
-import InstanceClass, { BaseInstanceClass } from "./InstanceClass";
+import { BaseInstanceClass } from "./InstanceClass";
 
 export interface WorldArea {
 	width: number;
