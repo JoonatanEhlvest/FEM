@@ -55,6 +55,11 @@ const getStyleObjectFromString = (str: string) => {
 	return style;
 };
 
+const removeProp = (obj: svgXML, prop: string): svgXML => {
+	const { [prop]: removed, ...restObject } = obj;
+	return restObject;
+};
+
 const renderSVG = (image: svgXML | null): ReactElement => {
 	if (image) {
 		console.log(image);
@@ -70,89 +75,88 @@ const renderSVG = (image: svgXML | null): ReactElement => {
 
 		return (
 			<svg
-				{...svgTag}
-				// xmlns={getStrProp(svgTag, "xmlns")}
-				// version={getStrProp(svgTag, "version")}
-				// width={getStrProp(svgTag, "width")}
-				// height={getStrProp(svgTag, "height")}
+				xmlns={getStrProp(svgTag, "xmlns")}
+				version={getStrProp(svgTag, "version")}
+				width={getStrProp(svgTag, "width")}
+				height={getStrProp(svgTag, "height")}
 			>
 				<g>
-					{rects.map((r) => {
+					{rects.map((r, i) => {
 						return (
 							<rect
+								key={`rect-${i}`}
 								{...r}
 								style={getStyleObjectFromString(
 									r.style as string
 								)}
-								onClick={() => console.log(r)}
 							/>
 						);
 					})}
-					{ellipses.map((e) => {
+					{ellipses.map((e, i) => {
 						return (
 							<ellipse
+								key={`ellipse-${i}`}
 								{...e}
 								style={getStyleObjectFromString(
 									e.style as string
 								)}
-								onClick={() => console.log(e)}
 							/>
 						);
 					})}
-					{texts.map((t) => {
+					{texts.map((t, i) => {
 						return (
 							<text
-								{...t}
+								key={`text-${i}`}
+								{...removeProp(t, "#text")}
 								style={getStyleObjectFromString(
 									t.style as string
 								)}
-								onClick={() => console.log(t)}
 							>
 								{getStrProp(t, "#text")}
 							</text>
 						);
 					})}
-					{paths.map((p) => {
+					{paths.map((p, i) => {
 						return (
 							<path
+								key={`path-${i}`}
 								{...p}
 								style={getStyleObjectFromString(
 									p.style as string
 								)}
-								onClick={() => console.log(p)}
 							/>
 						);
 					})}
-					{lines.map((p) => {
+					{lines.map((p, i) => {
 						return (
 							<line
+								key={`line-${i}`}
 								{...p}
 								style={getStyleObjectFromString(
 									p.style as string
 								)}
-								onClick={() => console.log(p)}
 							></line>
 						);
 					})}
-					{polygons.map((p) => {
+					{polygons.map((p, i) => {
 						return (
 							<polygon
+								key={`polygon-${i}`}
 								{...p}
 								style={getStyleObjectFromString(
 									p.style as string
 								)}
-								onClick={() => console.log(p)}
 							></polygon>
 						);
 					})}
-					{polylines.map((p) => {
+					{polylines.map((p, i) => {
 						return (
 							<polygon
+								key={`polylines-${i}`}
 								{...p}
 								style={getStyleObjectFromString(
 									p.style as string
 								)}
-								onClick={() => console.log(p)}
 							></polygon>
 						);
 					})}

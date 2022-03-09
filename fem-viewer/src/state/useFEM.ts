@@ -349,6 +349,9 @@ const useFEM = () => {
 	};
 
 	const setCurrentSvgElement = (modelName: Model["name"]) => {
+		if (modelName === getCurrentModel()?.name) {
+			return;
+		}
 		const svg = renderSVG(getModelSvg(modelName));
 		setState((prevState) => ({
 			...prevState,
