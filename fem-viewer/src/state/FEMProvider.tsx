@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FEMContext from "./FEMContext";
 import FEMState, { initialState } from "./FEMState";
 

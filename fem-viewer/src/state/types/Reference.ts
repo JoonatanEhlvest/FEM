@@ -1,8 +1,8 @@
-import InstanceClass from "./InstanceClass";
+import Instance from "./Instance";
+import Model from "./Model";
 
 export default interface Reference {
 	type: string;
-	modelName: string;
-	class: InstanceClass;
-	referencedInstanceName: string;
+	modelName: Model["name"];
+	referencedInstanceName: Instance["name"];
 }

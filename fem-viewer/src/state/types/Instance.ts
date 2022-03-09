@@ -34,7 +34,7 @@ export default interface Instance {
 	colorPicker: ColorPicker;
 
 	borderColor: string;
-	// reference: Reference;
+	reference: Reference | null;
 }
 
 const INSTANCE_DEFAULTS: { [key: string]: number | string } = {

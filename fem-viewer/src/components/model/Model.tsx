@@ -21,14 +21,16 @@ const renderInstanceType = (instance: Instance, model: ModelType) => {
 	switch (instance.class) {
 		case "Pool":
 			return <Pool instance={instance} sharedStyles={sharedStyles} />;
+		case "Process_Subclass":
 		case "Process":
 			return <Process instance={instance} sharedStyles={sharedStyles} />;
+		case "Asset_Subclass":
 		case "Asset":
 			return <Asset instance={instance} sharedStyles={sharedStyles} />;
 		case "Note":
 			return <Note instance={instance} sharedStyles={sharedStyles} />;
 		default:
-			return <div style={sharedStyles}>Unknown class</div>;
+			return <div style={sharedStyles}></div>;
 	}
 };
 

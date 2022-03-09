@@ -32,7 +32,7 @@ const Viewer = () => {
 	const svg = getCurrentSvgElement();
 
 	return (
-		<div style={{ width: "100%" }}>
+		<div style={{ width: "100%", height: "100%" }}>
 			<Header model={model} />
 			<div
 				className={styles["viewer-container"]}

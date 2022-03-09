@@ -8,11 +8,10 @@ import Instance, { INSTANCE_DEFAULTS } from "./types/Instance";
 import InstanceClass from "./types/InstanceClass";
 import Model from "./types/Model";
 import ModelAttributes from "./types/ModelAttributes";
-import { XMLParser } from "fast-xml-parser";
 import renderSVG, { svgXML } from "../components/svgrenderer/svgrenderer";
 
 type XMLObj = {
-	[key: string]: string | number | XMLObj;
+	[key: string]: string | number | XMLObj | XMLObj[];
 };
 
 const useFEM = () => {
@@ -34,24 +33,19 @@ const useFEM = () => {
 		}
 	};
 
-	const tryGetNumProperty = (jsonObj: XMLObj, attr: string): number => {
-		const attrWithPrefix = "@_" + attr;
-		if (jsonObj[attrWithPrefix] !== undefined) {
-			const value = jsonObj[attrWithPrefix];
-			return Number(value);
-		} else {
-			return 0;
-		}
+	const hasTextProperty = (value: XMLObj[keyof XMLObj]): boolean => {
+		return (
+			value !== undefined &&
+			typeof value === "object" &&
+			!Array.isArray(value) &&
+			value["#text"] !== undefined
+		);
 	};
 
 	const tryGetBoolAttr = (XMLattribute: XMLObj, attr: string): boolean => {
 		const value = XMLattribute[attr];
-		if (
-			value !== undefined &&
-			typeof value === "object" &&
-			value["#text"] !== undefined
-		) {
-			return value["#text"] === "Yes" ? true : false;
+		if (hasTextProperty(value)) {
+			return (value as XMLObj)["#text"] === "Yes" ? true : false;
 		} else {
 			return false;
 		}
@@ -59,12 +53,8 @@ const useFEM = () => {
 
 	const tryGetStrAttr = (XMLattribute: XMLObj, attr: string): string => {
 		const value = XMLattribute[attr];
-		if (
-			value !== undefined &&
-			typeof value === "object" &&
-			value["#text"] !== undefined
-		) {
-			return value["#text"] as string;
+		if (hasTextProperty(value)) {
+			return (value as XMLObj)["#text"] as string;
 		} else {
 			return "";
 		}
@@ -72,12 +62,8 @@ const useFEM = () => {
 
 	const tryGetNumAttr = (XMLattribute: XMLObj, attr: string): number => {
 		const value = XMLattribute[attr];
-		if (
-			value !== undefined &&
-			typeof value === "object" &&
-			value["#text"] !== undefined
-		) {
-			return Number(value["#text"]);
+		if (hasTextProperty(value)) {
+			return Number((value as XMLObj)["#text"]);
 		} else {
 			return INSTANCE_DEFAULTS.hasOwnProperty(attr)
 				? Number(INSTANCE_DEFAULTS[attr])
@@ -131,12 +117,44 @@ const useFEM = () => {
 		return match[1];
 	};
 
+	const findInstanceIREF = (refs: XMLObj): Instance["reference"] => {
+		let returnReference: Instance["reference"] = null;
+		if (Array.isArray(refs)) {
+			let correctRef = null;
+			for (let ref of refs) {
+				if (ref["IREF"] !== undefined) {
+					correctRef = ref["IREF"];
+					break;
+				}
+			}
+
+			if (correctRef !== null) {
+				returnReference = {
+					modelName: tryGetStrProperty(correctRef, "tmodelname"),
+					type: tryGetStrProperty(correctRef, "type"),
+					referencedInstanceName: tryGetStrProperty(
+						correctRef,
+						"tobjname"
+					),
+				};
+			}
+		}
+
+		return returnReference;
+	};
+
+	const getInstanceReference = (instance: XMLObj): Instance["reference"] => {
+		return findInstanceIREF(instance.INTERREF as XMLObj);
+	};
+
 	const getInstances = (instances: Array<XMLObj>): Array<Instance> => {
 		const ret: Array<Instance> = instances.map((XMLInstance) => {
 			const attributes = XMLInstance.ATTRIBUTE as XMLObj;
 			const position = parseInstancePosition(
 				tryGetStrAttr(attributes, "position")
 			);
+
+			const reference = getInstanceReference(XMLInstance);
 
 			const instance: Instance = {
 				id: tryGetStrProperty(XMLInstance, "id"),
@@ -173,6 +191,7 @@ const useFEM = () => {
 					"colorpicker"
 				) as ColorPicker,
 				borderColor: tryGetStrAttr(attributes, "bordercolor"),
+				reference,
 			};
 			return instance;
 		});
@@ -262,11 +281,7 @@ const useFEM = () => {
 	};
 
 	const addModel = (model: any) => {
-		const options = {
-			ignoreAttributes: false,
-			attributeNamePrefix: "",
-		};
-		const parser = new XMLParser(options);
+		console.log(model);
 
 		const modelToAdd: Model = {
 			id: tryGetStrProperty(model, "id"),

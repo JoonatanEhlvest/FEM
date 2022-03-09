@@ -62,7 +62,7 @@ const FileUpload: FC<Props> = ({ toggleViewer }) => {
 			const contents = event?.target?.result;
 			const xml = contents as string;
 			const jObj = parser.parse(xml);
-			addSvg(file.name.replace(/.svg/g, ""), jObj);
+			addSvg(file.name.replace(/.svg/g, "").trimEnd(), jObj);
 		};
 
 		fileReader.readAsText(file);
