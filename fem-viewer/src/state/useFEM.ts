@@ -9,6 +9,7 @@ import InstanceClass from "./types/InstanceClass";
 import Model from "./types/Model";
 import ModelAttributes from "./types/ModelAttributes";
 import renderSVG, { svgXML } from "../components/svgrenderer/svgrenderer";
+import Reference from "./types/Reference";
 
 type XMLObj = {
 	[key: string]: string | number | XMLObj | XMLObj[];
@@ -324,10 +325,16 @@ const useFEM = () => {
 		if (id === getCurrentModel()?.id) {
 			return;
 		}
-		setState((prevState) => ({
-			...prevState,
-			currentModel: state.models.find((m) => m.id === id),
-		}));
+
+		const newModel = state.models.find((m) => m.id === id);
+		if (newModel) {
+			setState((prevState) => ({
+				...prevState,
+				currentModel: newModel,
+			}));
+
+			setCurrentSvgElement(newModel.name);
+		}
 	};
 
 	const getCurrentInstance = (): FEMState["currentInstance"] => {
@@ -359,6 +366,23 @@ const useFEM = () => {
 		}));
 	};
 
+	const goToReference = (reference: Reference) => {
+		const models = state.models;
+		const referencedModel = models.find(
+			(m) => m.name === reference.modelName
+		);
+		if (referencedModel) {
+			const referencedInstance = referencedModel.instances.find(
+				(i) => i.name === reference.referencedInstanceName
+			);
+			setCurrentModel(referencedModel.id);
+
+			if (referencedInstance) {
+				setCurrentInstance(referencedInstance);
+			}
+		}
+	};
+
 	const getModelSvg = (
 		modelName: Model["name"]
 	): FEMState["svgs"][keyof FEMState["svgs"]] => {
@@ -375,7 +399,7 @@ const useFEM = () => {
 		getModelSvg,
 		addSvg,
 		getCurrentSvgElement,
-		setCurrentSvgElement,
+		goToReference,
 	};
 };
 

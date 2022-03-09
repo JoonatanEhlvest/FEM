@@ -4,7 +4,7 @@ import useFEM from "../../state/useFEM";
 import styles from "./modelTree.module.css";
 
 const ModelTree = () => {
-	const { getModelTree, setCurrentModel, setCurrentSvgElement } = useFEM();
+	const { getModelTree, setCurrentModel } = useFEM();
 	const [state, setState] = useState(() => {
 		return {
 			height: 0.75 * window.innerHeight,
@@ -34,10 +34,11 @@ const ModelTree = () => {
 				>
 					{getModelTree().map((model) => (
 						<div key={model.id}>
-							<p onClick={() =>  {
-								setCurrentModel(model.id)
-								setCurrentSvgElement(model.name)
-								}} >
+							<p
+								onClick={() => {
+									setCurrentModel(model.id);
+								}}
+							>
 								{model.name}
 							</p>
 						</div>
