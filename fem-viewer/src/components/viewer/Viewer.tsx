@@ -31,7 +31,7 @@ const Viewer = () => {
 	const svg = getCurrentSvgElement();
 
 	return (
-		<div style={{ width: "100%", height: "100%" }}>
+		<div className={styles["viewer-container-wrapper"]}>
 			<Header model={model} />
 			<div
 				className={styles["viewer-container"]}

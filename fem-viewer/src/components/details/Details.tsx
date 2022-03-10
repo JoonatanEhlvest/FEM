@@ -1,9 +1,10 @@
 import Reference from "../../state/types/Reference";
 import useFEM from "../../state/useFEM";
+import Header from "../header/Header";
 import styles from "./details.module.css";
 
 const Details = () => {
-	const { getCurrentInstance, goToReference} = useFEM();
+	const { getCurrentInstance, goToReference } = useFEM();
 
 	const instance = getCurrentInstance();
 
@@ -12,12 +13,15 @@ const Details = () => {
 			return;
 		}
 		goToReference(ref);
-	}
+	};
 
 	return (
 		<div style={{ flexGrow: 1 }}>
 			<div className={styles["details-container"]}>
-				<div>Details</div>
+				<Header>
+					<div>Details</div>
+				</Header>
+
 				{instance && (
 					<div>
 						<div>{instance.class}</div>
@@ -31,7 +35,13 @@ const Details = () => {
 									instance:{" "}
 									{instance.reference.referencedInstanceName}
 								</div>
-								<div onClick={() => handleGoToReference(instance.reference)}>GO TO REFERENCE</div>
+								<div
+									onClick={() =>
+										handleGoToReference(instance.reference)
+									}
+								>
+									GO TO REFERENCE
+								</div>
 							</div>
 						)}
 					</div>

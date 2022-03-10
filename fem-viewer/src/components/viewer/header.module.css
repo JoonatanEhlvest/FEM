@@ -1,5 +1,12 @@
 .header-container {
-	border-bottom: solid black 2px;
+	background-color: var(--black);
+	/* border-bottom: solid var(--border-color) 4px; */
+	border-left: solid var(--border-color) var(--tree-border-width);
+	height: var(--header-height);
+	color: white;
+
+	display: flex;
+	align-items: center;
 }
 
 .header-content {

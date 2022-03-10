@@ -1,6 +1,18 @@
 .details-container {
 	width: 100%;
 	height: 100%;
-	background-color: yellowgreen;
+	background-color: var(--bg-white);
 	position: relative;
+}
+
+.details-container::after {
+	content: "";
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: transparent;
+	border-top: var(--tree-border-width) solid var(--border-color);
+	position: absolute;
+	pointer-events: none;
 }

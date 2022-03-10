@@ -1,5 +1,5 @@
 .model-tree-container {
-	background-color: red;
+	background-color: var(--bg-white);
 	height: 100%;
 	width: 100%;
 	overflow: auto;
@@ -12,5 +12,5 @@
 	left: calc(50% - 50px);
 	width: 100px;
 	height: 10px;
-	background-color: black;
+	background-color: var(--drag-handle-bg);
 }

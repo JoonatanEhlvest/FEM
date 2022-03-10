@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Resizable, ResizeCallbackData } from "react-resizable";
 import useFEM from "../../state/useFEM";
+import Header from "../header/Header";
 import styles from "./modelTree.module.css";
+import sharedStyles from "../../utlitity/sharedStyles.module.css";
 
 const ModelTree = () => {
 	const { getModelTree, setCurrentModel } = useFEM();
@@ -25,13 +27,24 @@ const ModelTree = () => {
 			<Resizable
 				width={0}
 				height={state.height}
-				handle={<div className={styles["model-tree-handle"]}></div>}
+				handle={
+					<div
+						className={
+							styles["model-tree-handle"] +
+							" " +
+							sharedStyles["handle"]
+						}
+					></div>
+				}
 				onResize={onResize}
 			>
 				<div
 					className={styles["model-tree-container"]}
 					style={{ height: state.height }}
 				>
+					<Header>
+						<div>Model Tree</div>
+					</Header>
 					{getModelTree().map((model) => (
 						<div key={model.id}>
 							<p

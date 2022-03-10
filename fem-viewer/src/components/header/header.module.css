@@ -1,0 +1,8 @@
+.header-container {
+	background-color: var(--black);
+	color: white;
+	height: var(--header-height);
+	display: flex;
+	align-items: center;
+	padding-left: 5%;
+}

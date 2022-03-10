@@ -1,3 +1,14 @@
+:root {
+	--border-color: rgb(0, 0, 0);
+	--black: rgb(119, 61, 61);
+	--bg-white: rgb(216, 216, 216);
+	--viewer-bg: rgb(255, 255, 255);
+	--tree-border-width: 8px;
+	--header-height: 50px;
+	--drag-handle-bg: rgb(143, 2, 2);
+	--drag-handle-active-bg: rgb(200, 2, 2);
+}
+
 .App {
 	text-align: center;
 	width: 100%;

@@ -4,11 +4,9 @@ import Viewer from "../viewer/Viewer";
 import styles from "./appContainer.module.css";
 import Details from "../details/Details";
 import { Resizable, ResizeCallbackData } from "react-resizable";
-import FileUpload from "../fileUpload/FileUpload";
+import sharedStyles from "../../utlitity/sharedStyles.module.css";
 
 const AppContainer = () => {
-	const [filesUploaded, setFilesUploaded] = useState(false);
-
 	const [state, setState] = useState(() => {
 		const appWidth = window.innerWidth;
 		return {
@@ -30,25 +28,28 @@ const AppContainer = () => {
 
 	return (
 		<div className={styles["app-container-container"]}>
-			{filesUploaded ? (
-				<Resizable
-					height={0}
-					width={state.width}
-					handle={<div className={styles["model-tree-handle"]}></div>}
-					onResize={onResize}
-				>
+			<Resizable
+				height={0}
+				width={state.width}
+				handle={
 					<div
-						className={styles["app-container-sidebar-container"]}
-						style={{ flexBasis: state.width }}
-					>
-						<ModelTree />
-						<Details />
-					</div>
-				</Resizable>
-			) : (
-				<FileUpload toggleViewer={setFilesUploaded} />
-			)}
-
+						className={
+							styles["model-tree-handle"] +
+							" " +
+							sharedStyles["handle"]
+						}
+					></div>
+				}
+				onResize={onResize}
+			>
+				<div
+					className={styles["app-container-sidebar-container"]}
+					style={{ flexBasis: state.width }}
+				>
+					<ModelTree />
+					<Details />
+				</div>
+			</Resizable>
 			<Viewer />
 		</div>
 	);
