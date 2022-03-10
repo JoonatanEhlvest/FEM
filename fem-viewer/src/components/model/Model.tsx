@@ -12,11 +12,16 @@ import Note from "../hitboxes/note/Note";
 type Props = {
 	model: ModelType;
 	parentDimensions: DOMRectReadOnly | null;
+	showHitboxes: boolean;
 };
 
 // FIXME: Rendering for referenced instances
-const renderInstanceType = (instance: Instance, model: ModelType) => {
-	const sharedStyles: CSSProperties = getStyle(instance, model);
+const renderInstanceType = (
+	instance: Instance,
+	model: ModelType,
+	showHitboxes: boolean
+) => {
+	const sharedStyles: CSSProperties = getStyle(instance, model, showHitboxes);
 
 	switch (instance.class) {
 		case "Pool":
@@ -39,7 +44,7 @@ const renderInstanceType = (instance: Instance, model: ModelType) => {
  * renderInstanceType handles rendering of correct component based on instance class
  * Instance classes (Process, Asset, Pool etc.) are responsible for actually visualizing an instance.
  */
-const Model: FC<Props> = ({ model, parentDimensions }) => {
+const Model: FC<Props> = ({ model, parentDimensions, showHitboxes }) => {
 	const { setCurrentInstance } = useFEM();
 	return (
 		<div key={model.id} className={styles["model-container"]}>
@@ -52,7 +57,7 @@ const Model: FC<Props> = ({ model, parentDimensions }) => {
 						setCurrentInstance(i);
 					}}
 				>
-					{renderInstanceType(i, model)}
+					{renderInstanceType(i, model, showHitboxes)}
 				</div>
 			))}
 		</div>

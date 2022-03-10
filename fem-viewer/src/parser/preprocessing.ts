@@ -93,7 +93,11 @@ const getTransform = (i: Instance): CSSProperties["transform"] => {
 
 // Position instances and apply shared styles
 // FIXME: Apply positions relative to the model worldArea and parent size
-const getStyle = (i: Instance, model: Model): CSSProperties => {
+const getStyle = (
+	i: Instance,
+	model: Model,
+	showHitboxes: boolean
+): CSSProperties => {
 	// TODO: REMOVE
 	// const backgroundColor = getBgColor(i, model);
 	const cmToPx = 37.7952755906;
@@ -107,6 +111,17 @@ const getStyle = (i: Instance, model: Model): CSSProperties => {
 		const top = i.position.y * cmToPx;
 		const width = i.position.width * cmToPx;
 		const height = i.position.height * cmToPx;
+
+		let border: CSSProperties = {};
+
+		if (showHitboxes) {
+			border = {
+				borderColor: "rgb(255, 0, 160)",
+				borderWidth: "3px",
+				borderStyle: "solid",
+			};
+		}
+
 		return {
 			left,
 			transform: getTransform(i),
@@ -115,16 +130,8 @@ const getStyle = (i: Instance, model: Model): CSSProperties => {
 			height,
 			fontSize: i.fontSize,
 			backgroundColor: "transparent",
-			zIndex,
-			// borderColor: getBorderColor(i),
-			borderColor: "rgb(255, 0, 160)",
-			borderWidth: "3px",
-			borderStyle: "solid",
-			// width: "100%",
-			// height: "100%",
-			// top: 0,
-			// left: 0,
 			position: "inherit",
+			...border,
 		};
 	}
 	return {};

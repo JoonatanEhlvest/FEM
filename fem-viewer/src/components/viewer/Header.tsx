@@ -4,9 +4,10 @@ import styles from "./header.module.css";
 
 type Props = {
 	model: Model | undefined;
+	toggleHitboxes: () => void;
 };
 
-const Header: FC<Props> = ({ model }) => {
+const Header: FC<Props> = ({ model, toggleHitboxes }) => {
 	return (
 		<div className={styles["header-container"]}>
 			{model && (
@@ -14,6 +15,12 @@ const Header: FC<Props> = ({ model }) => {
 					<div>{model.name}</div>
 					<div style={{ width: "100px" }}> </div>
 					<div>{model.id}</div>
+					<button
+						className={styles["toggle-hitboxes"]}
+						onClick={toggleHitboxes}
+					>
+						Toggle Hitboxes
+					</button>
 				</div>
 			)}
 		</div>

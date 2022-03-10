@@ -2,6 +2,7 @@
 	background-color: var(--bg-white);
 	height: 100%;
 	width: 100%;
+	min-height: 200px;
 	overflow: auto;
 	position: relative;
 }
@@ -13,4 +14,34 @@
 	width: 100px;
 	height: 10px;
 	background-color: var(--drag-handle-bg);
+}
+
+.model-tree-content {
+	display: flex;
+	flex-direction: column;
+	justify-content: start;
+	align-items: flex-start;
+	padding-left: 10px;
+}
+
+.model-tree-item-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+}
+
+.model-tree-item-pre {
+	width: 10px;
+	height: 10px;
+	background-color: var(--black);
+	margin-right: 10px;
+}
+
+.model-tree-item {
+}
+
+.model-tree-item:hover {
+	text-decoration: underline;
 }

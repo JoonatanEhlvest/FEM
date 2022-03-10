@@ -1,12 +1,22 @@
-import React, { useState } from "react";
+import React, { CSSProperties, useState } from "react";
 import { Resizable, ResizeCallbackData } from "react-resizable";
 import useFEM from "../../state/useFEM";
 import Header from "../header/Header";
 import styles from "./modelTree.module.css";
 import sharedStyles from "../../utlitity/sharedStyles.module.css";
+import Model from "../../state/types/Model";
+
+const itemPreStylesIfSelected: CSSProperties = {
+	backgroundColor: "red",
+};
+
+const itemStylesIfSelected: CSSProperties = {
+	textDecoration: "underline",
+};
 
 const ModelTree = () => {
-	const { getModelTree, setCurrentModel } = useFEM();
+	const { getModelTree, setCurrentModel, getCurrentModel } = useFEM();
+
 	const [state, setState] = useState(() => {
 		return {
 			height: 0.75 * window.innerHeight,
@@ -20,6 +30,21 @@ const ModelTree = () => {
 				height: data.size.height,
 			};
 		});
+	};
+
+	const isCurrentModelSelected = (model: Model): boolean => {
+		return model.id === getCurrentModel()?.id;
+	};
+
+	const getStylesIfSelected = (
+		model: Model,
+		stylesIfSelected: CSSProperties
+	): CSSProperties => {
+		if (isCurrentModelSelected(model)) {
+			return stylesIfSelected;
+		}
+
+		return {};
 	};
 
 	return (
@@ -45,17 +70,34 @@ const ModelTree = () => {
 					<Header>
 						<div>Model Tree</div>
 					</Header>
-					{getModelTree().map((model) => (
-						<div key={model.id}>
-							<p
+					<div className={styles["model-tree-content"]}>
+						{getModelTree().map((model) => (
+							<div
+								className={styles["model-tree-item-container"]}
+								key={model.id}
 								onClick={() => {
 									setCurrentModel(model.id);
 								}}
 							>
-								{model.name}
-							</p>
-						</div>
-					))}
+								<div
+									className={styles["model-tree-item-pre"]}
+									style={getStylesIfSelected(
+										model,
+										itemPreStylesIfSelected
+									)}
+								></div>
+								<p
+									className={styles["model-tree-item"]}
+									style={getStylesIfSelected(
+										model,
+										itemStylesIfSelected
+									)}
+								>
+									{model.name}
+								</p>
+							</div>
+						))}
+					</div>
 				</div>
 			</Resizable>
 		</div>

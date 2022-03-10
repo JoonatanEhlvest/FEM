@@ -9,6 +9,8 @@ const Viewer = () => {
 	const viewerContainerRef = useRef<HTMLDivElement>(null);
 	const [dimensions, setDimensions] = useState<DOMRectReadOnly | null>(null);
 
+	const [showHitboxes, setShowHitboxes] = useState(false);
+
 	const observer = useRef(
 		new ResizeObserver((entries) => {
 			setDimensions(entries[0].contentRect);
@@ -30,15 +32,23 @@ const Viewer = () => {
 	const model = getCurrentModel();
 	const svg = getCurrentSvgElement();
 
+	const toggleHitboxes = () => setShowHitboxes(!showHitboxes);
+
 	return (
 		<div className={styles["viewer-container-wrapper"]}>
-			<Header model={model} />
+			<Header model={model} toggleHitboxes={toggleHitboxes} />
 			<div
 				className={styles["viewer-container"]}
 				ref={viewerContainerRef}
 			>
 				{svg && getCurrentSvgElement()}
-				{model && <Model model={model} parentDimensions={dimensions} />}
+				{model && (
+					<Model
+						model={model}
+						parentDimensions={dimensions}
+						showHitboxes={showHitboxes}
+					/>
+				)}
 			</div>
 		</div>
 	);

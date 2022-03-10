@@ -15,4 +15,24 @@
 	justify-content: flex-start;
 	padding-left: 5%;
 	padding-right: 5%;
+	width: 100%;
+	height: 100%;
+	align-items: center;
+}
+
+.toggle-hitboxes {
+	margin-left: auto;
+	height: 60%;
+	background-color: white;
+	border: 2px solid var(--border-color);
+}
+
+.toggle-hitboxes:active {
+	transform: scale(1.1);
+}
+
+.toggle-hitboxes:hover {
+	background-color: rgb(220, 47, 47);
+
+	color: white;
 }
