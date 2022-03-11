@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import useFEM from "../../state/useFEM";
 import Model from "../model/Model";
+import RenderSVG from "../svgrenderer/svgrenderer";
 import Header from "./Header";
 import styles from "./viewer.module.css";
 
 const Viewer = () => {
-	const { getCurrentModel, getModelSvg, getCurrentSvgElement } = useFEM();
+	const { getCurrentModel, getCurrentSvgElement, getZoom } = useFEM();
 	const viewerContainerRef = useRef<HTMLDivElement>(null);
 	const [dimensions, setDimensions] = useState<DOMRectReadOnly | null>(null);
 
@@ -41,7 +42,12 @@ const Viewer = () => {
 				className={styles["viewer-container"]}
 				ref={viewerContainerRef}
 			>
-				{svg && getCurrentSvgElement()}
+				{svg && (
+					<RenderSVG
+						image={getCurrentSvgElement()}
+						zoom={getZoom()}
+					/>
+				)}
 				{model && (
 					<Model
 						model={model}

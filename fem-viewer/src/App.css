@@ -1,7 +1,7 @@
 :root {
 	--border-color: rgb(92, 92, 92);
 	--black: rgb(95, 172, 208);
-	--bg-white: rgb(216, 216, 216);
+	--bg-white: rgb(255, 255, 255);
 	--viewer-bg: rgb(255, 255, 255);
 	--tree-border-width: 8px;
 	--header-height: 50px;

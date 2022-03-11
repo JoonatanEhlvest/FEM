@@ -8,6 +8,7 @@ import styles from "./model.module.css";
 import useFEM from "../../state/useFEM";
 import { getStyle } from "../../parser/preprocessing";
 import Note from "../hitboxes/note/Note";
+import FEMState from "../../state/FEMState";
 
 type Props = {
 	model: ModelType;
@@ -19,9 +20,15 @@ type Props = {
 const renderInstanceType = (
 	instance: Instance,
 	model: ModelType,
-	showHitboxes: boolean
+	showHitboxes: boolean,
+	zoom: FEMState["zoom"]
 ) => {
-	const sharedStyles: CSSProperties = getStyle(instance, model, showHitboxes);
+	const sharedStyles: CSSProperties = getStyle(
+		instance,
+		model,
+		showHitboxes,
+		zoom
+	);
 
 	switch (instance.class) {
 		case "Pool":
@@ -45,7 +52,7 @@ const renderInstanceType = (
  * Instance classes (Process, Asset, Pool etc.) are responsible for actually visualizing an instance.
  */
 const Model: FC<Props> = ({ model, parentDimensions, showHitboxes }) => {
-	const { setCurrentInstance } = useFEM();
+	const { setCurrentInstance, getZoom } = useFEM();
 	return (
 		<div key={model.id} className={styles["model-container"]}>
 			{model.instances.map((i) => (
@@ -57,7 +64,7 @@ const Model: FC<Props> = ({ model, parentDimensions, showHitboxes }) => {
 						setCurrentInstance(i);
 					}}
 				>
-					{renderInstanceType(i, model, showHitboxes)}
+					{renderInstanceType(i, model, showHitboxes, getZoom())}
 				</div>
 			))}
 		</div>

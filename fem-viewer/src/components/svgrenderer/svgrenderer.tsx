@@ -1,4 +1,5 @@
-import { ReactElement } from "react";
+import { FC, ReactElement, useEffect, useState } from "react";
+import FEMState from "../../state/FEMState";
 
 export type svgXML = { [key: string]: string | Array<svgXML> | svgXML };
 
@@ -60,9 +61,13 @@ const removeProp = (obj: svgXML, prop: string): svgXML => {
 	return restObject;
 };
 
-const renderSVG = (image: svgXML | null): ReactElement => {
+type Props = {
+	image: svgXML | undefined;
+	zoom: FEMState["zoom"];
+};
+
+const RenderSVG: FC<Props> = ({ image, zoom }): ReactElement => {
 	if (image) {
-		console.log(image);
 		const svgTag = getObjProp(image, "svg");
 		const g = getObjProp(svgTag, "g");
 		const ellipses = getArrProp(g, "ellipse");
@@ -73,14 +78,19 @@ const renderSVG = (image: svgXML | null): ReactElement => {
 		const polygons = getArrProp(g, "polygon");
 		const polylines = getArrProp(g, "polyline");
 
+		const width = parseFloat(getStrProp(svgTag, "width"));
+		const height = parseFloat(getStrProp(svgTag, "height"));
+
 		return (
 			<svg
+				viewBox={`0 0 ${width * zoom}px ${height * zoom}px`}
+				preserveAspectRatio="xMidYMid meet"
 				xmlns={getStrProp(svgTag, "xmlns")}
 				version={getStrProp(svgTag, "version")}
-				width={getStrProp(svgTag, "width")}
-				height={getStrProp(svgTag, "height")}
+				width={`${width * zoom}px`}
+				height={`${height * zoom}px`}
 			>
-				<g>
+				<g transform={`scale(${zoom})`}>
 					{rects.map((r, i) => {
 						return (
 							<rect
@@ -168,4 +178,4 @@ const renderSVG = (image: svgXML | null): ReactElement => {
 	return <div>Couldn't parse image</div>;
 };
 
-export default renderSVG;
+export default RenderSVG;

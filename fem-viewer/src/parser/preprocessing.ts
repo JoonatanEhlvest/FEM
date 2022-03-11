@@ -1,4 +1,5 @@
 import { CSSProperties } from "react";
+import FEMState from "../state/FEMState";
 import Instance from "../state/types/Instance";
 import Model from "../state/types/Model";
 
@@ -83,12 +84,16 @@ const DEFAULT_COLOR = "#ffc0cb";
 // 	return i.borderColor;
 // };
 
-const getTransform = (i: Instance): CSSProperties["transform"] => {
+const getTransform = (
+	i: Instance,
+	zoom: FEMState["zoom"]
+): CSSProperties["transform"] => {
+	let zoomAmount = -50 / zoom;
 	if (i.class === "Note") {
-		return "";
+		zoomAmount += 50;
 	}
 
-	return "translateX(-50%) translateY(-50%)";
+	return `scale(${zoom}) translate(${zoomAmount}%, ${zoomAmount}%)`;
 };
 
 // Position instances and apply shared styles
@@ -96,7 +101,8 @@ const getTransform = (i: Instance): CSSProperties["transform"] => {
 const getStyle = (
 	i: Instance,
 	model: Model,
-	showHitboxes: boolean
+	showHitboxes: boolean,
+	zoom: FEMState["zoom"]
 ): CSSProperties => {
 	// TODO: REMOVE
 	// const backgroundColor = getBgColor(i, model);
@@ -107,8 +113,8 @@ const getStyle = (
 	if (i.isGhost) zIndex -= 50;
 
 	if (i.position) {
-		const left = i.position.x * cmToPx;
-		const top = i.position.y * cmToPx;
+		const left = i.position.x * cmToPx * zoom;
+		const top = i.position.y * cmToPx * zoom;
 		const width = i.position.width * cmToPx;
 		const height = i.position.height * cmToPx;
 
@@ -122,9 +128,11 @@ const getStyle = (
 			};
 		}
 
+		let transformOrigin: CSSProperties = {};
+
 		return {
 			left,
-			transform: getTransform(i),
+			transform: getTransform(i, zoom),
 			top,
 			width,
 			height,
@@ -132,6 +140,7 @@ const getStyle = (
 			backgroundColor: "transparent",
 			position: "inherit",
 			...border,
+			...transformOrigin,
 		};
 	}
 	return {};

@@ -282,8 +282,6 @@ const useFEM = () => {
 	};
 
 	const addModel = (model: any) => {
-		console.log(model);
-
 		const modelToAdd: Model = {
 			id: tryGetStrProperty(model, "id"),
 			applib: tryGetStrProperty(model, "applib"),
@@ -359,7 +357,7 @@ const useFEM = () => {
 		if (modelName === getCurrentModel()?.name) {
 			return;
 		}
-		const svg = renderSVG(getModelSvg(modelName));
+		const svg = getModelSvg(modelName);
 		setState((prevState) => ({
 			...prevState,
 			currentSvgElement: svg,
@@ -389,6 +387,18 @@ const useFEM = () => {
 		return state.svgs[modelName];
 	};
 
+	const setZoom = (zoom: number) => {
+		setState((prevState) => ({
+			...prevState,
+			zoom,
+		}));
+	};
+
+	const getZoom = (): FEMState["zoom"] => {
+		console.log(state.zoom);
+		return state.zoom;
+	};
+
 	return {
 		getModelTree,
 		addModel,
@@ -400,6 +410,8 @@ const useFEM = () => {
 		addSvg,
 		getCurrentSvgElement,
 		goToReference,
+		setZoom,
+		getZoom,
 	};
 };
 

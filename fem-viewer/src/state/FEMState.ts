@@ -8,7 +8,8 @@ export default interface FEMState {
 	currentModel: Model | undefined;
 	currentInstance: Instance | undefined;
 	svgs: { [key: Model["name"]]: svgXML };
-	currentSvgElement: ReactElement | undefined;
+	currentSvgElement: svgXML | undefined;
+	zoom: number;
 }
 
 const initialState: FEMState = {
@@ -17,6 +18,7 @@ const initialState: FEMState = {
 	currentInstance: undefined,
 	svgs: {},
 	currentSvgElement: undefined,
+	zoom: 1,
 };
 
 export { initialState };
