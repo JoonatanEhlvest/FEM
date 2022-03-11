@@ -1,6 +1,5 @@
 :root {
 	--border-color: rgb(92, 92, 92);
-	--black: rgb(95, 172, 208);
 	--bg-white: rgb(255, 255, 255);
 	--viewer-bg: rgb(255, 255, 255);
 	--tree-border-width: 8px;
@@ -8,6 +7,10 @@
 	--drag-handle-bg: rgb(34, 34, 34);
 	--drag-handle-active-bg: rgb(2, 127, 200);
 	--selected-bg: rgb(103, 200, 245);
+
+	--black: rgb(34, 128, 172);
+	--subtitle-bg: rgb(95, 172, 208);
+	--subtitle-fg: white;
 }
 
 .App {

@@ -1,6 +1,7 @@
 import Reference from "../../state/types/Reference";
 import useFEM from "../../state/useFEM";
 import Header from "../header/Header";
+import Cell from "./Cell";
 import styles from "./details.module.css";
 
 const Details = () => {
@@ -23,26 +24,84 @@ const Details = () => {
 				</Header>
 
 				{instance && (
-					<div>
-						<div>{instance.class}</div>
-						<div>{instance.id}</div>
-						<div>{instance.denomination}</div>
-						{instance.reference && (
-							<div>
-								Reference
-								<div>Model: {instance.reference.modelName}</div>
+					<div className={styles["details-content"]}>
+						<Cell
+							title="General Information"
+							value={
 								<div>
-									instance:{" "}
-									{instance.reference.referencedInstanceName}
+									<Cell
+										title={"Class"}
+										value={instance.class}
+									/>
+									<Cell title={"ID"} value={instance.id} />
+									<Cell
+										title={"Denomination"}
+										value={instance.denomination}
+									/>
+									<Cell
+										title={"isGroup"}
+										value={instance.isGroup ? "Yes" : "No"}
+									/>
+									<Cell
+										title={"isGhost"}
+										value={instance.isGhost ? "Yes" : "No"}
+									/>
 								</div>
-								<div
-									onClick={() =>
-										handleGoToReference(instance.reference)
-									}
-								>
-									GO TO REFERENCE
-								</div>
-							</div>
+							}
+						/>
+
+						{instance.reference && (
+							<Cell
+								title={"Reference"}
+								value={
+									<div>
+										<Cell
+											title={"Model"}
+											value={instance.reference.modelName}
+										/>
+										<Cell
+											title={"Instance"}
+											value={
+												instance.reference
+													.referencedInstanceName
+											}
+										/>
+										<Cell
+											title={"Reference type"}
+											value={instance.reference.type}
+										/>
+										<Cell
+											title={"Follow reference"}
+											value={
+												<div
+													onClick={() =>
+														handleGoToReference(
+															instance.reference
+														)
+													}
+												>
+													<button>GO</button>
+												</div>
+											}
+										/>
+									</div>
+								}
+							/>
+							// <div>
+							// 	Reference
+							// 	<div>Model: {instance.reference.modelName}</div>
+							// 	<div>
+							// 		instance:{" "}
+							// 		{instance.reference.referencedInstanceName}
+							// 	</div>
+							// 	<div
+							// 		onClick={() =>
+							// 			handleGoToReference(instance.reference)
+							// 		}
+							// 	>
+							// 		GO TO REFERENCE
+							// 	</div>
+							// </div>
 						)}
 					</div>
 				)}

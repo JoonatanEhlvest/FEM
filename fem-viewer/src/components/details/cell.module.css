@@ -1,0 +1,40 @@
+.cell-row {
+	display: flex;
+	flex-direction: row;
+	border: 1px solid var(--black);
+}
+
+.prop-title {
+	display: flex;
+	width: 25%;
+	height: 25px;
+	justify-content: center;
+	align-items: center;
+	border-right: 1px solid var(--black);
+	background-color: rgba(95, 172, 208, 0.25);
+}
+
+.prop-value {
+	flex-grow: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.cell-row-child {
+	display: flex;
+	flex-direction: column;
+}
+
+.prop-title-child {
+	display: flex;
+	align-items: center;
+	height: 25px;
+	justify-content: center;
+	background-color: var(--subtitle-bg);
+	color: var(--subtitle-fg);
+}
+
+.prop-value-child {
+	flex-grow: 1;
+}

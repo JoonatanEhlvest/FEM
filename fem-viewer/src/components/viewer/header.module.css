@@ -32,7 +32,7 @@
 }
 
 .toggle-hitboxes:hover {
-	background-color: rgb(220, 47, 47);
+	background-color: var(--selected-bg);
 
 	color: white;
 }

@@ -16,3 +16,8 @@
 	position: absolute;
 	pointer-events: none;
 }
+
+.details-content {
+	display: flex;
+	flex-direction: column;
+}

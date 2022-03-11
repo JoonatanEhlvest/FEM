@@ -67,6 +67,7 @@ type Props = {
 };
 
 const RenderSVG: FC<Props> = ({ image, zoom }): ReactElement => {
+	const SCROLL_BUFFER_SIZE = 100;
 	if (image) {
 		const svgTag = getObjProp(image, "svg");
 		const g = getObjProp(svgTag, "g");
@@ -87,8 +88,8 @@ const RenderSVG: FC<Props> = ({ image, zoom }): ReactElement => {
 				preserveAspectRatio="xMidYMid meet"
 				xmlns={getStrProp(svgTag, "xmlns")}
 				version={getStrProp(svgTag, "version")}
-				width={`${width * zoom}px`}
-				height={`${height * zoom}px`}
+				width={`${width * zoom + SCROLL_BUFFER_SIZE}px`}
+				height={`${height * zoom + SCROLL_BUFFER_SIZE}px`}
 			>
 				<g transform={`scale(${zoom})`}>
 					{rects.map((r, i) => {
