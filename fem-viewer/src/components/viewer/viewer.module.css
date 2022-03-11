@@ -8,7 +8,12 @@
 }
 
 svg {
-	width: 100%;
+	top: 0;
+	left: 0;
+	position: absolute;
+	width: auto;
+	height: auto;
+	overflow: auto;
 }
 
 .viewer-container-wrapper {

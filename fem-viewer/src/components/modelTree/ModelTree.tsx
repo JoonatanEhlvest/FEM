@@ -7,7 +7,7 @@ import sharedStyles from "../../utlitity/sharedStyles.module.css";
 import Model from "../../state/types/Model";
 
 const itemPreStylesIfSelected: CSSProperties = {
-	backgroundColor: "red",
+	backgroundColor: "blue",
 };
 
 const itemStylesIfSelected: CSSProperties = {
@@ -36,15 +36,12 @@ const ModelTree = () => {
 		return model.id === getCurrentModel()?.id;
 	};
 
-	const getStylesIfSelected = (
-		model: Model,
-		stylesIfSelected: CSSProperties
-	): CSSProperties => {
+	const getClassIfSelected = (className: string, model: Model): string => {
 		if (isCurrentModelSelected(model)) {
-			return stylesIfSelected;
+			return styles[className];
 		}
 
-		return {};
+		return "";
 	};
 
 	return (
@@ -80,18 +77,24 @@ const ModelTree = () => {
 								}}
 							>
 								<div
-									className={styles["model-tree-item-pre"]}
-									style={getStylesIfSelected(
-										model,
-										itemPreStylesIfSelected
-									)}
+									className={
+										styles["model-tree-item-pre"] +
+										" " +
+										getClassIfSelected(
+											"pre-selected",
+											model
+										)
+									}
 								></div>
 								<p
-									className={styles["model-tree-item"]}
-									style={getStylesIfSelected(
-										model,
-										itemStylesIfSelected
-									)}
+									className={
+										styles["model-tree-item"] +
+										" " +
+										getClassIfSelected(
+											"item-selected",
+											model
+										)
+									}
 								>
 									{model.name}
 								</p>

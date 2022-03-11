@@ -35,7 +35,7 @@
 .model-tree-item-pre {
 	width: 10px;
 	height: 10px;
-	background-color: var(--black);
+	border: 2px solid var(--black);
 	margin-right: 10px;
 }
 
@@ -44,4 +44,12 @@
 
 .model-tree-item:hover {
 	text-decoration: underline;
+}
+
+.item-selected {
+	text-decoration: underline;
+}
+
+.pre-selected {
+	background-color: var(--selected-bg);
 }
