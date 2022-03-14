@@ -247,6 +247,11 @@ const useFEM = () => {
 					group: f("notegroupbackgroundcolor"),
 					default: f("notebackgroundcolor"),
 				},
+				"External Actor": {
+					ghost: f("externalactorghostbackgroundcolor"),
+					group: f("externalactorgroupbackgroundcolor"),
+					default: f("externalactorbackgroundcolor"),
+				},
 			},
 
 			Author: f("author"),

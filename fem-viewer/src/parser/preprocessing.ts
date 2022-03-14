@@ -139,6 +139,7 @@ const getStyle = (
 			fontSize: i.fontSize,
 			backgroundColor: "transparent",
 			position: "inherit",
+			zIndex,
 			...border,
 			...transformOrigin,
 		};

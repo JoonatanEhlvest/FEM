@@ -25,6 +25,8 @@ const getArrProp = (s: svgXML, prop: string): Array<svgXML> => {
 	const ret = s[prop];
 	if (Array.isArray(ret)) {
 		return ret;
+	} else if (typeof ret === "object") {
+		return [ret];
 	}
 
 	return [];
@@ -78,9 +80,9 @@ const RenderSVG: FC<Props> = ({ image, zoom }): ReactElement => {
 		const lines = getArrProp(g, "line");
 		const polygons = getArrProp(g, "polygon");
 		const polylines = getArrProp(g, "polyline");
-
 		const width = parseFloat(getStrProp(svgTag, "width"));
 		const height = parseFloat(getStrProp(svgTag, "height"));
+
 
 		return (
 			<svg

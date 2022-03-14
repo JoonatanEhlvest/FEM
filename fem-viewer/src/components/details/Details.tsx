@@ -1,3 +1,4 @@
+import Instance, { isSubclass } from "../../state/types/Instance";
 import Reference from "../../state/types/Reference";
 import useFEM from "../../state/useFEM";
 import Header from "../header/Header";
@@ -14,6 +15,28 @@ const Details = () => {
 			return;
 		}
 		goToReference(ref);
+	};
+
+	const getTitle = (instance: Instance): string => {
+		if (instance.class === "Note") {
+			return "Description";
+		}
+		if (isSubclass(instance)) {
+			return "Name";
+		} else {
+			return "Denomination";
+		}
+	};
+
+	const getValue = (instance: Instance): string => {
+		if (instance.class === "Note") {
+			return instance.description;
+		}
+		if (isSubclass(instance)) {
+			return instance.name;
+		} else {
+			return instance.denomination;
+		}
 	};
 
 	return (
@@ -35,8 +58,8 @@ const Details = () => {
 									/>
 									<Cell title={"ID"} value={instance.id} />
 									<Cell
-										title={"Denomination"}
-										value={instance.denomination}
+										title={getTitle(instance)}
+										value={getValue(instance)}
 									/>
 									<Cell
 										title={"isGroup"}

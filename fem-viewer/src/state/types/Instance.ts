@@ -42,7 +42,11 @@ const INSTANCE_DEFAULTS: { [key: string]: number | string } = {
 };
 
 const isSubclass = (i: Instance): boolean => {
-	const subclasses: InstanceClass[] = ["Asset_Subclass", "Process_Subclass"];
+	const subclasses: InstanceClass[] = [
+		"Asset_Subclass",
+		"Process_Subclass",
+		"External Actor_Subclass",
+	];
 	return subclasses.includes(i.class);
 };
 
