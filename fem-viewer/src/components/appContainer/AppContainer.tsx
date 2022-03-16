@@ -5,8 +5,11 @@ import styles from "./appContainer.module.css";
 import Details from "../details/Details";
 import { Resizable, ResizeCallbackData } from "react-resizable";
 import sharedStyles from "../../utlitity/sharedStyles.module.css";
+import { useParams } from "react-router-dom";
 
 const AppContainer = () => {
+	const { id } = useParams();
+
 	const [state, setState] = useState(() => {
 		const appWidth = window.innerWidth;
 		return {

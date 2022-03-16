@@ -1,20 +1,12 @@
-import { useState } from "react";
 import "./App.css";
-import AppContainer from "./components/appContainer/AppContainer";
-import FileUpload from "./components/fileUpload/FileUpload";
+import AppRouter from "./components/router/AppRouter";
 import FEMProvider from "./state/FEMProvider";
 
 function App() {
-	const [filesUploaded, setFilesUploaded] = useState(false);
-
 	return (
 		<div className="App">
 			<FEMProvider>
-				{filesUploaded ? (
-					<AppContainer />
-				) : (
-					<FileUpload toggleViewer={setFilesUploaded} />
-				)}
+				<AppRouter />
 			</FEMProvider>
 		</div>
 	);

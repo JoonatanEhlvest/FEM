@@ -1,19 +1,81 @@
+import axios from "axios";
+import { exec } from "child_process";
 import { XMLParser } from "fast-xml-parser";
-import React, { ChangeEvent, FC, useState } from "react";
+import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import createParser from "../../parser";
 import useFEM from "../../state/useFEM";
 import { ATTR_PREFIX } from "../../utlitity";
 
-type Props = {
-	toggleViewer: React.Dispatch<React.SetStateAction<boolean>>;
+type ModelGroup = {
+	name: string;
+	links: Array<String>;
 };
 
-const FileUpload: FC<Props> = ({ toggleViewer }) => {
+const FileUpload = () => {
 	const { addModel, addSvg } = useFEM();
 	const [uploadError, setUploadError] = useState<string | null>(null);
+	const [xmlFiles, setXMLFiles] = useState<Array<File | null> | null>(null);
+	const [svgFiles, setsvgFiles] = useState<Array<File | null> | null>(null);
+	const [modelGroups, setModelGroups] = useState<Array<ModelGroup>>([]);
+
+	useEffect(() => {
+		axios
+			.get("/api/v1/upload")
+			.then((res) => {
+				setUploadError(null);
+				setModelGroups(res.data.modelGroups);
+			})
+			.catch((_) => {
+				setUploadError("Couln't find modelGroups");
+			});
+	}, []);
+
+	const generateLink = (modelGroupName: ModelGroup["name"]) => {
+		axios
+			.post("/api/v1/generatelink", { modelGroupName })
+			.then((res) => {
+				console.log(res);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
 	const onSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		toggleViewer(true);
+		if (xmlFiles) {
+			const data = new FormData();
+
+			data.append("modelGroupName", "BMI");
+			xmlFiles.forEach((file) => {
+				if (file) {
+					data.append("files", file);
+				}
+			});
+
+			axios.post("/api/v1/upload", data, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			});
+		}
+
+		if (svgFiles) {
+			const data = new FormData();
+
+			data.append("modelGroupName", "BMI");
+			svgFiles.forEach((file) => {
+				if (file) {
+					data.append("files", file);
+				}
+			});
+
+			axios.post("/api/v1/upload", data, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			});
+		}
 	};
 
 	const onXMLChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -32,6 +94,7 @@ const FileUpload: FC<Props> = ({ toggleViewer }) => {
 				parser.getModels().forEach((model: any) => {
 					addModel(model);
 				});
+				setXMLFiles([file]);
 			} catch {
 				setUploadError(`Couldn't parse ${file.name}`);
 			}
@@ -51,9 +114,17 @@ const FileUpload: FC<Props> = ({ toggleViewer }) => {
 		};
 		const parser = new XMLParser(options);
 
+		const svgs: Array<File | null> = [];
 		Array.from(e.target.files).forEach((file: File) => {
-			readSvg(parser, file);
+			try {
+				readSvg(parser, file);
+				svgs.push(file);
+			} catch {
+				setUploadError(`Couldn't parse ${file.name}`);
+			}
 		});
+
+		setsvgFiles(svgs);
 	};
 
 	const readSvg = (parser: XMLParser, file: File) => {
@@ -83,6 +154,23 @@ const FileUpload: FC<Props> = ({ toggleViewer }) => {
 				<input type="submit" />
 			</form>
 			{uploadError && <div>{uploadError}</div>}
+			<div>
+				{modelGroups.map((m) => {
+					return (
+						<div>
+							ModelGroup: {m.name}
+							<div>
+								{m.links.map((link) => {
+									return <div>link: {link}</div>;
+								})}
+							</div>
+							<button onClick={() => generateLink(m.name)}>
+								Generate link
+							</button>
+						</div>
+					);
+				})}
+			</div>
 		</div>
 	);
 };
