@@ -5,6 +5,9 @@ import multer from "multer";
 import fs from "fs";
 import startup from "./startup";
 import { randomUUID } from "crypto";
+import createParser, { Parser } from "../../src/parser/index";
+import { XMLParser } from "fast-xml-parser";
+import { ATTR_PREFIX } from "../../src/utlitity";
 
 dotenv.config();
 
@@ -65,6 +68,67 @@ app.get("/api/v1/upload", (_, res) => {
 	});
 });
 
+const findModelGroupByLinkId = (linkID: string): string | null => {
+	const links = readLinks();
+	const modelGroups = Object.keys(links["links"]);
+
+	for (const modelGroup of modelGroups) {
+		if (
+			links["links"][modelGroup]["links"].find(
+				(id: string) => id === linkID
+			)
+		) {
+			return modelGroup;
+		}
+	}
+	return null;
+};
+
+app.get("/api/v1/modelgroups/:linkID", (req, res) => {
+	const { linkID } = req.params;
+	console.log(linkID);
+
+	const modelGroup = findModelGroupByLinkId(linkID);
+
+	if (modelGroup) {
+		fs.readdir(path.join("uploads", modelGroup), (err, files) => {
+			if (err) {
+				return res.status(500).json({
+					message: "Unable to scan files",
+				});
+			}
+			files.forEach((file) => {
+				if (file.endsWith(".xml")) {
+					const xml = fs.readFile(
+						path.join("uploads", modelGroup, file),
+						"utf-8",
+						(err, data) => {
+							if (err) {
+								return res.status(500).json({
+									message: "Unable to read file",
+								});
+							}
+
+							const options = {
+								ignoreAttributes: false,
+								attributeNamePrefix: ATTR_PREFIX,
+							};
+							const parser = new XMLParser(options);
+
+							const xml: string = data;
+							const jObj = parser.parse(xml);
+
+							return res.json({ xml: jObj });
+						}
+					);
+				}
+			});
+		});
+	} else {
+		return res.status(404).json({ error: "No modelGroup found for link" });
+	}
+});
+
 const readLinks = () => {
 	const data = fs.readFileSync(
 		path.join(__dirname, "..", "modelGroupLinks.json")
@@ -81,7 +145,6 @@ const writeLinks = (links: string) => {
 const getModelGroupLinks = (modelGroupName: string) => {
 	const links = readLinks();
 	if (links["links"][modelGroupName]) {
-		console.log(links["links"][modelGroupName]["links"]);
 		return links["links"][modelGroupName]["links"];
 	}
 	return [];

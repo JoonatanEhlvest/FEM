@@ -113,3 +113,5 @@ const createParser = (XMLData: any): Parser => {
 };
 
 export default createParser;
+
+export { Parser };

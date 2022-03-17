@@ -6,9 +6,13 @@ import Details from "../details/Details";
 import { Resizable, ResizeCallbackData } from "react-resizable";
 import sharedStyles from "../../utlitity/sharedStyles.module.css";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+import { Parser } from "../../parser";
+import useFEM from "../../state/useFEM";
 
 const AppContainer = () => {
 	const { id } = useParams();
+	const { addModel } = useFEM();
 
 	const [state, setState] = useState(() => {
 		const appWidth = window.innerWidth;
@@ -16,6 +20,19 @@ const AppContainer = () => {
 			width: appWidth * 0.25,
 		};
 	});
+
+	useEffect(() => {
+		axios.get(`/api/v1/modelgroups/${id}`).then((res) => {
+			console.log(res.data);
+			const parser = new Parser(res.data.xml);
+			parser
+				.getModels()
+				.forEach((model: any) => {
+					addModel(model);
+				})
+				.catch((err: any) => console.log(err));
+		});
+	}, []);
 
 	const onResize = (
 		event: React.SyntheticEvent,
