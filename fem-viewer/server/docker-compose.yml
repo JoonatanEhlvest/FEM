@@ -1,0 +1,21 @@
+version: "3.3"
+
+services:
+    db:
+        container_name: femdb_container
+        image: mysql:5.7
+        restart: always
+        environment:
+            MYSQL_DATABASE: "femviewerdb"
+            MYSQL_USER: "femuser"
+            MYSQL_PASSWORD: "fempw"
+            MYSQL_ROOT_PASSWORD: "fempw"
+        ports:
+            - "3306:3306"
+        expose:
+            - "3306"
+        volumes:
+            - femdb:/var/lib/mysql
+
+volumes:
+    femdb:

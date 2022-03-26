@@ -10,6 +10,7 @@ import Model from "./types/Model";
 import ModelAttributes from "./types/ModelAttributes";
 import renderSVG, { svgXML } from "../components/svgrenderer/svgrenderer";
 import Reference from "./types/Reference";
+import axios from "axios";
 
 type XMLObj = {
 	[key: string]: string | number | XMLObj | XMLObj[];
@@ -400,8 +401,89 @@ const useFEM = () => {
 	};
 
 	const getZoom = (): FEMState["zoom"] => {
-		console.log(state.zoom);
 		return state.zoom;
+	};
+
+	const setError = (error: FEMState["error"]) => {
+		setState((prevState) => ({
+			...prevState,
+			error,
+		}));
+	};
+
+	const getError = (): FEMState["error"] => {
+		return state.error;
+	};
+
+	const login = (username: string, password: string) => {
+		axios
+			.post("/api/v1/login", { username, password })
+			.then((res) => {
+				setState((prev) => ({
+					...prev,
+					user: res.data.user,
+				}));
+			})
+			.catch((err) => {
+				setError({
+					status: err.response.status,
+					message: err.response.data.message,
+				});
+			});
+	};
+
+	const logout = () => {
+		axios
+			.delete("/api/v1/logout")
+			.then(() => {
+				setState((prev) => ({
+					...prev,
+					user: null,
+				}));
+			})
+			.catch((err) => {
+				setError({
+					status: err.response.status,
+					message: err.response.data.message,
+				});
+			});
+	};
+
+	const register = (username: string, password: string) => {
+		axios
+			.post("/api/v1/register", { username, password })
+			.then((res) => {
+				setState((prev) => ({
+					...prev,
+					user: res.data.user,
+				}));
+			})
+			.catch((err) => {
+				setError({
+					status: err.response.status,
+					message: err.response.data.message,
+				});
+			});
+	};
+
+	const tryAutoLogin = () => {
+		axios
+			.get("/api/v1/session")
+			.then((res) => {
+				setState((prev) => ({
+					...prev,
+					user: res.data.user,
+				}));
+			})
+			.catch((err) => {});
+	};
+
+	const isAuthenticated = () => {
+		return state.user !== null;
+	};
+
+	const fetchUser = () => {
+		return axios.get(`/api/v1/user/${state.user}`);
 	};
 
 	return {
@@ -417,6 +499,14 @@ const useFEM = () => {
 		goToReference,
 		setZoom,
 		getZoom,
+		setError,
+		getError,
+		isAuthenticated,
+		login,
+		register,
+		tryAutoLogin,
+		logout,
+		fetchUser,
 	};
 };
 

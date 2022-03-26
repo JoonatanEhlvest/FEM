@@ -8,7 +8,7 @@
 	--drag-handle-active-bg: rgb(2, 127, 200);
 	--selected-bg: rgb(103, 200, 245);
 
-	--black: rgb(34, 128, 172);
+	--bg-primary: rgb(34, 128, 172);
 	--subtitle-bg: rgb(95, 172, 208);
 	--subtitle-fg: white;
 }
@@ -17,7 +17,7 @@
 	text-align: center;
 	width: 100%;
 	height: 100%;
-	overflow: hidden;
+	overflow: auto;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;

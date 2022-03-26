@@ -1,0 +1,70 @@
+// docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id  String @id @default(uuid())
+
+  username String @unique
+  password String @unique
+
+  modelGroups ModelGroupsOnUsers[]
+
+  sharedBy Share[] @relation("sharedBy")
+
+  sharedTo Share[] @relation("sharedTo")
+}
+
+model File {
+  id  String @id @default(uuid())
+
+  modelGroup ModelGroup @relation(fields: [modelGroupId], references: [id])
+  modelGroupId String
+
+  name String
+}
+
+model ModelGroup {
+  id  String @id @default(uuid())
+
+  name String @unique
+
+
+  files File[]
+  users ModelGroupsOnUsers[]
+  shares Share[]
+}
+
+model ModelGroupsOnUsers {
+  modelGroup  ModelGroup  @relation(fields: [modelGroupId], references: [id])
+  modelGroupId  String
+
+  user  User  @relation(fields: [userId], references: [id])
+  userId String
+
+  owner Boolean
+
+  @@id([modelGroupId, userId])
+}
+
+model Share {
+  id  String @id @default(uuid())
+
+  modelGroup  ModelGroup  @relation(fields: [modelGroupId], references: [id])
+  modelGroupId  String
+
+  sharedBy  User  @relation("sharedBy", fields: [sharedByName], references: [username])
+  sharedByName String
+
+  sharedTo  User  @relation("sharedTo", fields: [sharedToName], references: [username])
+  sharedToName String
+}
+
+

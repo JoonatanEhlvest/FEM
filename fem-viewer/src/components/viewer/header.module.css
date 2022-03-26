@@ -1,5 +1,5 @@
 .header-container {
-	background-color: var(--black);
+	background-color: var(--bg-primary);
 	/* border-bottom: solid var(--border-color) 4px; */
 	border-left: solid var(--border-color) var(--tree-border-width);
 	height: var(--header-height);

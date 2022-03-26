@@ -6,76 +6,51 @@ import createParser from "../../parser";
 import useFEM from "../../state/useFEM";
 import { ATTR_PREFIX } from "../../utlitity";
 
-type ModelGroup = {
-	name: string;
-	links: Array<String>;
-};
-
 const FileUpload = () => {
 	const { addModel, addSvg } = useFEM();
 	const [uploadError, setUploadError] = useState<string | null>(null);
 	const [xmlFiles, setXMLFiles] = useState<Array<File | null> | null>(null);
 	const [svgFiles, setsvgFiles] = useState<Array<File | null> | null>(null);
-	const [modelGroups, setModelGroups] = useState<Array<ModelGroup>>([]);
+	const [modelGroupUploadName, setModelGroupUploadName] = useState("");
 
-	useEffect(() => {
+	const fetchModelGroupLinks = () => {
 		axios
 			.get("/api/v1/upload")
 			.then((res) => {
 				setUploadError(null);
-				setModelGroups(res.data.modelGroups);
 			})
 			.catch((_) => {
 				setUploadError("Couln't find modelGroups");
-			});
-	}, []);
-
-	const generateLink = (modelGroupName: ModelGroup["name"]) => {
-		axios
-			.post("/api/v1/generatelink", { modelGroupName })
-			.then((res) => {
-				console.log(res);
-			})
-			.catch((err) => {
-				console.log(err);
 			});
 	};
 
 	const onSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
+		const data = new FormData();
+		data.append("modelGroupName", modelGroupUploadName);
 		if (xmlFiles) {
-			const data = new FormData();
-
-			data.append("modelGroupName", "BMI");
 			xmlFiles.forEach((file) => {
 				if (file) {
 					data.append("files", file);
 				}
 			});
-
-			axios.post("/api/v1/upload", data, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-			});
 		}
 
 		if (svgFiles) {
-			const data = new FormData();
-
-			data.append("modelGroupName", "BMI");
 			svgFiles.forEach((file) => {
 				if (file) {
 					data.append("files", file);
 				}
 			});
+		}
 
-			axios.post("/api/v1/upload", data, {
+		axios
+			.post("/api/v1/upload", data, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 				},
-			});
-		}
+			})
+			.catch((err) => console.log(err));
 	};
 
 	const onXMLChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -142,6 +117,14 @@ const FileUpload = () => {
 	return (
 		<div>
 			<form onSubmit={onSubmit}>
+				<label>Model Group Name</label>
+				<input
+					onChange={(e) => setModelGroupUploadName(e.target.value)}
+					type="text"
+					name=""
+					id=""
+					value={modelGroupUploadName}
+				/>
 				<label>Input the XML export</label>
 				<input onChange={onXMLChange} type="file" accept=".xml" />
 				<label>Input the SVGs</label>
@@ -154,23 +137,6 @@ const FileUpload = () => {
 				<input type="submit" />
 			</form>
 			{uploadError && <div>{uploadError}</div>}
-			<div>
-				{modelGroups.map((m) => {
-					return (
-						<div>
-							ModelGroup: {m.name}
-							<div>
-								{m.links.map((link) => {
-									return <div>link: {link}</div>;
-								})}
-							</div>
-							<button onClick={() => generateLink(m.name)}>
-								Generate link
-							</button>
-						</div>
-					);
-				})}
-			</div>
 		</div>
 	);
 };

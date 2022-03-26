@@ -1,12 +1,17 @@
-import React, { FC } from "react";
+import React, { CSSProperties, FC } from "react";
 import styles from "./header.module.css";
 
 type Props = {
 	children: JSX.Element;
+	extraStyles?: CSSProperties;
 };
 
-const Header: FC<Props> = ({ children }) => {
-	return <div className={styles["header-container"]}>{children}</div>;
+const Header: FC<Props> = ({ children, extraStyles }) => {
+	return (
+		<div className={styles["header-container"]} style={extraStyles}>
+			{children}
+		</div>
+	);
 };
 
 export default Header;
