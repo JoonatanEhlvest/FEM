@@ -1,4 +1,4 @@
-import axios from "axios";
+import http from "../../http";
 import { exec } from "child_process";
 import { XMLParser } from "fast-xml-parser";
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
@@ -14,8 +14,7 @@ const FileUpload = () => {
 	const [modelGroupUploadName, setModelGroupUploadName] = useState("");
 
 	const fetchModelGroupLinks = () => {
-		axios
-			.get("/api/v1/upload")
+		http.get("/api/v1/upload")
 			.then((res) => {
 				setUploadError(null);
 			})
@@ -44,13 +43,11 @@ const FileUpload = () => {
 			});
 		}
 
-		axios
-			.post("/api/v1/upload", data, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
-			})
-			.catch((err) => console.log(err));
+		http.post("/api/v1/upload", data, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+		}).catch((err) => console.log(err));
 	};
 
 	const onXMLChange = (e: ChangeEvent<HTMLInputElement>) => {

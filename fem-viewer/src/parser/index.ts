@@ -101,6 +101,11 @@ class Parser {
 }
 
 const createParser = (XMLData: any): Parser => {
+	const jObj = parseXMLToModel(XMLData);
+	return new Parser(jObj);
+};
+
+export const parseXMLToModel = (XMLData: any): any => {
 	const options = {
 		ignoreAttributes: false,
 		attributeNamePrefix: ATTR_PREFIX,
@@ -109,7 +114,7 @@ const createParser = (XMLData: any): Parser => {
 
 	const xml: string = XMLData;
 	const jObj = parser.parse(xml);
-	return new Parser(jObj);
+	return jObj;
 };
 
 export default createParser;

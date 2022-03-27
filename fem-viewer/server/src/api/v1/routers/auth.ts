@@ -70,7 +70,7 @@ router.delete("/logout", authorizeUser, (req, res) => {
 });
 
 router.get("/session", async (req, res) => {
-	console.log("Session", req.user);
+	console.log("Session", req.user, req.session, req.headers);
 	if (req.isAuthenticated()) {
 		return res.json({ user: req.user.id });
 	}

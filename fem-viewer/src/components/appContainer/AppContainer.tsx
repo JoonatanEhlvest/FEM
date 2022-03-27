@@ -12,8 +12,7 @@ import useFEM from "../../state/useFEM";
 import Error from "../error/Error";
 
 const AppContainer = () => {
-	const { id } = useParams();
-	const { addModel, addSvg, getError, setError } = useFEM();
+	const { getError } = useFEM();
 
 	const [state, setState] = useState(() => {
 		const appWidth = window.innerWidth;
@@ -21,29 +20,6 @@ const AppContainer = () => {
 			width: appWidth * 0.25,
 		};
 	});
-
-	useEffect(() => {
-		axios
-			.get(`/api/v1/modelgroups/${id}`)
-			.then((res) => {
-				console.log(res.data);
-				const svgs = res.data.svgs;
-				svgs.forEach((svg: any) => {
-					addSvg(svg.name, svg.data);
-				});
-				const parser = new Parser(res.data.xml);
-				parser.getModels().forEach((model: any) => {
-					addModel(model);
-				});
-			})
-			.catch((err: any) => {
-				console.log(err.response);
-				setError({
-					status: err.response.status,
-					message: err.response.data.message,
-				});
-			});
-	}, []);
 
 	const onResize = (
 		event: React.SyntheticEvent,

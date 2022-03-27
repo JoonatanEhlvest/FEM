@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { addXMLAttrPrefix } from "../utlitity";
 import FEMContext from "./FEMContext";
-import FEMState from "./FEMState";
+import FEMState, { initialState } from "./FEMState";
 import Connector from "./types/Connector";
 import { ColorPicker } from "./types/Instance";
 import Instance, { INSTANCE_DEFAULTS } from "./types/Instance";
@@ -10,7 +10,7 @@ import Model from "./types/Model";
 import ModelAttributes from "./types/ModelAttributes";
 import renderSVG, { svgXML } from "../components/svgrenderer/svgrenderer";
 import Reference from "./types/Reference";
-import axios from "axios";
+import http from "../http";
 
 type XMLObj = {
 	[key: string]: string | number | XMLObj | XMLObj[];
@@ -416,8 +416,7 @@ const useFEM = () => {
 	};
 
 	const login = (username: string, password: string) => {
-		axios
-			.post("/api/v1/login", { username, password })
+		http.post("/api/v1/login", { username, password })
 			.then((res) => {
 				setState((prev) => ({
 					...prev,
@@ -433,8 +432,7 @@ const useFEM = () => {
 	};
 
 	const logout = () => {
-		axios
-			.delete("/api/v1/logout")
+		http.delete("/api/v1/logout")
 			.then(() => {
 				setState((prev) => ({
 					...prev,
@@ -450,8 +448,7 @@ const useFEM = () => {
 	};
 
 	const register = (username: string, password: string) => {
-		axios
-			.post("/api/v1/register", { username, password })
+		http.post("/api/v1/register", { username, password })
 			.then((res) => {
 				setState((prev) => ({
 					...prev,
@@ -467,8 +464,7 @@ const useFEM = () => {
 	};
 
 	const tryAutoLogin = () => {
-		axios
-			.get("/api/v1/session")
+		http.get("/api/v1/session")
 			.then((res) => {
 				setState((prev) => ({
 					...prev,
@@ -483,7 +479,18 @@ const useFEM = () => {
 	};
 
 	const fetchUser = () => {
-		return axios.get(`/api/v1/user/${state.user}`);
+		return http.get(`/api/v1/user/${state.user}`);
+	};
+
+	const resetModels = () => {
+		setState((prev) => ({
+			...prev,
+			svgs: initialState.svgs,
+			models: initialState.models,
+			currentInstance: undefined,
+			currentModel: undefined,
+			currentSvgElement: undefined,
+		}));
 	};
 
 	return {
@@ -507,6 +514,7 @@ const useFEM = () => {
 		tryAutoLogin,
 		logout,
 		fetchUser,
+		resetModels,
 	};
 };
 

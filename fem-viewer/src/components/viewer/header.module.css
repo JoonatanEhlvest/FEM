@@ -41,3 +41,17 @@
 	width: 10%;
 	margin-left: 20px;
 }
+
+.dashboard-btn {
+	color: black;
+	background-color: white;
+	border: white 4px solid;
+	border-radius: 5px 5px;
+	transition: transform 100ms ease-in;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.dashboard-btn:hover {
+	transform: scale(1.1);
+}

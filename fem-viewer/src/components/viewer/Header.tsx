@@ -4,6 +4,7 @@ import useFEM from "../../state/useFEM";
 import styles from "./header.module.css";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import { NavLink } from "react-router-dom";
 
 type Props = {
 	model: Model | undefined;
@@ -42,6 +43,9 @@ const Header: FC<Props> = ({ model, toggleHitboxes }) => {
 					</div>
 				</div>
 			)}
+			<NavLink to="/dashboard">
+				<button className={styles["dashboard-btn"]}>Dashboard</button>
+			</NavLink>
 		</div>
 	);
 };

@@ -21,6 +21,21 @@ const app = express();
 
 app.use(express.static(path.join(CLIENT_PATH, "build")));
 app.use(express.static(path.join(CLIENT_PATH, "public")));
+
+app.use((_, res, next) => {
+	res.header(
+		"Access-Control-Allow-Headers",
+		"Origin, X-Requested-With, Content-Type, Accept, Credentials, Set-Cookie"
+	);
+	res.header("Access-Control-Allow-Credentials", "true");
+	res.header(
+		"Access-Control-Allow-Headers",
+		"Content-Type, Accept, Access-Control-Allow-Credentials, Cross-Origin"
+	);
+	res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+	next();
+});
+
 app.use(express.json());
 
 app.use(

@@ -47,7 +47,7 @@ const AppRouter = () => {
 					}
 				/>
 				<Route
-					path="/viewer/:id"
+					path="/viewer"
 					element={
 						<RequireAuth>
 							<AppContainer />

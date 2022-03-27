@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Navigate } from "react-router-dom";
 import useFEM from "../../state/useFEM";
 import Model from "../model/Model";
 import RenderSVG from "../svgrenderer/svgrenderer";
