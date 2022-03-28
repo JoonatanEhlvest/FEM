@@ -1,17 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
+import Popup from "reactjs-popup";
 import useFEM from "../../state/useFEM";
 import Model from "../model/Model";
 import RenderSVG from "../svgrenderer/svgrenderer";
+import DetailsPopup from "./DetailsPopup";
 import Header from "./Header";
 import styles from "./viewer.module.css";
 
 const Viewer = () => {
-	const { getCurrentModel, getCurrentSvgElement, getZoom } = useFEM();
+	const {
+		getCurrentModel,
+		getCurrentSvgElement,
+		getZoom,
+		getCurrentInstance,
+	} = useFEM();
 	const viewerContainerRef = useRef<HTMLDivElement>(null);
 	const [dimensions, setDimensions] = useState<DOMRectReadOnly | null>(null);
-
-	const [showHitboxes, setShowHitboxes] = useState(false);
 
 	const observer = useRef(
 		new ResizeObserver((entries) => {
@@ -34,11 +39,9 @@ const Viewer = () => {
 	const model = getCurrentModel();
 	const svg = getCurrentSvgElement();
 
-	const toggleHitboxes = () => setShowHitboxes(!showHitboxes);
-
 	return (
 		<div className={styles["viewer-container-wrapper"]}>
-			<Header model={model} toggleHitboxes={toggleHitboxes} />
+			<Header model={model} />
 			<div
 				className={styles["viewer-container"]}
 				ref={viewerContainerRef}
@@ -49,13 +52,8 @@ const Viewer = () => {
 						zoom={getZoom()}
 					/>
 				)}
-				{model && (
-					<Model
-						model={model}
-						parentDimensions={dimensions}
-						showHitboxes={showHitboxes}
-					/>
-				)}
+				{model && <Model model={model} parentDimensions={dimensions} />}
+				<DetailsPopup />
 			</div>
 		</div>
 	);

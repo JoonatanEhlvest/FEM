@@ -345,8 +345,8 @@ const useFEM = () => {
 		return state.currentInstance;
 	};
 
-	const setCurrentInstance = (instance: Instance) => {
-		if (instance.id === getCurrentInstance()?.id) {
+	const setCurrentInstance = (instance: FEMState["currentInstance"]) => {
+		if (instance?.id === getCurrentInstance()?.id) {
 			return;
 		}
 		setState((prevState) => ({

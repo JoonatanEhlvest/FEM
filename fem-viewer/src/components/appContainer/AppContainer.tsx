@@ -60,7 +60,6 @@ const AppContainer = () => {
 					style={{ flexBasis: state.width }}
 				>
 					<ModelTree />
-					<Details />
 				</div>
 			</Resizable>
 			<Viewer />

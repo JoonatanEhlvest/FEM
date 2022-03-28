@@ -96,13 +96,25 @@ const getTransform = (
 	return `scale(${zoom}) translate(${zoomAmount}%, ${zoomAmount}%)`;
 };
 
+const getCurrentInstanceStyles = (isCurr: boolean): CSSProperties => {
+	if (isCurr) {
+		return {
+			border: "var(--bg-primary) 4px solid",
+			boxShadow: "0px 0px 40px var(--bg-primary)",
+			filter: "contrast(200%) saturate(150%)",
+		};
+	}
+
+	return {};
+};
+
 // Position instances and apply shared styles
 // FIXME: Apply positions relative to the model worldArea and parent size
 const getStyle = (
 	i: Instance,
 	model: Model,
-	showHitboxes: boolean,
-	zoom: FEMState["zoom"]
+	zoom: FEMState["zoom"],
+	isCurrentInstance: boolean
 ): CSSProperties => {
 	// TODO: REMOVE
 	// const backgroundColor = getBgColor(i, model);
@@ -120,14 +132,6 @@ const getStyle = (
 
 		let border: CSSProperties = {};
 
-		if (showHitboxes) {
-			border = {
-				borderColor: "rgb(255, 0, 160)",
-				borderWidth: "3px",
-				borderStyle: "solid",
-			};
-		}
-
 		let transformOrigin: CSSProperties = {};
 
 		return {
@@ -142,6 +146,7 @@ const getStyle = (
 			zIndex,
 			...border,
 			...transformOrigin,
+			...getCurrentInstanceStyles(isCurrentInstance),
 		};
 	}
 	return {};

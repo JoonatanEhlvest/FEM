@@ -8,10 +8,9 @@ import { NavLink } from "react-router-dom";
 
 type Props = {
 	model: Model | undefined;
-	toggleHitboxes: () => void;
 };
 
-const Header: FC<Props> = ({ model, toggleHitboxes }) => {
+const Header: FC<Props> = ({ model }) => {
 	const { setZoom, getZoom } = useFEM();
 
 	const onChangeZoom = (value: number | number[]) => {
@@ -26,12 +25,7 @@ const Header: FC<Props> = ({ model, toggleHitboxes }) => {
 				<div className={styles["header-content"]}>
 					<div>{model.name}</div>
 					<div style={{ width: "100px" }}> </div>
-					<button
-						className={styles["toggle-hitboxes"]}
-						onClick={toggleHitboxes}
-					>
-						Toggle Hitboxes
-					</button>
+
 					<div className={styles["slider"]}>
 						<Slider
 							min={0.5}

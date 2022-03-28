@@ -46,63 +46,42 @@ const ModelTree = () => {
 
 	return (
 		<div>
-			<Resizable
-				width={0}
-				height={state.height}
-				handle={
-					<div
-						className={
-							styles["model-tree-handle"] +
-							" " +
-							sharedStyles["handle"]
-						}
-					></div>
-				}
-				onResize={onResize}
+			<div
+				className={styles["model-tree-container"]}
+				style={{ height: state.height }}
 			>
-				<div
-					className={styles["model-tree-container"]}
-					style={{ height: state.height }}
-				>
-					<Header>
-						<div>Model Tree</div>
-					</Header>
-					<div className={styles["model-tree-content"]}>
-						{getModelTree().map((model) => (
+				<Header>
+					<div>Model Tree</div>
+				</Header>
+				<div className={styles["model-tree-content"]}>
+					{getModelTree().map((model) => (
+						<div
+							className={styles["model-tree-item-container"]}
+							key={model.id}
+							onClick={() => {
+								setCurrentModel(model.id);
+							}}
+						>
 							<div
-								className={styles["model-tree-item-container"]}
-								key={model.id}
-								onClick={() => {
-									setCurrentModel(model.id);
-								}}
+								className={
+									styles["model-tree-item-pre"] +
+									" " +
+									getClassIfSelected("pre-selected", model)
+								}
+							></div>
+							<p
+								className={
+									styles["model-tree-item"] +
+									" " +
+									getClassIfSelected("item-selected", model)
+								}
 							>
-								<div
-									className={
-										styles["model-tree-item-pre"] +
-										" " +
-										getClassIfSelected(
-											"pre-selected",
-											model
-										)
-									}
-								></div>
-								<p
-									className={
-										styles["model-tree-item"] +
-										" " +
-										getClassIfSelected(
-											"item-selected",
-											model
-										)
-									}
-								>
-									{model.name}
-								</p>
-							</div>
-						))}
-					</div>
+								{model.name}
+							</p>
+						</div>
+					))}
 				</div>
-			</Resizable>
+			</div>
 		</div>
 	);
 };

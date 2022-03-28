@@ -13,21 +13,20 @@ import FEMState from "../../state/FEMState";
 type Props = {
 	model: ModelType;
 	parentDimensions: DOMRectReadOnly | null;
-	showHitboxes: boolean;
 };
 
 // FIXME: Rendering for referenced instances
 const renderInstanceType = (
 	instance: Instance,
 	model: ModelType,
-	showHitboxes: boolean,
-	zoom: FEMState["zoom"]
+	zoom: FEMState["zoom"],
+	isCurrentInstance: boolean
 ) => {
 	const sharedStyles: CSSProperties = getStyle(
 		instance,
 		model,
-		showHitboxes,
-		zoom
+		zoom,
+		isCurrentInstance
 	);
 
 	switch (instance.class) {
@@ -51,8 +50,13 @@ const renderInstanceType = (
  * renderInstanceType handles rendering of correct component based on instance class
  * Instance classes (Process, Asset, Pool etc.) are responsible for actually visualizing an instance.
  */
-const Model: FC<Props> = ({ model, parentDimensions, showHitboxes }) => {
-	const { setCurrentInstance, getZoom } = useFEM();
+const Model: FC<Props> = ({ model, parentDimensions }) => {
+	const { setCurrentInstance, getZoom, getCurrentInstance } = useFEM();
+
+	const isCurrentInstance = (instance: FEMState["currentInstance"]) => {
+		return instance?.id === getCurrentInstance()?.id;
+	};
+
 	return (
 		<div key={model.id} className={styles["model-container"]}>
 			{model.instances.map((i) => (
@@ -60,11 +64,15 @@ const Model: FC<Props> = ({ model, parentDimensions, showHitboxes }) => {
 					key={i.id}
 					className={styles["instance"]}
 					onClick={() => {
-						console.log(i);
 						setCurrentInstance(i);
 					}}
 				>
-					{renderInstanceType(i, model, showHitboxes, getZoom())}
+					{renderInstanceType(
+						i,
+						model,
+						getZoom(),
+						isCurrentInstance(i)
+					)}
 				</div>
 			))}
 		</div>

@@ -83,7 +83,6 @@ const RenderSVG: FC<Props> = ({ image, zoom }): ReactElement => {
 		const width = parseFloat(getStrProp(svgTag, "width"));
 		const height = parseFloat(getStrProp(svgTag, "height"));
 
-
 		return (
 			<svg
 				viewBox={`0 0 ${width * zoom}px ${height * zoom}px`}
