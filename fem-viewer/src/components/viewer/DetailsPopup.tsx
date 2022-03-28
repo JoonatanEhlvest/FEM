@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import Draggable from "react-draggable";
 import Popup from "reactjs-popup";
 import useFEM from "../../state/useFEM";
 import Details from "../details/Details";
@@ -15,7 +16,11 @@ const DetailsPopup: FC<Props> = () => {
 			closeOnEscape
 			onClose={() => setCurrentInstance(undefined)}
 		>
-			<Details />
+			<Draggable>
+				<div style={{ zIndex: 1000 }}>
+					<Details />
+				</div>
+			</Draggable>
 		</Popup>
 	);
 };

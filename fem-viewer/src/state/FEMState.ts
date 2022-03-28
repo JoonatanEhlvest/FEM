@@ -19,6 +19,12 @@ export default interface FEMState {
 		message: string;
 	} | null;
 	user: User | null;
+	referencedBy: {
+		[key: Instance["name"]]: {
+			modelName: Model["name"];
+			instanceName: Instance["name"];
+		}[];
+	};
 }
 
 const initialState: FEMState = {
@@ -30,6 +36,7 @@ const initialState: FEMState = {
 	zoom: 1,
 	error: null,
 	user: null,
+	referencedBy: {},
 };
 
 export { initialState };

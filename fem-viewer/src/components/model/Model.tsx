@@ -6,9 +6,10 @@ import Pool from "../hitboxes/pool/Pool";
 import Process from "../hitboxes/process/Process";
 import styles from "./model.module.css";
 import useFEM from "../../state/useFEM";
-import { getStyle } from "../../parser/preprocessing";
+import { getStyle, getTransform } from "../../parser/preprocessing";
 import Note from "../hitboxes/note/Note";
 import FEMState from "../../state/FEMState";
+import DetailsPopup from "../viewer/DetailsPopup";
 
 type Props = {
 	model: ModelType;
@@ -67,6 +68,7 @@ const Model: FC<Props> = ({ model, parentDimensions }) => {
 						setCurrentInstance(i);
 					}}
 				>
+					<div id="popup-root" />
 					{renderInstanceType(
 						i,
 						model,

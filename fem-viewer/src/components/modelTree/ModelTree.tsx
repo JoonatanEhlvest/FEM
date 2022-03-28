@@ -17,21 +17,6 @@ const itemStylesIfSelected: CSSProperties = {
 const ModelTree = () => {
 	const { getModelTree, setCurrentModel, getCurrentModel } = useFEM();
 
-	const [state, setState] = useState(() => {
-		return {
-			height: 0.75 * window.innerHeight,
-		};
-	});
-
-	const onResize = (e: React.SyntheticEvent, data: ResizeCallbackData) => {
-		setState((prevState) => {
-			return {
-				...prevState,
-				height: data.size.height,
-			};
-		});
-	};
-
 	const isCurrentModelSelected = (model: Model): boolean => {
 		return model.id === getCurrentModel()?.id;
 	};
@@ -45,42 +30,37 @@ const ModelTree = () => {
 	};
 
 	return (
-		<div>
-			<div
-				className={styles["model-tree-container"]}
-				style={{ height: state.height }}
-			>
-				<Header>
-					<div>Model Tree</div>
-				</Header>
-				<div className={styles["model-tree-content"]}>
-					{getModelTree().map((model) => (
+		<div className={styles["model-tree-container"]}>
+			<Header>
+				<div>Model Tree</div>
+			</Header>
+			<div className={styles["model-tree-content"]}>
+				{getModelTree().map((model) => (
+					<div
+						className={styles["model-tree-item-container"]}
+						key={model.id}
+						onClick={() => {
+							setCurrentModel(model.id);
+						}}
+					>
 						<div
-							className={styles["model-tree-item-container"]}
-							key={model.id}
-							onClick={() => {
-								setCurrentModel(model.id);
-							}}
+							className={
+								styles["model-tree-item-pre"] +
+								" " +
+								getClassIfSelected("pre-selected", model)
+							}
+						></div>
+						<p
+							className={
+								styles["model-tree-item"] +
+								" " +
+								getClassIfSelected("item-selected", model)
+							}
 						>
-							<div
-								className={
-									styles["model-tree-item-pre"] +
-									" " +
-									getClassIfSelected("pre-selected", model)
-								}
-							></div>
-							<p
-								className={
-									styles["model-tree-item"] +
-									" " +
-									getClassIfSelected("item-selected", model)
-								}
-							>
-								{model.name}
-							</p>
-						</div>
-					))}
-				</div>
+							{model.name}
+						</p>
+					</div>
+				))}
 			</div>
 		</div>
 	);

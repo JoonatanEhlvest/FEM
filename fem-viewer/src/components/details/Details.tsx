@@ -6,7 +6,12 @@ import Cell from "./Cell";
 import styles from "./details.module.css";
 
 const Details = () => {
-	const { getCurrentInstance, goToReference } = useFEM();
+	const {
+		getCurrentInstance,
+		setCurrentInstance,
+		goToReference,
+		getReferencedBys,
+	} = useFEM();
 
 	const instance = getCurrentInstance();
 
@@ -39,11 +44,18 @@ const Details = () => {
 		}
 	};
 
+	const handleClosePopup = () => {
+		setCurrentInstance(undefined);
+	};
+
 	return (
 		<div style={{ flexGrow: 1 }}>
 			<div className={styles["details-container"]}>
 				<Header>
-					<div>Details</div>
+					<div className={styles["header-content"]}>
+						<div>Details</div>
+						<button onClick={handleClosePopup}>X</button>
+					</div>
 				</Header>
 
 				{instance && (
@@ -56,7 +68,10 @@ const Details = () => {
 										title={"Class"}
 										value={instance.class}
 									/>
-									<Cell title={"ID"} value={instance.id} />
+									<Cell
+										title={"Name"}
+										value={instance.name}
+									/>
 									<Cell
 										title={getTitle(instance)}
 										value={getValue(instance)}
@@ -110,22 +125,14 @@ const Details = () => {
 									</div>
 								}
 							/>
-							// <div>
-							// 	Reference
-							// 	<div>Model: {instance.reference.modelName}</div>
-							// 	<div>
-							// 		instance:{" "}
-							// 		{instance.reference.referencedInstanceName}
-							// 	</div>
-							// 	<div
-							// 		onClick={() =>
-							// 			handleGoToReference(instance.reference)
-							// 		}
-							// 	>
-							// 		GO TO REFERENCE
-							// 	</div>
-							// </div>
 						)}
+						<button
+							onClick={() =>
+								console.log(getReferencedBys(instance.name))
+							}
+						>
+							REF
+						</button>
 					</div>
 				)}
 			</div>

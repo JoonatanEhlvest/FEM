@@ -149,7 +149,10 @@ const useFEM = () => {
 		return findInstanceIREF(instance.INTERREF as XMLObj);
 	};
 
-	const getInstances = (instances: Array<XMLObj>): Array<Instance> => {
+	const getInstances = (
+		instances: Array<XMLObj>,
+		modelName: Model["name"]
+	): Array<Instance> => {
 		const ret: Array<Instance> = instances.map((XMLInstance) => {
 			const attributes = XMLInstance.ATTRIBUTE as XMLObj;
 			const position = parseInstancePosition(
@@ -157,11 +160,46 @@ const useFEM = () => {
 			);
 
 			const reference = getInstanceReference(XMLInstance);
+			const id = tryGetStrProperty(XMLInstance, "id");
+			const name = tryGetStrProperty(XMLInstance, "name");
+			if (
+				reference?.referencedInstanceName ===
+				"Used in creating the new business"
+			) {
+				console.log(name, reference);
+			}
+
+			if (reference && name) {
+				setState((prev) => {
+					let newReferencedBys: FEMState["referencedBy"][keyof FEMState["referencedBy"]] =
+						[{ modelName, instanceName: name }];
+					if (
+						prev.referencedBy[reference.referencedInstanceName] !==
+						undefined
+					) {
+						newReferencedBys = [
+							...prev.referencedBy[
+								reference.referencedInstanceName
+							],
+							{ modelName, instanceName: name },
+						];
+					}
+
+					return {
+						...prev,
+						referencedBy: {
+							...prev.referencedBy,
+							[reference.referencedInstanceName]:
+								newReferencedBys,
+						},
+					};
+				});
+			}
 
 			const instance: Instance = {
-				id: tryGetStrProperty(XMLInstance, "id"),
+				id,
 				class: tryGetStrProperty(XMLInstance, "class") as InstanceClass,
-				name: tryGetStrProperty(XMLInstance, "name"),
+				name,
 				isGhost: tryGetBoolAttr(attributes, "isghost"),
 				isGroup: tryGetBoolAttr(attributes, "isgroup"),
 				position: position,
@@ -288,15 +326,16 @@ const useFEM = () => {
 	};
 
 	const addModel = (model: any) => {
+		const name = tryGetStrProperty(model, "name");
 		const modelToAdd: Model = {
+			name,
 			id: tryGetStrProperty(model, "id"),
 			applib: tryGetStrProperty(model, "applib"),
 			modeltype: tryGetStrProperty(model, "modeltype"),
-			name: tryGetStrProperty(model, "name"),
 			version: tryGetStrProperty(model, "version"),
 			libtype: tryGetStrProperty(model, "libtype"),
 			connectors: getConnectors(model.CONNECTOR),
-			instances: getInstances(model.INSTANCE),
+			instances: getInstances(model.INSTANCE, name),
 			attributes: getModelAttributes(model.MODELATTRIBUTES),
 		};
 
@@ -493,6 +532,10 @@ const useFEM = () => {
 		}));
 	};
 
+	const getReferencedBys = (name: Instance["name"]) => {
+		return state.referencedBy[name];
+	};
+
 	return {
 		getModelTree,
 		addModel,
@@ -515,6 +558,7 @@ const useFEM = () => {
 		logout,
 		fetchUser,
 		resetModels,
+		getReferencedBys,
 	};
 };
 

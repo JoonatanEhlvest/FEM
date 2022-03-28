@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Draggable from "react-draggable";
 import { Navigate } from "react-router-dom";
 import Popup from "reactjs-popup";
 import useFEM from "../../state/useFEM";
@@ -53,8 +54,9 @@ const Viewer = () => {
 					/>
 				)}
 				{model && <Model model={model} parentDimensions={dimensions} />}
-				<DetailsPopup />
 			</div>
+
+			<DetailsPopup />
 		</div>
 	);
 };

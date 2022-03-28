@@ -84,7 +84,7 @@ const DEFAULT_COLOR = "#ffc0cb";
 // 	return i.borderColor;
 // };
 
-const getTransform = (
+export const getTransform = (
 	i: Instance,
 	zoom: FEMState["zoom"]
 ): CSSProperties["transform"] => {
