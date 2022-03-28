@@ -94,7 +94,7 @@ router.get("/modelgroup/:modelGroupId", async (req, res) => {
 
 				if (file.name.endsWith(".svg")) {
 					const data = await fs.readFile(pathToFile, "utf-8");
-					const jObj = parseXMLToModel(data);
+					const jObj = parseXMLToModel(data, true);
 					const normalizedName = file.name
 						.replace(/.svg/, "")
 						.trimEnd();

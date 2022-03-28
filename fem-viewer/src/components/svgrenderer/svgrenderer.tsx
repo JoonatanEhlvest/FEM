@@ -1,10 +1,12 @@
+import { render } from "@testing-library/react";
+import React from "react";
 import { FC, ReactElement, useEffect, useState } from "react";
 import FEMState from "../../state/FEMState";
 
 export type svgXML = { [key: string]: string | Array<svgXML> | svgXML };
 
 const getStrProp = (s: svgXML, prop: string): string => {
-	const ret = s[prop];
+	const ret = (s[":@"] as svgXML)[prop];
 	if (typeof ret === "string") {
 		return ret;
 	}
@@ -49,6 +51,7 @@ const getStyleObjectFromString = (str: string) => {
 	const style: { [key: string]: string } = {};
 	str.split(";").forEach((el) => {
 		const [property, value] = el.split(":");
+
 		if (!property) return;
 
 		const formattedProperty = formatStringToCamelCase(property.trim());
@@ -68,18 +71,64 @@ type Props = {
 	zoom: FEMState["zoom"];
 };
 
+const getElemType = (elem: svgXML): [string | null, string | null] => {
+	const types = [
+		"rect",
+		"ellipse",
+		"text",
+		"polygon",
+		"polyline",
+		"line",
+		"path",
+	];
+	for (const type of types) {
+		if (elem[type]) {
+			let text = null;
+			if (getArrProp(elem, type).length > 0) {
+				text = getArrProp(elem, type)[0]["#text"] as string;
+			}
+			return [type, text];
+		}
+	}
+	return [null, null];
+};
+
+const renderG = (g: svgXML[], zoom: FEMState["zoom"]) => {
+	return (
+		<g transform={`scale(${zoom})`}>
+			{g.map((elem, i) => {
+				const props = getObjProp(elem, ":@");
+				const style = getStyleObjectFromString(
+					getStrProp(elem, "style")
+				);
+
+				const [type, text] = getElemType(elem);
+				if (!type) return;
+
+				return React.createElement(type, {
+					...props,
+					style,
+					children: text,
+					key: `svgElem-${i}`,
+				});
+			})}
+		</g>
+	);
+};
+
 const RenderSVG: FC<Props> = ({ image, zoom }): ReactElement => {
 	const SCROLL_BUFFER_SIZE = 100;
 	if (image) {
-		const svgTag = getObjProp(image, "svg");
-		const g = getObjProp(svgTag, "g");
-		const ellipses = getArrProp(g, "ellipse");
-		const rects = getArrProp(g, "rect");
-		const texts = getArrProp(g, "text");
-		const paths = getArrProp(g, "path");
-		const lines = getArrProp(g, "line");
-		const polygons = getArrProp(g, "polygon");
-		const polylines = getArrProp(g, "polyline");
+		const svgTag = image[1] as svgXML as svgXML;
+		// const g = ((svgTag as svgXML).svg as svgXML).g as svgXML;
+		const g = getArrProp(getArrProp(svgTag, "svg")[0], "g");
+		// const ellipses = getArrProp(g, "ellipse");
+		// const rects = getArrProp(g, "rect");
+		// const texts = getArrProp(g, "text");
+		// const paths = getArrProp(g, "path");
+		// const lines = getArrProp(g, "line");
+		// const polygons = getArrProp(g, "polygon");
+		// const polylines = getArrProp(g, "polyline");
 		const width = parseFloat(getStrProp(svgTag, "width"));
 		const height = parseFloat(getStrProp(svgTag, "height"));
 
@@ -92,18 +141,8 @@ const RenderSVG: FC<Props> = ({ image, zoom }): ReactElement => {
 				width={`${width * zoom + SCROLL_BUFFER_SIZE}px`}
 				height={`${height * zoom + SCROLL_BUFFER_SIZE}px`}
 			>
-				<g transform={`scale(${zoom})`}>
-					{rects.map((r, i) => {
-						return (
-							<rect
-								key={`rect-${i}`}
-								{...r}
-								style={getStyleObjectFromString(
-									r.style as string
-								)}
-							/>
-						);
-					})}
+				{renderG(g, zoom)}
+				{/* <g transform={`scale(${zoom})`}>
 					{ellipses.map((e, i) => {
 						return (
 							<ellipse
@@ -115,19 +154,18 @@ const RenderSVG: FC<Props> = ({ image, zoom }): ReactElement => {
 							/>
 						);
 					})}
-					{texts.map((t, i) => {
+					{rects.map((r, i) => {
 						return (
-							<text
-								key={`text-${i}`}
-								{...removeProp(t, "#text")}
+							<rect
+								key={`rect-${i}`}
+								{...r}
 								style={getStyleObjectFromString(
-									t.style as string
+									r.style as string
 								)}
-							>
-								{getStrProp(t, "#text")}
-							</text>
+							/>
 						);
 					})}
+
 					{paths.map((p, i) => {
 						return (
 							<path
@@ -172,7 +210,20 @@ const RenderSVG: FC<Props> = ({ image, zoom }): ReactElement => {
 							></polygon>
 						);
 					})}
-				</g>
+					{texts.map((t, i) => {
+						return (
+							<text
+								key={`text-${i}`}
+								{...removeProp(t, "#text")}
+								style={getStyleObjectFromString(
+									t.style as string
+								)}
+							>
+								{getStrProp(t, "#text")}
+							</text>
+						);
+					})}
+				</g> */}
 			</svg>
 		);
 	}

@@ -105,10 +105,14 @@ const createParser = (XMLData: any): Parser => {
 	return new Parser(jObj);
 };
 
-export const parseXMLToModel = (XMLData: any): any => {
+export const parseXMLToModel = (
+	XMLData: any,
+	preserveOrder: boolean = false
+): any => {
 	const options = {
 		ignoreAttributes: false,
 		attributeNamePrefix: ATTR_PREFIX,
+		preserveOrder,
 	};
 	const parser = new XMLParser(options);
 

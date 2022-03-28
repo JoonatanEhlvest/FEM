@@ -162,12 +162,6 @@ const useFEM = () => {
 			const reference = getInstanceReference(XMLInstance);
 			const id = tryGetStrProperty(XMLInstance, "id");
 			const name = tryGetStrProperty(XMLInstance, "name");
-			if (
-				reference?.referencedInstanceName ===
-				"Used in creating the new business"
-			) {
-				console.log(name, reference);
-			}
 
 			if (reference && name) {
 				setState((prev) => {

@@ -33,6 +33,7 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup }) => {
 		const modelGroupId = modelGroup.modelGroup.id;
 		http.get(`/api/v1/modelgroup/${modelGroupId}`)
 			.then((res) => {
+				console.log(res);
 				const svgs = res.data.data.svgs;
 				svgs.forEach((svg: any) => {
 					addSvg(svg.name, svg.data);
@@ -43,12 +44,13 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup }) => {
 				});
 				navigate("/viewer");
 			})
-			.catch((err) =>
+			.catch((err) => {
+				console.log(err);
 				setError({
 					status: err.response.status,
 					message: err.response.data.message,
-				})
-			);
+				});
+			});
 	};
 
 	return (
