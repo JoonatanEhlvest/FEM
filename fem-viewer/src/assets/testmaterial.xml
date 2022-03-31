@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ADOXML SYSTEM "adoxml31.dtd">
+<ADOXML version="3.1" date="31.03.2022" time="13:58" database="awful" username="FEMUSER" adoversion="Version 5.1">
+<MODELS>
+<MODEL id="mod.13619" name="Originals" version="" modeltype="FEM" libtype="bp" applib="Fractal Enterprise Model (FEM) Library 0.9 Dynamic">
+<MODELATTRIBUTES>
+<ATTRIBUTE name="Version number" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Author" type="STRING">Admin</ATTRIBUTE>
+<ATTRIBUTE name="Creation date" type="STRING">30.03.2022, 15:13</ATTRIBUTE>
+<ATTRIBUTE name="Date last changed" type="STRING">31.03.2022, 13:55:30</ATTRIBUTE>
+<ATTRIBUTE name="Last user" type="STRING">FEMUSER</ATTRIBUTE>
+<ATTRIBUTE name="Keywords" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Comment" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Model type" type="ENUMERATION">Current model</ATTRIBUTE>
+<ATTRIBUTE name="State" type="ENUMERATION">In process</ATTRIBUTE>
+<ATTRIBUTE name="Reviewed on" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Reviewed by" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Description" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Number of objects and relations" type="INTEGER">5</ATTRIBUTE>
+<ATTRIBUTE name="World area" type="STRING">w:20.05cm h:28.75cm minw:5cm minh:5cm</ATTRIBUTE>
+<ATTRIBUTE name="Grid" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Zoom" type="INTEGER">100</ATTRIBUTE>
+<ATTRIBUTE name="Viewable area" type="STRING">VIEW representation:graphic
+GRAPHIC x:-16 y:-16 w:1153 h:727 scale:1
+TABLE
+</ATTRIBUTE>
+<ATTRIBUTE name="Current mode" type="STRING">Advanced</ATTRIBUTE>
+<ATTRIBUTE name="Base name" type="STRING">Originals</ATTRIBUTE>
+<ATTRIBUTE name="Access state" type="ENUMERATION">write</ATTRIBUTE>
+<ATTRIBUTE name="Current page layout" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Connector marks" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Type" type="STRING">FEM</ATTRIBUTE>
+<ATTRIBUTE name="Change counter" type="INTEGER">238</ATTRIBUTE>
+<ATTRIBUTE name="Font size" type="INTEGER">0</ATTRIBUTE>
+<ATTRIBUTE name="Context of version" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Name" type="STRING">Originals</ATTRIBUTE>
+<ATTRIBUTE name="nModelID" type="EXPRESSION">EXPR val:&quot;13619&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Font Size" type="ENUMERATION">10</ATTRIBUTE>
+<ATTRIBUTE name="Asset Background Color (Hex Color Code)" type="STRING">$ffffff</ATTRIBUTE>
+<ATTRIBUTE name="Asset Ghost Background Color (Hex Color Code)" type="STRING">$ffffff</ATTRIBUTE>
+<ATTRIBUTE name="Asset Group Background Color (Hex Color Code)" type="STRING">$ecf5ff</ATTRIBUTE>
+<ATTRIBUTE name="Process Background Color (Hex Color Code)" type="STRING">$ffffff</ATTRIBUTE>
+<ATTRIBUTE name="Process Ghost Background Color (Hex Color Code)" type="STRING">$ffffff</ATTRIBUTE>
+<ATTRIBUTE name="Process Group Background Color (Hex Color Code)" type="STRING">$fff7f2</ATTRIBUTE>
+<ATTRIBUTE name="Pool Background Color (Hex Color Code)" type="STRING">#FFFFFF</ATTRIBUTE>
+<ATTRIBUTE name="Pool Ghost Background Color (Hex Color Code)" type="STRING">#FFFFFF</ATTRIBUTE>
+<ATTRIBUTE name="Pool Group Background Color (Hex Color Code)" type="STRING">$fffff4</ATTRIBUTE>
+<ATTRIBUTE name="External Actor Background Color (Hex Color Code)" type="STRING">#FFFFFF</ATTRIBUTE>
+<ATTRIBUTE name="External Actor Ghost Background Color (Hex Color Code)" type="STRING">#FFFFFF</ATTRIBUTE>
+<ATTRIBUTE name="External Actor Group Background Color (Hex Color Code)" type="STRING">$f4f4f4</ATTRIBUTE>
+<ATTRIBUTE name="Note Background Color (Hex Color Code)" type="STRING">$ffffef</ATTRIBUTE>
+<ATTRIBUTE name="Note Ghost Background Color (Hex Color Code)" type="STRING">$ffffef</ATTRIBUTE>
+<ATTRIBUTE name="Position" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="External tool coupling" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="__GfxThumb__" type="LONGSTRING">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</ATTRIBUTE>
+<ATTRIBUTE name="AttrRep_FEM" type="LONGSTRING">NOTEBOOK
+
+#------------------
+CHAPTER &quot;Description&quot;
+ATTR &quot;Name&quot; write-protected
+ATTR &quot;Description&quot; lines:5
+ATTR &quot;Comment&quot; lines:5
+ATTR &quot;Keywords&quot; lines:5
+ATTR &quot;nModelID&quot;
+GROUP &quot;Default font for labels&quot;
+ATTR &quot;Font Size&quot;
+ENDGROUP
+
+CHAPTER &quot;Default Appearance Asset&quot;
+
+ATTR &quot;Asset Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;Asset Ghost Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;Asset Group Background Color (Hex Color Code)&quot; dialog:color
+
+CHAPTER &quot;Default Appearance Process&quot;
+
+ATTR &quot;Process Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;Process Ghost Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;Process Group Background Color (Hex Color Code)&quot; dialog:color
+
+CHAPTER &quot;Default Appearance Pool&quot;
+
+ATTR &quot;Pool Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;Pool Ghost Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;Pool Group Background Color (Hex Color Code)&quot; dialog:color
+
+CHAPTER &quot;Default Appearance External Actor&quot;
+
+ATTR &quot;External Actor Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;External Actor Ghost Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;External Actor Group Background Color (Hex Color Code)&quot; dialog:color
+
+CHAPTER &quot;Default Appearance Note&quot;
+
+ATTR &quot;Note Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;Note Ghost Background Color (Hex Color Code)&quot; dialog:color
+
+#------------------
+CHAPTER &quot;Model properties&quot;
+ATTR &quot;Model type&quot;
+ATTR &quot;State&quot;
+ATTR &quot;Reviewed by&quot;
+ATTR &quot;Reviewed on&quot;
+
+#------------------
+CHAPTER &quot;Model information&quot;
+ATTR &quot;Author&quot; write-protected
+ATTR &quot;Creation date&quot; write-protected
+ATTR &quot;Last user&quot; write-protected
+ATTR &quot;Date last changed&quot; write-protected
+ATTR &quot;Number of objects and relations&quot; write-protected</ATTRIBUTE>
+<ATTRIBUTE name="__Variants__" type="LONGSTRING"></ATTRIBUTE>
+</MODELATTRIBUTES>
+<INSTANCE id="obj.13621" class="Process" name="Process-10605">
+<ATTRIBUTE name="Position" type="STRING">NODE x:2.5cm y:2.5cm w:4.07cm h:2.3cm index:1</ATTRIBUTE>
+<ATTRIBUTE name="External tool coupling" type="STRING"></ATTRIBUTE>
+<INTERREF name="Referenced FEM"></INTERREF>
+<ATTRIBUTE name="objectsInside" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isGroup" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="isGhost" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="Apply Archetype" type="PROGRAMCALL">ITEM &quot;Apply Archetype&quot; param:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Description" type="LONGSTRING"></ATTRIBUTE>
+<ATTRIBUTE name="Corder Color Code (Hex Color Code)" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Font Size" type="ENUMERATION">10</ATTRIBUTE>
+<ATTRIBUTE name="Font Style" type="ENUMERATION">Standard</ATTRIBUTE>
+<ATTRIBUTE name="Border Color" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Individual Background Color" type="STRING">$fdcdac</ATTRIBUTE>
+<ATTRIBUTE name="Color Picker" type="ENUMERATION">Default</ATTRIBUTE>
+<ATTRIBUTE name="Individual Ghost Background Color" type="STRING">$fcf0e8</ATTRIBUTE>
+<ATTRIBUTE name="referencedDescription" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedDenomination" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedGhostColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedBcolor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Border Color Picker" type="ENUMERATION">Individual</ATTRIBUTE>
+<ATTRIBUTE name="Prepare process assets" type="PROGRAMCALL">ITEM &quot;Prepare process assets&quot; param:&quot;&quot;</ATTRIBUTE>
+<INTERREF name="referencedProcess"></INTERREF>
+<ATTRIBUTE name="isPrimaryProcess" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="referencedProcessName" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isStakeholderAcquireProcess" type="EXPRESSION">EXPR val:&quot;No&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Denomination" type="STRING">Process</ATTRIBUTE>
+<ATTRIBUTE name="Process Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Process Background Color (Hex Color Code)&quot;)) val:&quot;$ffffff&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Process Ghost Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Process Ghost Background Color (Hex Color Code)&quot;)) val:&quot;$ffffff&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Process Group Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Process Group Background Color (Hex Color Code)&quot;)) val:&quot;$fff7f2&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Referenced Subclass Name" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Subclass"></INTERREF>
+<ATTRIBUTE name="referencedProcessID" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedPrimary" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Bsubclass"></INTERREF>
+<ATTRIBUTE name="__Variants__" type="LONGSTRING"></ATTRIBUTE>
+</INSTANCE>
+<INSTANCE id="obj.13624" class="Asset" name="Asset-10608">
+<ATTRIBUTE name="Position" type="STRING">NODE x:7.75cm y:2.25cm w:4.05cm h:2.06cm index:2</ATTRIBUTE>
+<ATTRIBUTE name="External tool coupling" type="STRING"></ATTRIBUTE>
+<INTERREF name="Referenced FEM"></INTERREF>
+<ATTRIBUTE name="objectsInside" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isGroup" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="isGhost" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="Apply Archetype" type="PROGRAMCALL">ITEM &quot;Apply Archetype&quot; param:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Description" type="LONGSTRING"></ATTRIBUTE>
+<ATTRIBUTE name="Corder Color Code (Hex Color Code)" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Font Size" type="ENUMERATION">10</ATTRIBUTE>
+<ATTRIBUTE name="Font Style" type="ENUMERATION">Standard</ATTRIBUTE>
+<ATTRIBUTE name="Border Color" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Individual Background Color" type="STRING">$86c3f4</ATTRIBUTE>
+<ATTRIBUTE name="Color Picker" type="ENUMERATION">Default</ATTRIBUTE>
+<ATTRIBUTE name="Individual Ghost Background Color" type="STRING">$ddeeff</ATTRIBUTE>
+<ATTRIBUTE name="referencedDescription" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedDenomination" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedGhostColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedBcolor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Border Color Picker" type="ENUMERATION">Individual</ATTRIBUTE>
+<ATTRIBUTE name="Prepare asset processes" type="PROGRAMCALL">ITEM &quot;Prepare asset processes&quot; param:&quot;&quot;</ATTRIBUTE>
+<INTERREF name="referencedAsset"></INTERREF>
+<ATTRIBUTE name="referencedAssetName" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isMeansOfPayment" type="EXPRESSION">EXPR expr:(
+set(list1,ctobjs(&quot;Used In&quot;)),
+set(list2,conn(&quot;Used In&quot;, objid, list1)),
+set(counter,0),
+fortok(i,list2,&quot; &quot;,cond(aval(VAL i,&quot;Asset Type&quot;)=&quot;Means of Payment&quot;,set(counter,counter+1),counter)),
+counter)
+ val:0</ATTRIBUTE>
+<ATTRIBUTE name="outgoingAssetTypes" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Denomination" type="STRING">Asset</ATTRIBUTE>
+<ATTRIBUTE name="isMonetaryFund" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="isAttractionOutgoing" type="EXPRESSION">EXPR expr:(
+set(list1,ctobjs(&quot;Used In&quot;)),
+set(list2,conn(&quot;Used In&quot;, objid, list1)),
+set(counter,0),
+fortok(i,list2,&quot; &quot;,cond(aval(VAL i,&quot;Asset Type&quot;)=&quot;Attraction&quot;,set(counter,counter+1),counter)),
+counter)
+ val:0</ATTRIBUTE>
+<ATTRIBUTE name="Asset Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Asset Background Color (Hex Color Code)&quot;)) val:&quot;$ffffff&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Asset Ghost Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Asset Ghost Background Color (Hex Color Code)&quot;)) val:&quot;$ffffff&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Asset Group Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Asset Group Background Color (Hex Color Code)&quot;)) val:&quot;$ecf5ff&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Subclass"></INTERREF>
+<ATTRIBUTE name="referencedAssetID" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isTacit" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="referencedTacit" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Bsubclass"></INTERREF>
+<ATTRIBUTE name="__Variants__" type="LONGSTRING"></ATTRIBUTE>
+</INSTANCE>
+<INSTANCE id="obj.13627" class="Note" name="Note-10611">
+<ATTRIBUTE name="Position" type="STRING">NODE x:2.5cm y:4.75cm w:3cm h:3cm index:3</ATTRIBUTE>
+<ATTRIBUTE name="External tool coupling" type="STRING"></ATTRIBUTE>
+<INTERREF name="Referenced FEM"></INTERREF>
+<ATTRIBUTE name="objectsInside" type="EXPRESSION">EXPR expr:(&quot;&quot;) val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isGroup" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="isGhost" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="Apply Archetype" type="PROGRAMCALL">ITEM &quot;Apply Archetype&quot; param:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Description" type="LONGSTRING">Note</ATTRIBUTE>
+<ATTRIBUTE name="Corder Color Code (Hex Color Code)" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Font Size" type="ENUMERATION">10</ATTRIBUTE>
+<ATTRIBUTE name="Font Style" type="ENUMERATION">Standard</ATTRIBUTE>
+<ATTRIBUTE name="Border Color" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Individual Background Color" type="STRING">$ffffef</ATTRIBUTE>
+<ATTRIBUTE name="Color Picker" type="ENUMERATION">Default</ATTRIBUTE>
+<ATTRIBUTE name="Individual Ghost Background Color" type="STRING">$fffff5</ATTRIBUTE>
+<ATTRIBUTE name="referencedDescription" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedDenomination" type="EXPRESSION">EXPR expr:(&quot;&quot;) val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedGhostColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedBcolor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Border Color Picker" type="ENUMERATION">Individual</ATTRIBUTE>
+<ATTRIBUTE name="Note Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Note Background Color (Hex Color Code)&quot;)) val:&quot;$ffffef&quot;</ATTRIBUTE>
+<INTERREF name="referencedNote"></INTERREF>
+<ATTRIBUTE name="referencedNoteDescription" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Note Ghost Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Note Ghost Background Color (Hex Color Code)&quot;)) val:&quot;$ffffef&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Subclass"></INTERREF>
+<ATTRIBUTE name="referencedNoteID" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Bsubclass"></INTERREF>
+<ATTRIBUTE name="__Variants__" type="LONGSTRING"></ATTRIBUTE>
+</INSTANCE>
+<INSTANCE id="obj.13630" class="External Actor" name="External Actor-10614">
+<ATTRIBUTE name="Position" type="STRING">NODE x:9cm y:5.75cm w:4.05cm h:2cm index:4</ATTRIBUTE>
+<ATTRIBUTE name="External tool coupling" type="STRING"></ATTRIBUTE>
+<INTERREF name="Referenced FEM"></INTERREF>
+<ATTRIBUTE name="objectsInside" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isGroup" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="isGhost" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="Apply Archetype" type="PROGRAMCALL">ITEM &quot;Apply Archetype&quot; param:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Description" type="LONGSTRING"></ATTRIBUTE>
+<ATTRIBUTE name="Corder Color Code (Hex Color Code)" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Font Size" type="ENUMERATION">10</ATTRIBUTE>
+<ATTRIBUTE name="Font Style" type="ENUMERATION">Standard</ATTRIBUTE>
+<ATTRIBUTE name="Border Color" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Individual Background Color" type="STRING">$c3c3c3</ATTRIBUTE>
+<ATTRIBUTE name="Color Picker" type="ENUMERATION">Default</ATTRIBUTE>
+<ATTRIBUTE name="Individual Ghost Background Color" type="STRING">$dfdfdf</ATTRIBUTE>
+<ATTRIBUTE name="referencedDescription" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedDenomination" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedGhostColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedBcolor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Border Color Picker" type="ENUMERATION">Individual</ATTRIBUTE>
+<INTERREF name="Referenced External Actor"></INTERREF>
+<ATTRIBUTE name="referencedExternalActorName" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Denomination" type="STRING">External Actor</ATTRIBUTE>
+<ATTRIBUTE name="External Actor Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;External Actor Background Color (Hex Color Code)&quot;)) val:&quot;#FFFFFF&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Referenced External Actor Name" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="External Actor Ghost Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;External Actor Ghost Background Color (Hex Color Code)&quot;)) val:&quot;#FFFFFF&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Subclass"></INTERREF>
+<ATTRIBUTE name="Referenced External Actor ID" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isMultiple" type="ENUMERATION">Yes</ATTRIBUTE>
+<ATTRIBUTE name="referencedMultiple" type="EXPRESSION">EXPR val:&quot;Yes&quot;</ATTRIBUTE>
+<ATTRIBUTE name="External Actor Group Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;External Actor Group Background Color (Hex Color Code)&quot;)) val:&quot;$f4f4f4&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Bsubclass"></INTERREF>
+<ATTRIBUTE name="__Variants__" type="LONGSTRING"></ATTRIBUTE>
+</INSTANCE>
+<INSTANCE id="obj.13633" class="Pool" name="Pool-10617">
+<ATTRIBUTE name="Position" type="STRING">NODE x:14.25cm y:6.5cm w:2.38cm h:1.69cm index:5</ATTRIBUTE>
+<ATTRIBUTE name="External tool coupling" type="STRING"></ATTRIBUTE>
+<INTERREF name="Referenced FEM"></INTERREF>
+<ATTRIBUTE name="objectsInside" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isGroup" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="isGhost" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="Apply Archetype" type="PROGRAMCALL">ITEM &quot;Apply Archetype&quot; param:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Description" type="LONGSTRING"></ATTRIBUTE>
+<ATTRIBUTE name="Corder Color Code (Hex Color Code)" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Font Size" type="ENUMERATION">10</ATTRIBUTE>
+<ATTRIBUTE name="Font Style" type="ENUMERATION">Standard</ATTRIBUTE>
+<ATTRIBUTE name="Border Color" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Individual Background Color" type="STRING">$ffff00</ATTRIBUTE>
+<ATTRIBUTE name="Color Picker" type="ENUMERATION">Default</ATTRIBUTE>
+<ATTRIBUTE name="Individual Ghost Background Color" type="STRING">$ffffc8</ATTRIBUTE>
+<ATTRIBUTE name="referencedDescription" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedDenomination" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedGhostColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedBcolor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Border Color Picker" type="ENUMERATION">Individual</ATTRIBUTE>
+<INTERREF name="Referenced Pool"></INTERREF>
+<ATTRIBUTE name="referencedPoolName" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Denomination" type="STRING">Pool</ATTRIBUTE>
+<ATTRIBUTE name="Pool Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Pool Background Color (Hex Color Code)&quot;)) val:&quot;#FFFFFF&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Pool Ghost Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Pool Ghost Background Color (Hex Color Code)&quot;)) val:&quot;#FFFFFF&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Subclass"></INTERREF>
+<ATTRIBUTE name="referencedPoolID" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Pool Group Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Pool Group Background Color (Hex Color Code)&quot;)) val:&quot;$fffff4&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Bsubclass"></INTERREF>
+<ATTRIBUTE name="__Variants__" type="LONGSTRING"></ATTRIBUTE>
+</INSTANCE>
+</MODEL>
+<MODEL id="mod.13601" name="Ghosts" version="" modeltype="FEM" libtype="bp" applib="Fractal Enterprise Model (FEM) Library 0.9 Dynamic">
+<MODELATTRIBUTES>
+<ATTRIBUTE name="Version number" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Author" type="STRING">Admin</ATTRIBUTE>
+<ATTRIBUTE name="Creation date" type="STRING">30.03.2022, 15:15</ATTRIBUTE>
+<ATTRIBUTE name="Date last changed" type="STRING">31.03.2022, 13:55:30</ATTRIBUTE>
+<ATTRIBUTE name="Last user" type="STRING">FEMUSER</ATTRIBUTE>
+<ATTRIBUTE name="Keywords" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Comment" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Model type" type="ENUMERATION">Current model</ATTRIBUTE>
+<ATTRIBUTE name="State" type="ENUMERATION">In process</ATTRIBUTE>
+<ATTRIBUTE name="Reviewed on" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Reviewed by" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Description" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Number of objects and relations" type="INTEGER">5</ATTRIBUTE>
+<ATTRIBUTE name="World area" type="STRING">w:20.05cm h:28.75cm minw:5cm minh:5cm</ATTRIBUTE>
+<ATTRIBUTE name="Grid" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Zoom" type="INTEGER">100</ATTRIBUTE>
+<ATTRIBUTE name="Viewable area" type="STRING">VIEW representation:graphic
+GRAPHIC x:-16 y:-16 w:1153 h:727 scale:1
+TABLE
+</ATTRIBUTE>
+<ATTRIBUTE name="Current mode" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Base name" type="STRING">Ghosts</ATTRIBUTE>
+<ATTRIBUTE name="Access state" type="ENUMERATION">write</ATTRIBUTE>
+<ATTRIBUTE name="Current page layout" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Connector marks" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Type" type="STRING">FEM</ATTRIBUTE>
+<ATTRIBUTE name="Change counter" type="INTEGER">466</ATTRIBUTE>
+<ATTRIBUTE name="Font size" type="INTEGER">0</ATTRIBUTE>
+<ATTRIBUTE name="Context of version" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Name" type="STRING">Ghosts</ATTRIBUTE>
+<ATTRIBUTE name="nModelID" type="EXPRESSION">EXPR val:&quot;13601&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Font Size" type="ENUMERATION">10</ATTRIBUTE>
+<ATTRIBUTE name="Asset Background Color (Hex Color Code)" type="STRING">$ffffff</ATTRIBUTE>
+<ATTRIBUTE name="Asset Ghost Background Color (Hex Color Code)" type="STRING">$ffffff</ATTRIBUTE>
+<ATTRIBUTE name="Asset Group Background Color (Hex Color Code)" type="STRING">$ecf5ff</ATTRIBUTE>
+<ATTRIBUTE name="Process Background Color (Hex Color Code)" type="STRING">$ffffff</ATTRIBUTE>
+<ATTRIBUTE name="Process Ghost Background Color (Hex Color Code)" type="STRING">$ffffff</ATTRIBUTE>
+<ATTRIBUTE name="Process Group Background Color (Hex Color Code)" type="STRING">$fff7f2</ATTRIBUTE>
+<ATTRIBUTE name="Pool Background Color (Hex Color Code)" type="STRING">#FFFFFF</ATTRIBUTE>
+<ATTRIBUTE name="Pool Ghost Background Color (Hex Color Code)" type="STRING">#FFFFFF</ATTRIBUTE>
+<ATTRIBUTE name="Pool Group Background Color (Hex Color Code)" type="STRING">$fffff4</ATTRIBUTE>
+<ATTRIBUTE name="External Actor Background Color (Hex Color Code)" type="STRING">#FFFFFF</ATTRIBUTE>
+<ATTRIBUTE name="External Actor Ghost Background Color (Hex Color Code)" type="STRING">#FFFFFF</ATTRIBUTE>
+<ATTRIBUTE name="External Actor Group Background Color (Hex Color Code)" type="STRING">$f4f4f4</ATTRIBUTE>
+<ATTRIBUTE name="Note Background Color (Hex Color Code)" type="STRING">$ffffef</ATTRIBUTE>
+<ATTRIBUTE name="Note Ghost Background Color (Hex Color Code)" type="STRING">$ffffef</ATTRIBUTE>
+<ATTRIBUTE name="Position" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="External tool coupling" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="__GfxThumb__" type="LONGSTRING">iVBORw0KGgoAAAANSUhEUgAAALIAAAEACAIAAACYnbv1AAAACXBIWXMAAAsTAAALEwEAmpwYAAAEdUlEQVR4nO3bwVEbVwCA4aeZNJAekE4pJIoudOBjbnEpGXzJ+JgOuNhKA2khB4keXIJyIPYQ+QdhWGBtf9+BYbBYrff9em+lXRaHw2HA//3w0jvAHMmCIAuCLAiyIMiCIAuCLAiyIMiCIAvCA7NYLBZjjG/gespisfgG/heTe9RBeXAcLzsY17t9kzKOPGq2+Pz7a3mUP3/YCzraQ3PGkS/I4mhc7ziONx9582E3v5/VhKGJI6fH5tMRfNixu22SuP/zPg9l3HTXbDHJeeWnX7+5tXsO+bMN1awWuDm4NYvJJ/lPQRwOBy/Nmessnm7hPxwOzu/mL7I4PWxXV1dnZ2cPfUplzF8Mz6kxu9pe7MfY7cZqtRq73Vht1sv9dr9cL/fb/W4sN+uTydwni+dMR6ZHjmeLex2g1VivN2O7X45x+c9us1nu//uH3W6MMdYnJ5JpJ4yr7cW78XoztmO5HvvrrxevLld/v11Psv3v0PHYPNvr5uQT3XtPrrbb/diNsdqN5evl/mK/3Iz9u8vd5u3r+y50ZosjD1hEpnhWi8i8uYJKiCye+p2Cl+b89WzxdGU8XRO3XYjhAW5dRK7LGKcO8f0H4xlu0Ti8f79dr3/xSfaj3XVucXT94rYRvXswHnml7cssl8snf47vwulTzqNrXUc/HON4MCa8Zv2lV7AWH3fEpa9HeuBKf/dxt7R/7R74BvWe9+DwlfJekeDjLIIsCLIgyIIgC4IsCLIgyIIwQRYTfqzps7WZmGa2OBw+TLIdd+jMxLwWkcPhgzLmYF5ZDGXMwzRZbH/9Y3l+9m6M1fLs8tWb8z9/P/23IszYRLPF+c/7yzfj/Lex/2v8tJpmm7ycCabrxWIx1Snnxw3+aBF5WbM7t2AOZEGQBUEWBFkQZEGQBUEWBFkQZEGQBUEWBFkQZEGQBUEWBFkQZEGQBUEWhGlu8Z1kV25yi+/L8oc6BIsIQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAFQRYEWRBkQZAF4V/KtErPhhd2JAAAAABJRU5ErkJggg==</ATTRIBUTE>
+<ATTRIBUTE name="AttrRep_FEM" type="LONGSTRING">NOTEBOOK
+
+#------------------
+CHAPTER &quot;Description&quot;
+ATTR &quot;Name&quot; write-protected
+ATTR &quot;Description&quot; lines:5
+ATTR &quot;Comment&quot; lines:5
+ATTR &quot;Keywords&quot; lines:5
+ATTR &quot;nModelID&quot;
+GROUP &quot;Default font for labels&quot;
+ATTR &quot;Font Size&quot;
+ENDGROUP
+
+CHAPTER &quot;Default Appearance Asset&quot;
+
+ATTR &quot;Asset Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;Asset Ghost Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;Asset Group Background Color (Hex Color Code)&quot; dialog:color
+
+CHAPTER &quot;Default Appearance Process&quot;
+
+ATTR &quot;Process Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;Process Ghost Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;Process Group Background Color (Hex Color Code)&quot; dialog:color
+
+CHAPTER &quot;Default Appearance Pool&quot;
+
+ATTR &quot;Pool Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;Pool Ghost Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;Pool Group Background Color (Hex Color Code)&quot; dialog:color
+
+CHAPTER &quot;Default Appearance External Actor&quot;
+
+ATTR &quot;External Actor Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;External Actor Ghost Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;External Actor Group Background Color (Hex Color Code)&quot; dialog:color
+
+CHAPTER &quot;Default Appearance Note&quot;
+
+ATTR &quot;Note Background Color (Hex Color Code)&quot; dialog:color
+ATTR &quot;Note Ghost Background Color (Hex Color Code)&quot; dialog:color
+
+#------------------
+CHAPTER &quot;Model properties&quot;
+ATTR &quot;Model type&quot;
+ATTR &quot;State&quot;
+ATTR &quot;Reviewed by&quot;
+ATTR &quot;Reviewed on&quot;
+
+#------------------
+CHAPTER &quot;Model information&quot;
+ATTR &quot;Author&quot; write-protected
+ATTR &quot;Creation date&quot; write-protected
+ATTR &quot;Last user&quot; write-protected
+ATTR &quot;Date last changed&quot; write-protected
+ATTR &quot;Number of objects and relations&quot; write-protected</ATTRIBUTE>
+<ATTRIBUTE name="__Variants__" type="LONGSTRING"></ATTRIBUTE>
+</MODELATTRIBUTES>
+<INSTANCE id="obj.13603" class="Process" name="Process-10605">
+<ATTRIBUTE name="Position" type="STRING">NODE x:2.5cm y:2.5cm w:4.07cm h:2.3cm index:1</ATTRIBUTE>
+<ATTRIBUTE name="External tool coupling" type="STRING"></ATTRIBUTE>
+<INTERREF name="Referenced FEM"></INTERREF>
+<ATTRIBUTE name="objectsInside" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isGroup" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="isGhost" type="ENUMERATION">Yes</ATTRIBUTE>
+<ATTRIBUTE name="Apply Archetype" type="PROGRAMCALL">ITEM &quot;Apply Archetype&quot; param:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Description" type="LONGSTRING"></ATTRIBUTE>
+<ATTRIBUTE name="Corder Color Code (Hex Color Code)" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Font Size" type="ENUMERATION">10</ATTRIBUTE>
+<ATTRIBUTE name="Font Style" type="ENUMERATION">Standard</ATTRIBUTE>
+<ATTRIBUTE name="Border Color" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Individual Background Color" type="STRING">$fdcdac</ATTRIBUTE>
+<ATTRIBUTE name="Color Picker" type="ENUMERATION">Default</ATTRIBUTE>
+<ATTRIBUTE name="Individual Ghost Background Color" type="STRING">$fcf0e8</ATTRIBUTE>
+<ATTRIBUTE name="referencedDescription" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedDenomination" type="EXPRESSION">EXPR val:&quot;Process&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedGhostColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedBcolor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Border Color Picker" type="ENUMERATION">Individual</ATTRIBUTE>
+<ATTRIBUTE name="Prepare process assets" type="PROGRAMCALL">ITEM &quot;Prepare process assets&quot; param:&quot;&quot;</ATTRIBUTE>
+<INTERREF name="referencedProcess">
+<IREF type="objectreference" tmodeltype="FEM" tmodelname="Originals" tmodelver="" tclassname="Process" tobjname="Process-10605"></IREF>
+</INTERREF>
+<ATTRIBUTE name="isPrimaryProcess" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="referencedProcessName" type="EXPRESSION">EXPR val:&quot;Process&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isStakeholderAcquireProcess" type="EXPRESSION">EXPR val:&quot;No&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Denomination" type="STRING">Process</ATTRIBUTE>
+<ATTRIBUTE name="Process Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Process Background Color (Hex Color Code)&quot;)) val:&quot;$ffffff&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Process Ghost Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Process Ghost Background Color (Hex Color Code)&quot;)) val:&quot;$ffffff&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Process Group Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Process Group Background Color (Hex Color Code)&quot;)) val:&quot;$fff7f2&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Referenced Subclass Name" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Subclass"></INTERREF>
+<ATTRIBUTE name="referencedProcessID" type="EXPRESSION">EXPR val:&quot;13621&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedPrimary" type="EXPRESSION">EXPR val:&quot;No&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Bsubclass"></INTERREF>
+<ATTRIBUTE name="__Variants__" type="LONGSTRING"></ATTRIBUTE>
+</INSTANCE>
+<INSTANCE id="obj.13606" class="Asset" name="Asset-10608">
+<ATTRIBUTE name="Position" type="STRING">NODE x:7.75cm y:2.25cm w:4.05cm h:2.06cm index:2</ATTRIBUTE>
+<ATTRIBUTE name="External tool coupling" type="STRING"></ATTRIBUTE>
+<INTERREF name="Referenced FEM"></INTERREF>
+<ATTRIBUTE name="objectsInside" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isGroup" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="isGhost" type="ENUMERATION">Yes</ATTRIBUTE>
+<ATTRIBUTE name="Apply Archetype" type="PROGRAMCALL">ITEM &quot;Apply Archetype&quot; param:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Description" type="LONGSTRING"></ATTRIBUTE>
+<ATTRIBUTE name="Corder Color Code (Hex Color Code)" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Font Size" type="ENUMERATION">10</ATTRIBUTE>
+<ATTRIBUTE name="Font Style" type="ENUMERATION">Standard</ATTRIBUTE>
+<ATTRIBUTE name="Border Color" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Individual Background Color" type="STRING">$86c3f4</ATTRIBUTE>
+<ATTRIBUTE name="Color Picker" type="ENUMERATION">Default</ATTRIBUTE>
+<ATTRIBUTE name="Individual Ghost Background Color" type="STRING">$ddeeff</ATTRIBUTE>
+<ATTRIBUTE name="referencedDescription" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedDenomination" type="EXPRESSION">EXPR val:&quot;Asset&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedGhostColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedBcolor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Border Color Picker" type="ENUMERATION">Individual</ATTRIBUTE>
+<ATTRIBUTE name="Prepare asset processes" type="PROGRAMCALL">ITEM &quot;Prepare asset processes&quot; param:&quot;&quot;</ATTRIBUTE>
+<INTERREF name="referencedAsset">
+<IREF type="objectreference" tmodeltype="FEM" tmodelname="Originals" tmodelver="" tclassname="Asset" tobjname="Asset-10608"></IREF>
+</INTERREF>
+<ATTRIBUTE name="referencedAssetName" type="EXPRESSION">EXPR val:&quot;Asset&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isMeansOfPayment" type="EXPRESSION">EXPR expr:(
+set(list1,ctobjs(&quot;Used In&quot;)),
+set(list2,conn(&quot;Used In&quot;, objid, list1)),
+set(counter,0),
+fortok(i,list2,&quot; &quot;,cond(aval(VAL i,&quot;Asset Type&quot;)=&quot;Means of Payment&quot;,set(counter,counter+1),counter)),
+counter)
+ val:0</ATTRIBUTE>
+<ATTRIBUTE name="outgoingAssetTypes" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Denomination" type="STRING">Asset</ATTRIBUTE>
+<ATTRIBUTE name="isMonetaryFund" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="isAttractionOutgoing" type="EXPRESSION">EXPR expr:(
+set(list1,ctobjs(&quot;Used In&quot;)),
+set(list2,conn(&quot;Used In&quot;, objid, list1)),
+set(counter,0),
+fortok(i,list2,&quot; &quot;,cond(aval(VAL i,&quot;Asset Type&quot;)=&quot;Attraction&quot;,set(counter,counter+1),counter)),
+counter)
+ val:0</ATTRIBUTE>
+<ATTRIBUTE name="Asset Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Asset Background Color (Hex Color Code)&quot;)) val:&quot;$ffffff&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Asset Ghost Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Asset Ghost Background Color (Hex Color Code)&quot;)) val:&quot;$ffffff&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Asset Group Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Asset Group Background Color (Hex Color Code)&quot;)) val:&quot;$ecf5ff&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Subclass"></INTERREF>
+<ATTRIBUTE name="referencedAssetID" type="EXPRESSION">EXPR val:&quot;13624&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isTacit" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="referencedTacit" type="EXPRESSION">EXPR val:&quot;No&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Bsubclass"></INTERREF>
+<ATTRIBUTE name="__Variants__" type="LONGSTRING"></ATTRIBUTE>
+</INSTANCE>
+<INSTANCE id="obj.13609" class="Note" name="Note-10611">
+<ATTRIBUTE name="Position" type="STRING">NODE x:2.5cm y:4.75cm w:3cm h:3cm index:3</ATTRIBUTE>
+<ATTRIBUTE name="External tool coupling" type="STRING"></ATTRIBUTE>
+<INTERREF name="Referenced FEM"></INTERREF>
+<ATTRIBUTE name="objectsInside" type="EXPRESSION">EXPR expr:(&quot;&quot;) val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isGroup" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="isGhost" type="ENUMERATION">Yes</ATTRIBUTE>
+<ATTRIBUTE name="Apply Archetype" type="PROGRAMCALL">ITEM &quot;Apply Archetype&quot; param:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Description" type="LONGSTRING">Note</ATTRIBUTE>
+<ATTRIBUTE name="Corder Color Code (Hex Color Code)" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Font Size" type="ENUMERATION">10</ATTRIBUTE>
+<ATTRIBUTE name="Font Style" type="ENUMERATION">Standard</ATTRIBUTE>
+<ATTRIBUTE name="Border Color" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Individual Background Color" type="STRING">$ffffef</ATTRIBUTE>
+<ATTRIBUTE name="Color Picker" type="ENUMERATION">Default</ATTRIBUTE>
+<ATTRIBUTE name="Individual Ghost Background Color" type="STRING">$fffff5</ATTRIBUTE>
+<ATTRIBUTE name="referencedDescription" type="EXPRESSION">EXPR val:&quot;Note&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedDenomination" type="EXPRESSION">EXPR expr:(&quot;&quot;) val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedGhostColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedBcolor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Border Color Picker" type="ENUMERATION">Individual</ATTRIBUTE>
+<ATTRIBUTE name="Note Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Note Background Color (Hex Color Code)&quot;)) val:&quot;$ffffef&quot;</ATTRIBUTE>
+<INTERREF name="referencedNote">
+<IREF type="objectreference" tmodeltype="FEM" tmodelname="Originals" tmodelver="" tclassname="Note" tobjname="Note-10611"></IREF>
+</INTERREF>
+<ATTRIBUTE name="referencedNoteDescription" type="EXPRESSION">EXPR val:&quot;Note&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Note Ghost Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Note Ghost Background Color (Hex Color Code)&quot;)) val:&quot;$ffffef&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Subclass"></INTERREF>
+<ATTRIBUTE name="referencedNoteID" type="EXPRESSION">EXPR val:&quot;13627&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Bsubclass"></INTERREF>
+<ATTRIBUTE name="__Variants__" type="LONGSTRING"></ATTRIBUTE>
+</INSTANCE>
+<INSTANCE id="obj.13612" class="External Actor" name="External Actor-10614">
+<ATTRIBUTE name="Position" type="STRING">NODE x:9cm y:5.75cm w:4.05cm h:2cm index:4</ATTRIBUTE>
+<ATTRIBUTE name="External tool coupling" type="STRING"></ATTRIBUTE>
+<INTERREF name="Referenced FEM"></INTERREF>
+<ATTRIBUTE name="objectsInside" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isGroup" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="isGhost" type="ENUMERATION">Yes</ATTRIBUTE>
+<ATTRIBUTE name="Apply Archetype" type="PROGRAMCALL">ITEM &quot;Apply Archetype&quot; param:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Description" type="LONGSTRING"></ATTRIBUTE>
+<ATTRIBUTE name="Corder Color Code (Hex Color Code)" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Font Size" type="ENUMERATION">10</ATTRIBUTE>
+<ATTRIBUTE name="Font Style" type="ENUMERATION">Standard</ATTRIBUTE>
+<ATTRIBUTE name="Border Color" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Individual Background Color" type="STRING">$c3c3c3</ATTRIBUTE>
+<ATTRIBUTE name="Color Picker" type="ENUMERATION">Default</ATTRIBUTE>
+<ATTRIBUTE name="Individual Ghost Background Color" type="STRING">$dfdfdf</ATTRIBUTE>
+<ATTRIBUTE name="referencedDescription" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedDenomination" type="EXPRESSION">EXPR val:&quot;External Actor&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedGhostColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedBcolor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Border Color Picker" type="ENUMERATION">Individual</ATTRIBUTE>
+<INTERREF name="Referenced External Actor">
+<IREF type="objectreference" tmodeltype="FEM" tmodelname="Originals" tmodelver="" tclassname="External Actor" tobjname="External Actor-10614"></IREF>
+</INTERREF>
+<ATTRIBUTE name="referencedExternalActorName" type="EXPRESSION">EXPR val:&quot;External Actor&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Denomination" type="STRING">External Actor</ATTRIBUTE>
+<ATTRIBUTE name="External Actor Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;External Actor Background Color (Hex Color Code)&quot;)) val:&quot;#FFFFFF&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Referenced External Actor Name" type="EXPRESSION">EXPR val:&quot;External Actor&quot;</ATTRIBUTE>
+<ATTRIBUTE name="External Actor Ghost Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;External Actor Ghost Background Color (Hex Color Code)&quot;)) val:&quot;#FFFFFF&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Subclass"></INTERREF>
+<ATTRIBUTE name="Referenced External Actor ID" type="EXPRESSION">EXPR val:&quot;13630&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isMultiple" type="ENUMERATION">Yes</ATTRIBUTE>
+<ATTRIBUTE name="referencedMultiple" type="EXPRESSION">EXPR val:&quot;Yes&quot;</ATTRIBUTE>
+<ATTRIBUTE name="External Actor Group Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;External Actor Group Background Color (Hex Color Code)&quot;)) val:&quot;$f4f4f4&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Bsubclass"></INTERREF>
+<ATTRIBUTE name="__Variants__" type="LONGSTRING"></ATTRIBUTE>
+</INSTANCE>
+<INSTANCE id="obj.13615" class="Pool" name="Pool-10617">
+<ATTRIBUTE name="Position" type="STRING">NODE x:14.25cm y:6.5cm w:2.38cm h:1.69cm index:5</ATTRIBUTE>
+<ATTRIBUTE name="External tool coupling" type="STRING"></ATTRIBUTE>
+<INTERREF name="Referenced FEM"></INTERREF>
+<ATTRIBUTE name="objectsInside" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="isGroup" type="ENUMERATION">No</ATTRIBUTE>
+<ATTRIBUTE name="isGhost" type="ENUMERATION">Yes</ATTRIBUTE>
+<ATTRIBUTE name="Apply Archetype" type="PROGRAMCALL">ITEM &quot;Apply Archetype&quot; param:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Description" type="LONGSTRING"></ATTRIBUTE>
+<ATTRIBUTE name="Corder Color Code (Hex Color Code)" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Font Size" type="ENUMERATION">10</ATTRIBUTE>
+<ATTRIBUTE name="Font Style" type="ENUMERATION">Standard</ATTRIBUTE>
+<ATTRIBUTE name="Border Color" type="STRING"></ATTRIBUTE>
+<ATTRIBUTE name="Individual Background Color" type="STRING">$ffff00</ATTRIBUTE>
+<ATTRIBUTE name="Color Picker" type="ENUMERATION">Default</ATTRIBUTE>
+<ATTRIBUTE name="Individual Ghost Background Color" type="STRING">$ffffc8</ATTRIBUTE>
+<ATTRIBUTE name="referencedDescription" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedDenomination" type="EXPRESSION">EXPR val:&quot;Pool&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedGhostColor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="referencedBcolor" type="EXPRESSION">EXPR val:&quot;&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Border Color Picker" type="ENUMERATION">Individual</ATTRIBUTE>
+<INTERREF name="Referenced Pool">
+<IREF type="objectreference" tmodeltype="FEM" tmodelname="Originals" tmodelver="" tclassname="Pool" tobjname="Pool-10617"></IREF>
+</INTERREF>
+<ATTRIBUTE name="referencedPoolName" type="EXPRESSION">EXPR val:&quot;Pool&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Denomination" type="STRING">Pool</ATTRIBUTE>
+<ATTRIBUTE name="Pool Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Pool Background Color (Hex Color Code)&quot;)) val:&quot;#FFFFFF&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Pool Ghost Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Pool Ghost Background Color (Hex Color Code)&quot;)) val:&quot;#FFFFFF&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Subclass"></INTERREF>
+<ATTRIBUTE name="referencedPoolID" type="EXPRESSION">EXPR val:&quot;13633&quot;</ATTRIBUTE>
+<ATTRIBUTE name="Pool Group Background Color" type="EXPRESSION">EXPR expr:(aval(modelid, &quot;Pool Group Background Color (Hex Color Code)&quot;)) val:&quot;$fffff4&quot;</ATTRIBUTE>
+<INTERREF name="Referenced Bsubclass"></INTERREF>
+<ATTRIBUTE name="__Variants__" type="LONGSTRING"></ATTRIBUTE>
+</INSTANCE>
+</MODEL>
+</MODELS>
+</ADOXML>

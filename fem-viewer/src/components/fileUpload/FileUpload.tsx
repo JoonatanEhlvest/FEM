@@ -1,27 +1,20 @@
 import http from "../../http";
-import { exec } from "child_process";
 import { XMLParser } from "fast-xml-parser";
-import React, { ChangeEvent, FC, useEffect, useState } from "react";
-import createParser from "../../parser";
+import React, { ChangeEvent, useState } from "react";
 import useFEM from "../../state/useFEM";
 import { ATTR_PREFIX } from "../../utlitity";
+import createParser from "../../parser";
+import { upload } from "@testing-library/user-event/dist/upload";
+import Header from "../header/Header";
+import { NavLink } from "react-router-dom";
+import styles from "./fileUpload.module.css";
 
 const FileUpload = () => {
-	const { addModel, addSvg } = useFEM();
-	const [uploadError, setUploadError] = useState<string | null>(null);
+	const { setError, setPopup } = useFEM();
+	const [uploadError, setUploadError] = useState(false);
 	const [xmlFiles, setXMLFiles] = useState<Array<File | null> | null>(null);
 	const [svgFiles, setsvgFiles] = useState<Array<File | null> | null>(null);
 	const [modelGroupUploadName, setModelGroupUploadName] = useState("");
-
-	const fetchModelGroupLinks = () => {
-		http.get("/api/v1/upload")
-			.then((res) => {
-				setUploadError(null);
-			})
-			.catch((_) => {
-				setUploadError("Couln't find modelGroups");
-			});
-	};
 
 	const onSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
@@ -47,29 +40,39 @@ const FileUpload = () => {
 			headers: {
 				"Content-Type": "multipart/form-data",
 			},
-		}).catch((err) => console.log(err));
+		})
+			.then((res) => {
+				console.log("Uploaded");
+				setPopup({ message: "Successfully uploaded" });
+			})
+			.catch((err) => {
+				setError({
+					status: err.response.status,
+					message: err.response.data.message,
+				});
+			});
 	};
 
 	const onXMLChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setUploadError(null);
+		setUploadError(false);
 		if (e.target.files === null) {
-			setUploadError("Couldnt upload file");
+			setUploadError(true);
 			return;
 		}
 		const file = e.target.files[0];
 		const fileReader = new FileReader();
 		fileReader.onload = (event) => {
-			const contents = event?.target?.result;
-
 			try {
-				const parser = createParser(contents);
-				parser.getModels().forEach((model: any) => {
-					addModel(model);
+				const data = event.target?.result;
+				createParser(data).getModels();
+			} catch (err) {
+				setUploadError(true);
+				setError({
+					status: 422,
+					message: "Couldn't parse file: " + file.name,
 				});
-				setXMLFiles([file]);
-			} catch {
-				setUploadError(`Couldn't parse ${file.name}`);
 			}
+			setXMLFiles([file]);
 		};
 
 		fileReader.readAsText(file);
@@ -89,30 +92,29 @@ const FileUpload = () => {
 		const svgs: Array<File | null> = [];
 		Array.from(e.target.files).forEach((file: File) => {
 			try {
-				readSvg(parser, file);
 				svgs.push(file);
 			} catch {
-				setUploadError(`Couldn't parse ${file.name}`);
+				setUploadError(true);
+				setError({
+					status: 422,
+					message: "Couldn't parse svg " + file.name,
+				});
 			}
 		});
 
 		setsvgFiles(svgs);
 	};
 
-	const readSvg = (parser: XMLParser, file: File) => {
-		const fileReader = new FileReader();
-		fileReader.onload = (event) => {
-			const contents = event?.target?.result;
-			const xml = contents as string;
-			const jObj = parser.parse(xml);
-			addSvg(file.name.replace(/.svg/g, "").trimEnd(), jObj);
-		};
-
-		fileReader.readAsText(file);
-	};
-
 	return (
 		<div>
+			<Header>
+				<div className={styles["header-content"]}>
+					<h1>Upload</h1>
+					<NavLink to="/dashboard">
+						<button>Dashboard</button>
+					</NavLink>
+				</div>
+			</Header>
 			<form onSubmit={onSubmit}>
 				<label>Model Group Name</label>
 				<input
@@ -133,7 +135,6 @@ const FileUpload = () => {
 				/>
 				<input type="submit" />
 			</form>
-			{uploadError && <div>{uploadError}</div>}
 		</div>
 	);
 };

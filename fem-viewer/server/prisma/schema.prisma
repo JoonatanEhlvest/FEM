@@ -25,7 +25,7 @@ model User {
 model File {
   id  String @id @default(uuid())
 
-  modelGroup ModelGroup @relation(fields: [modelGroupId], references: [id])
+  modelGroup ModelGroup @relation(fields: [modelGroupId], references: [id], onDelete: Cascade)
   modelGroupId String
 
   name String

@@ -5,15 +5,25 @@ import db from "../../../db/index";
 import { authorizeUser } from "./shared";
 import { generateModelGroupName } from "../../../storage";
 import { Prisma } from "@prisma/client";
+import fs from "fs/promises";
+import createParser from "../../../../../src/parser";
+import { UPLOAD_DIR } from "../../../../applicationPaths";
+import path from "path";
 
 const router = Router();
 
-const upload = multer({ storage: storage() });
-router.post(
-	"/upload",
-	authorizeUser,
-	upload.array("files"),
-	async (req, res, next) => {
+const upload = multer({
+	storage: storage(),
+});
+
+const uploadArray = upload.array("files");
+
+router.post("/upload", authorizeUser, async (req, res, next) => {
+	uploadArray(req, res, async (err) => {
+		if (err) {
+			return res.status(422).json({ message: err.message });
+		}
+
 		const files = req.files as Express.Multer.File[];
 		if (!files) {
 			return next();
@@ -23,6 +33,27 @@ router.post(
 			req.user.username,
 			req.body.modelGroupName
 		);
+		const xml = files.find((f) => f.originalname.endsWith(".xml"));
+		try {
+			if (xml) {
+				const data = await fs.readFile(xml.path, "utf-8");
+				createParser(data).getModels();
+			} else {
+				await fs.rm(path.join(UPLOAD_DIR, modelGroupName), {
+					recursive: true,
+				});
+				return res
+					.status(422)
+					.json({ message: "No xml file provided" });
+			}
+		} catch (err) {
+			await fs.rm(path.join(UPLOAD_DIR, modelGroupName), {
+				recursive: true,
+			});
+			return res
+				.status(422)
+				.json({ message: `Couldn't parse ${xml.originalname}` });
+		}
 
 		try {
 			await db.user.update({
@@ -48,7 +79,7 @@ router.post(
 				},
 			});
 
-			return res.status(200);
+			return res.status(200).end();
 		} catch (err) {
 			if (err instanceof Prisma.PrismaClientKnownRequestError) {
 				if (err.code === "P2002") {
@@ -58,8 +89,8 @@ router.post(
 				}
 			}
 		}
-	}
-);
+	});
+});
 
 router.get("/upload", authorizeUser, async (req, res) => {
 	const modelGroups = await db.modelGroup.findMany({

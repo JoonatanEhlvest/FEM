@@ -1,18 +1,16 @@
 import { useContext } from "react";
-import { addXMLAttrPrefix } from "../utlitity";
 import FEMContext from "./FEMContext";
 import FEMState, { initialState } from "./FEMState";
-import Connector from "./types/Connector";
-import { ColorPicker } from "./types/Instance";
-import Instance, { INSTANCE_DEFAULTS } from "./types/Instance";
-import InstanceClass from "./types/InstanceClass";
+
 import Model from "./types/Model";
-import ModelAttributes from "./types/ModelAttributes";
-import renderSVG, { svgXML } from "../components/svgrenderer/svgrenderer";
+
+import { svgXML } from "../components/svgrenderer/svgrenderer";
 import Reference from "./types/Reference";
 import http from "../http";
+import Instance, { InterrefType } from "./types/Instance";
+import InstanceClass from "./types/InstanceClass";
 
-type XMLObj = {
+export type XMLObj = {
 	[key: string]: string | number | XMLObj | XMLObj[];
 };
 
@@ -25,320 +23,65 @@ const useFEM = () => {
 		);
 	}
 
-	const tryGetStrProperty = (jsonObj: XMLObj, attr: string): string => {
-		const attrWithPrefix = addXMLAttrPrefix(attr);
-		if (jsonObj[attrWithPrefix] !== undefined) {
-			const value = jsonObj[attrWithPrefix];
-			return String(value);
-		} else {
-			return "";
-		}
-	};
-
-	const hasTextProperty = (value: XMLObj[keyof XMLObj]): boolean => {
-		return (
-			value !== undefined &&
-			typeof value === "object" &&
-			!Array.isArray(value) &&
-			value["#text"] !== undefined
-		);
-	};
-
-	const tryGetBoolAttr = (XMLattribute: XMLObj, attr: string): boolean => {
-		const value = XMLattribute[attr];
-		if (hasTextProperty(value)) {
-			return (value as XMLObj)["#text"] === "Yes" ? true : false;
-		} else {
-			return false;
-		}
-	};
-
-	const tryGetStrAttr = (XMLattribute: XMLObj, attr: string): string => {
-		const value = XMLattribute[attr];
-		if (hasTextProperty(value)) {
-			return (value as XMLObj)["#text"] as string;
-		} else {
-			return "";
-		}
-	};
-
-	const tryGetNumAttr = (XMLattribute: XMLObj, attr: string): number => {
-		const value = XMLattribute[attr];
-		if (hasTextProperty(value)) {
-			return Number((value as XMLObj)["#text"]);
-		} else {
-			return INSTANCE_DEFAULTS.hasOwnProperty(attr)
-				? Number(INSTANCE_DEFAULTS[attr])
-				: 0;
-		}
-	};
-
-	const findFloatsFromString = (s: string): number[] | undefined => {
-		return s.match(/[+-]?([0-9]*[.])?[0-9]+/g)?.map((f) => parseFloat(f));
-	};
-
-	const parseInstancePosition = (s: string): Instance["position"] => {
-		const match = findFloatsFromString(s);
-		if (match === undefined) {
-			return undefined;
-		}
-		const ret: Instance["position"] = {
-			x: match[0],
-			y: match[1],
-			width: match[2],
-			height: match[3],
-			index: match[4],
-		};
-
-		return ret;
-	};
-
-	const parseWorldArea = (s: string): ModelAttributes["worldArea"] => {
-		const match = findFloatsFromString(s);
-		if (match === undefined) {
-			return undefined;
-		}
-
-		const ret: ModelAttributes["worldArea"] = {
-			width: match[0],
-			height: match[1],
-			minWidth: match[2],
-			minHeight: match[3],
-		};
-
-		return ret;
-	};
-
-	const extractHexColor = (s: string): string => {
-		const pattern = /val:"(\$?[a-zA-Z0-9]+)"/;
-		const match = s.match(pattern);
-
-		if (match == null || match.length < 2) {
-			return "";
-		}
-		return match[1];
-	};
-
-	const findInstanceIREF = (refs: XMLObj): Instance["reference"] => {
-		let returnReference: Instance["reference"] = null;
-		if (Array.isArray(refs)) {
-			let correctRef = null;
-			for (let ref of refs) {
-				if (ref["IREF"] !== undefined) {
-					correctRef = ref["IREF"];
-					break;
-				}
-			}
-
-			if (correctRef !== null) {
-				returnReference = {
-					modelName: tryGetStrProperty(correctRef, "tmodelname"),
-					type: tryGetStrProperty(correctRef, "type"),
-					referencedInstanceName: tryGetStrProperty(
-						correctRef,
-						"tobjname"
-					),
-				};
-			}
-		}
-
-		return returnReference;
-	};
-
-	const getInstanceReference = (instance: XMLObj): Instance["reference"] => {
-		return findInstanceIREF(instance.INTERREF as XMLObj);
-	};
-
-	const getInstances = (
-		instances: Array<XMLObj>,
-		modelName: Model["name"]
-	): Array<Instance> => {
-		const ret: Array<Instance> = instances.map((XMLInstance) => {
-			const attributes = XMLInstance.ATTRIBUTE as XMLObj;
-			const position = parseInstancePosition(
-				tryGetStrAttr(attributes, "position")
-			);
-
-			const reference = getInstanceReference(XMLInstance);
-			const id = tryGetStrProperty(XMLInstance, "id");
-			const name = tryGetStrProperty(XMLInstance, "name");
-
-			if (reference && name) {
-				setState((prev) => {
-					let newReferencedBys: FEMState["referencedBy"][keyof FEMState["referencedBy"]] =
-						[{ modelName, instanceName: name }];
-					if (
-						prev.referencedBy[reference.referencedInstanceName] !==
-						undefined
-					) {
-						newReferencedBys = [
-							...prev.referencedBy[
-								reference.referencedInstanceName
-							],
-							{ modelName, instanceName: name },
-						];
+	const getReferences = (models: Model[]) => {
+		models.forEach((model) => {
+			model.instances.forEach((instance) => {
+				Object.entries(instance.Interrefs).forEach(([key, iref]) => {
+					if (iref) {
+						const newRef: Reference = {
+							type: iref.type,
+							referencedClass: iref.tclassname as InstanceClass,
+							modelName: iref.tmodelname,
+							referencedInstanceName: iref.tobjname,
+							referencedByInstance: instance.name,
+							referencedByModel: model.name,
+						};
+						setState((prev) => ({
+							...prev,
+							references: {
+								...prev.references,
+								[key]: [
+									...(prev.references[key as InterrefType] ||
+										[]),
+									newRef,
+								],
+							},
+						}));
 					}
+				});
+			});
+		});
+	};
 
+	const addModelGroup = (modelGroupId: string, navigate: any) => {
+		http.get(`/api/v1/modelgroup/${modelGroupId}`)
+			.then((res) => {
+				console.log(res);
+				const svgs = res.data.data.svgs;
+				svgs.forEach((svg: any) => {
+					addSvg(svg.name, svg.data);
+				});
+
+				const models = res.data.data.models;
+
+				setState((prevState) => {
 					return {
-						...prev,
-						referencedBy: {
-							...prev.referencedBy,
-							[reference.referencedInstanceName]:
-								newReferencedBys,
-						},
+						...prevState,
+						models: [...prevState.models, ...models],
 					};
 				});
-			}
 
-			const instance: Instance = {
-				id,
-				class: tryGetStrProperty(XMLInstance, "class") as InstanceClass,
-				name,
-				isGhost: tryGetBoolAttr(attributes, "isghost"),
-				isGroup: tryGetBoolAttr(attributes, "isgroup"),
-				position: position,
-				applyArchetype: tryGetStrAttr(attributes, "applyArchetype"),
-				description: tryGetStrAttr(attributes, "description"),
-				fontSize: tryGetNumAttr(attributes, "fontsize"),
-				fontStyle: tryGetStrAttr(attributes, "fontStyle"),
-				individualBGColor: tryGetStrAttr(
-					attributes,
-					"individualbackgroundcolor"
-				),
-				individualGhostBGColor: tryGetStrAttr(
-					attributes,
-					"individualghostbackgroundcolor"
-				),
-				referencedBGColor: extractHexColor(
-					tryGetStrAttr(attributes, "referencedcolor")
-				),
-				referencedGhostBGColor: extractHexColor(
-					tryGetStrAttr(attributes, "referencedghostcolor")
-				),
-				denomination: tryGetStrAttr(attributes, "denomination"),
-				referencedDenomination: tryGetStrAttr(
-					attributes,
-					"referenceddenomination"
-				),
-				colorPicker: tryGetStrAttr(
-					attributes,
-					"colorpicker"
-				) as ColorPicker,
-				borderColor: tryGetStrAttr(attributes, "bordercolor"),
-				reference,
-			};
-			return instance;
-		});
-		return ret;
-	};
+				getReferences(models);
 
-	const getConnectors = (connectors: Array<XMLObj>): Array<Connector> => {
-		const ret: Array<Connector> = connectors.map((XMLconnector) => {
-			const attributes = XMLconnector.ATTRIBUTE as XMLObj;
-			const from = XMLconnector.FROM as XMLObj;
-			const to = XMLconnector.TO as XMLObj;
-			const connector: Connector = {
-				id: tryGetStrProperty(XMLconnector, "id"),
-				class: tryGetStrProperty(XMLconnector, "class"),
-				fromId: tryGetStrProperty(from, "instance"),
-				toId: tryGetStrProperty(to, "instance"),
-				positions: tryGetStrAttr(attributes, "positions"),
-				appearance: tryGetStrAttr(attributes, "appearance"),
-				processType: tryGetStrAttr(attributes, "processtype"),
-			};
-			return connector;
-		});
-		return ret;
-	};
-
-	const getModelAttributes = (
-		modelAttributes: XMLObj
-	): Partial<ModelAttributes> => {
-		const f = (s: string): string => tryGetStrAttr(modelAttributes, s);
-
-		const worldArea = parseWorldArea(f("worldarea"));
-		const ret: Partial<ModelAttributes> = {
-			accessState: f("accessstate"),
-			colors: {
-				Asset: {
-					ghost: f("assetghostbackgroundcolor"),
-					group: f("assetgroupbackgroundcolor"),
-					default: f("assetbackgroundcolor"),
-				},
-				Pool: {
-					ghost: f("poolghostbackgroundcolor"),
-					group: f("poolgroupbackgroundcolor"),
-					default: f("poolbackgroundcolor"),
-				},
-				Process: {
-					ghost: f("processghostbackgroundcolor"),
-					group: f("processgroupbackgroundcolor"),
-					default: f("processbackgroundcolor"),
-				},
-				Note: {
-					ghost: f("noteghostbackgroundcolor"),
-					group: f("notegroupbackgroundcolor"),
-					default: f("notebackgroundcolor"),
-				},
-				"External Actor": {
-					ghost: f("externalactorghostbackgroundcolor"),
-					group: f("externalactorgroupbackgroundcolor"),
-					default: f("externalactorbackgroundcolor"),
-				},
-			},
-
-			Author: f("author"),
-			baseName: f("basename"),
-			changeCounter: tryGetNumAttr(modelAttributes, "changecounter"),
-			comment: f("comment"),
-			connectorMarks: f("connectormarks"),
-			contextOfVersion: f("contextofversion"),
-			creationDate: f("creationdate"),
-			currentMode: f("currentmode"),
-			currentPageLayout: f("currentpagelayout"),
-			lastChanged: f("datelastchanged"),
-			description: f("description"),
-			externalActorBGColor: f("externalactorbackgroundcolor"),
-			externalActorGhostBGColor: f("externalactorghostbackgroundcolor"),
-			externalActorGroupBGColor: f("externalactorgroupbackgroundcolor"),
-			fontSize: tryGetNumAttr(modelAttributes, "fontsize"),
-			lastUser: f("lastuser"),
-			modelType: f("modeltype"),
-			noteBGColor: f("notebackgroundcolor"),
-			noteGhostBGColor: f("noteghostbackgroundcolor"),
-			noteGroupBGColor: f("notegroupbackgroundcolor"),
-
-			position: f("position"),
-			state: f("state"),
-			type: f("type"),
-			worldArea: worldArea,
-			viewableArea: f("viewablearea"),
-			zoom: tryGetNumAttr(modelAttributes, "zoom"),
-		};
-
-		return ret;
-	};
-
-	const addModel = (model: any) => {
-		const name = tryGetStrProperty(model, "name");
-		const modelToAdd: Model = {
-			name,
-			id: tryGetStrProperty(model, "id"),
-			applib: tryGetStrProperty(model, "applib"),
-			modeltype: tryGetStrProperty(model, "modeltype"),
-			version: tryGetStrProperty(model, "version"),
-			libtype: tryGetStrProperty(model, "libtype"),
-			connectors: getConnectors(model.CONNECTOR),
-			instances: getInstances(model.INSTANCE, name),
-			attributes: getModelAttributes(model.MODELATTRIBUTES),
-		};
-
-		setState((prevState) => {
-			return {
-				...prevState,
-				models: [...prevState.models, modelToAdd],
-			};
-		});
+				navigate("/viewer");
+			})
+			.catch((err) => {
+				console.log(err);
+				setError({
+					status: err.response.status,
+					message: err.response.data.message,
+				});
+			});
 	};
 
 	const addSvg = (name: string, svg: svgXML) => {
@@ -415,6 +158,7 @@ const useFEM = () => {
 			setCurrentModel(referencedModel.id);
 
 			if (referencedInstance) {
+				setCurrentInstance(undefined);
 				setCurrentInstance(referencedInstance);
 			}
 		}
@@ -523,16 +267,41 @@ const useFEM = () => {
 			currentInstance: undefined,
 			currentModel: undefined,
 			currentSvgElement: undefined,
+			references: initialState.references,
 		}));
 	};
 
-	const getReferencedBys = (name: Instance["name"]) => {
-		return state.referencedBy[name];
+	const setPopup = (popUp: FEMState["popUp"]) => {
+		setState((prevState) => ({
+			...prevState,
+			popUp,
+		}));
+	};
+
+	const getPopup = (): FEMState["popUp"] => {
+		return state.popUp;
+	};
+
+	const getInstancesThatReference = (
+		instance: Instance,
+		refType: InterrefType
+	): Reference[] => {
+		return state.references[refType].filter((ref) => {
+			if (
+				ref.referencedByInstance === instance.name &&
+				ref.referencedByModel === getCurrentModel()?.name
+			)
+				return false;
+			return (
+				ref.referencedInstanceName === instance.name &&
+				ref.referencedClass === instance.class
+			);
+		});
 	};
 
 	return {
 		getModelTree,
-		addModel,
+		addModelGroup,
 		getCurrentModel,
 		setCurrentModel,
 		getCurrentInstance,
@@ -552,7 +321,10 @@ const useFEM = () => {
 		logout,
 		fetchUser,
 		resetModels,
-		getReferencedBys,
+		setPopup,
+		getPopup,
+		getInstancesThatReference,
+		state,
 	};
 };
 

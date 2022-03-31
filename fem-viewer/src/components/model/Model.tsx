@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC } from "react";
+import React, { CSSProperties, FC, useEffect } from "react";
 import Instance from "../../state/types/Instance";
 import ModelType from "../../state/types/Model";
 import Asset from "../hitboxes/asset/Asset";

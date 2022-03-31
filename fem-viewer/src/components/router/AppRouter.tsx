@@ -9,10 +9,12 @@ import Register from "../auth/Register";
 import RequireAuth from "../auth/RequireAuth";
 import Dashboard from "../dashboard/Dashboard";
 import FileUpload from "../fileUpload/FileUpload";
+import Popup from "../popUp/Popup";
 
 const AppRouter = () => {
-	const { getError, setError } = useFEM();
+	const { getError, setError, getPopup, setPopup } = useFEM();
 	const error = getError();
+	const popup = getPopup();
 	return (
 		<BrowserRouter>
 			{error && (
@@ -21,6 +23,11 @@ const AppRouter = () => {
 					handleClose={() => setError(null)}
 				/>
 			)}
+
+			{popup && (
+				<Popup popUp={popup} handleClose={() => setPopup(null)} />
+			)}
+
 			<Routes>
 				<Route
 					path="/dashboard"
@@ -59,6 +66,14 @@ const AppRouter = () => {
 					element={
 						<RequireAuth>
 							<FileUpload />
+						</RequireAuth>
+					}
+				/>
+				<Route
+					path="*"
+					element={
+						<RequireAuth>
+							<Dashboard />
 						</RequireAuth>
 					}
 				/>

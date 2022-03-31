@@ -6,49 +6,54 @@ import { ModelGroup } from "./Dashboard";
 import styles from "./dashboard.module.css";
 import { Parser } from "../../parser";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 type Props = {
 	modelGroup: ModelGroup;
+	removeModelGroup: (id: string) => void;
 };
 
-const ModelGroupListItem: FC<Props> = ({ modelGroup }) => {
+const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 	const { state, handleChange } = useForm({ usernameToShareWith: "" });
-	const { setError, addSvg, addModel, resetModels } = useFEM();
+	const { setError, addModelGroup, resetModels, setPopup } = useFEM();
 	const navigate = useNavigate();
 
 	const handleShare = (modelGroupId: ModelGroup["modelGroup"]["id"]) => {
 		http.patch("/api/v1/modelgroup/share", {
 			modelGroupId,
 			usernameToShareWith: state.usernameToShareWith,
-		}).catch((err) => {
-			setError({
-				status: err.response.status,
-				message: err.response.data.message,
+		})
+			.then((res) => {
+				setPopup({
+					message: "Sharing successful",
+				});
+			})
+			.catch((err) => {
+				setError({
+					status: err.response.status,
+					message: err.response.data.message,
+				});
 			});
-		});
 	};
 
 	const handleView = () => {
 		resetModels();
 		const modelGroupId = modelGroup.modelGroup.id;
-		http.get(`/api/v1/modelgroup/${modelGroupId}`)
+		addModelGroup(modelGroupId, navigate);
+	};
+
+	const handleDelete = () => {
+		const modelGroupId = modelGroup.modelGroup.id;
+		axios
+			.delete(`/api/v1/modelgroup/${modelGroupId}`)
 			.then((res) => {
-				console.log(res);
-				const svgs = res.data.data.svgs;
-				svgs.forEach((svg: any) => {
-					addSvg(svg.name, svg.data);
-				});
-				const parser = new Parser(res.data.data.xml);
-				parser.getModels().forEach((model: any) => {
-					addModel(model);
-				});
-				navigate("/viewer");
+				setPopup({ message: "Deletion successful" });
+				removeModelGroup(res.data.modelGroup.id);
 			})
 			.catch((err) => {
-				console.log(err);
 				setError({
-					status: err.response.status,
-					message: err.response.data.message,
+					status: err.response.staus,
+					message: err.reponse.data.message,
 				});
 			});
 	};
@@ -62,6 +67,9 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup }) => {
 					src={require("./view.svg").default}
 					alt="view model"
 				/>
+				{modelGroup.owner && (
+					<button onClick={handleDelete}>Delete</button>
+				)}
 			</div>
 			<div>
 				<div>{modelGroup.owner ? "Shared To" : "Shared by"}</div>

@@ -30,7 +30,6 @@ const Dashboard = () => {
 	useEffect(() => {
 		fetchUser()
 			.then((res) => {
-				console.log(res.data);
 				setUser(res.data.user);
 			})
 			.catch((err) => {
@@ -40,6 +39,20 @@ const Dashboard = () => {
 				});
 			});
 	}, []);
+
+	const removeModelGroup = (id: string) => {
+		if (user) {
+			setUser((prev) => {
+				if (prev) {
+					return {
+						...prev,
+						modelGroups: prev.modelGroups.filter(m => m.modelGroup.id !== id)
+					};
+				}
+				return null;
+			});
+		}
+	};
 
 	const handleLogout = () => {
 		logout();
@@ -68,7 +81,7 @@ const Dashboard = () => {
 				</div>
 			</Header>
 
-			{user && <DashBoardModelGroupList modelGroups={user.modelGroups} />}
+			{user && <DashBoardModelGroupList removeModelGroup={removeModelGroup} modelGroups={user.modelGroups} />}
 		</div>
 	);
 };

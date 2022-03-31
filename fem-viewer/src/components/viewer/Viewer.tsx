@@ -47,16 +47,19 @@ const Viewer = () => {
 				className={styles["viewer-container"]}
 				ref={viewerContainerRef}
 			>
-				{svg && (
+				{svg ? (
 					<RenderSVG
 						image={getCurrentSvgElement()}
 						zoom={getZoom()}
 					/>
+				) : (
+					<div> No svg provided for model</div>
 				)}
-				{model && <Model model={model} parentDimensions={dimensions} />}
+				{model && svg && (
+					<Model model={model} parentDimensions={dimensions} />
+				)}
+				<DetailsPopup />
 			</div>
-
-			<DetailsPopup />
 		</div>
 	);
 };

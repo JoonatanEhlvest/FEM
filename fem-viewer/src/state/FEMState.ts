@@ -1,7 +1,8 @@
 import { ReactElement } from "react";
 import { svgXML } from "../components/svgrenderer/svgrenderer";
-import Instance from "./types/Instance";
+import Instance, { InterrefType } from "./types/Instance";
 import Model from "./types/Model";
+import Reference from "./types/Reference";
 
 export interface User {
 	id: string;
@@ -19,12 +20,12 @@ export default interface FEMState {
 		message: string;
 	} | null;
 	user: User | null;
-	referencedBy: {
-		[key: Instance["name"]]: {
-			modelName: Model["name"];
-			instanceName: Instance["name"];
-		}[];
+	references: {
+		[key in InterrefType]: Reference[];
 	};
+	popUp: {
+		message: string;
+	} | null;
 }
 
 const initialState: FEMState = {
@@ -36,7 +37,16 @@ const initialState: FEMState = {
 	zoom: 1,
 	error: null,
 	user: null,
-	referencedBy: {},
+	references: {
+		"Referenced Bsubclass": [],
+		"Referenced External Actor": [],
+		"Referenced Subclass": [],
+		"Referened Pool": [],
+		referencedAsset: [],
+		referencedNote: [],
+		referencedProcess: [],
+	},
+	popUp: null,
 };
 
 export { initialState };

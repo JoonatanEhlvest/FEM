@@ -5,6 +5,7 @@ import ModelGroupListItem from "./ModelGroupListItem";
 
 interface Props {
 	modelGroups: ModelGroup[];
+	removeModelGroup: (id: string) => void;
 }
 
 const split = <T,>(arr: Array<T>, filter: (item: T) => boolean): [T[], T[]] => {
@@ -22,7 +23,10 @@ const split = <T,>(arr: Array<T>, filter: (item: T) => boolean): [T[], T[]] => {
 	return [first, second];
 };
 
-const DashBoardModelGroupList: FC<Props> = ({ modelGroups }) => {
+const DashBoardModelGroupList: FC<Props> = ({
+	modelGroups,
+	removeModelGroup,
+}) => {
 	const [ownedModelGroups, notOwnedModelGroups] = split(
 		modelGroups,
 		(m) => m.owner
@@ -39,6 +43,7 @@ const DashBoardModelGroupList: FC<Props> = ({ modelGroups }) => {
 						<ModelGroupListItem
 							key={m.modelGroup.id}
 							modelGroup={m}
+							removeModelGroup={removeModelGroup}
 						/>
 					);
 				})}
@@ -52,6 +57,7 @@ const DashBoardModelGroupList: FC<Props> = ({ modelGroups }) => {
 						<ModelGroupListItem
 							key={m.modelGroup.id}
 							modelGroup={m}
+							removeModelGroup={removeModelGroup}
 						/>
 					);
 				})}

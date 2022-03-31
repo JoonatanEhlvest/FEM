@@ -4,13 +4,20 @@ import db from "../../../db";
 import { Prisma } from "@prisma/client";
 import path from "path";
 import { UPLOAD_DIR } from "../../../../applicationPaths";
-import { parseXMLToModel } from "../../../../../src/parser/index";
+import createParser, { parseXMLToModel } from "../../../../../src/parser/index";
 import fs from "fs/promises";
+import Model from "../../../../../src/state/types/Model";
 
 const router = Router();
 
 router.patch("/modelgroup/share", authorizeUser, async (req, res) => {
 	const { usernameToShareWith, modelGroupId } = req.body;
+
+	if (usernameToShareWith === req.user.username) {
+		return res
+			.status(422)
+			.json({ message: "Can't share a model with yourself" });
+	}
 
 	try {
 		const result = await db.modelGroupsOnUsers.create({
@@ -36,8 +43,6 @@ router.patch("/modelgroup/share", authorizeUser, async (req, res) => {
 				modelGroupId: modelGroupId,
 			},
 		});
-
-		console.log(result);
 
 		return res.status(200).end();
 	} catch (err) {
@@ -75,9 +80,9 @@ router.get("/modelgroup/:modelGroupId", async (req, res) => {
 		});
 
 		const response: {
-			xml: any;
+			models: Model[];
 			svgs: any[];
-		} = { xml: null, svgs: [] };
+		} = { models: [], svgs: [] };
 
 		await Promise.all(
 			modelGroup.files.map(async (file) => {
@@ -88,8 +93,9 @@ router.get("/modelgroup/:modelGroupId", async (req, res) => {
 				);
 				if (file.name.endsWith(".xml")) {
 					const data = await fs.readFile(pathToFile, "utf-8");
-					const jObj = parseXMLToModel(data);
-					response.xml = jObj;
+					const parser = createParser(data);
+					const models = parser.parseModels();
+					response.models = models;
 				}
 
 				if (file.name.endsWith(".svg")) {
@@ -108,5 +114,41 @@ router.get("/modelgroup/:modelGroupId", async (req, res) => {
 		res.status(422).json({ message: err });
 	}
 });
+
+router.delete(
+	"/modelgroup/:modelGroupId",
+	authorizeUser,
+	async (req, res, next) => {
+		const { modelGroupId } = req.params;
+		try {
+			await db.modelGroupsOnUsers.deleteMany({
+				where: {
+					modelGroupId: modelGroupId,
+				},
+			});
+
+			await db.share.deleteMany({
+				where: {
+					modelGroupId: modelGroupId,
+				},
+			});
+
+			const modelGroup = await db.modelGroup.delete({
+				where: {
+					id: modelGroupId,
+				},
+			});
+
+			await fs.rm(path.join(UPLOAD_DIR, modelGroup.name), {
+				recursive: true,
+			});
+
+			return res.json({ modelGroup });
+		} catch (err) {
+			console.log(err);
+			return res.status(500).json({ message: "Couldn't delete" });
+		}
+	}
+);
 
 export default router;

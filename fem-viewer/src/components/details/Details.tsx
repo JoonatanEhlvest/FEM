@@ -1,16 +1,18 @@
-import Instance, { isSubclass } from "../../state/types/Instance";
+import Instance, { InterrefType, isSubclass } from "../../state/types/Instance";
 import Reference from "../../state/types/Reference";
 import useFEM from "../../state/useFEM";
 import Header from "../header/Header";
 import Cell from "./Cell";
 import styles from "./details.module.css";
+import arrowRight from "./arrow-right.svg";
 
 const Details = () => {
 	const {
 		getCurrentInstance,
 		setCurrentInstance,
 		goToReference,
-		getReferencedBys,
+		getInstancesThatReference,
+		state,
 	} = useFEM();
 
 	const instance = getCurrentInstance();
@@ -46,6 +48,82 @@ const Details = () => {
 
 	const handleClosePopup = () => {
 		setCurrentInstance(undefined);
+	};
+
+	const renderInterModelReference = () => {
+		if (!instance) return;
+		return Object.entries(state.references).map(([refName, iref]) => {
+			const refs = getInstancesThatReference(
+				instance,
+				refName as InterrefType
+			);
+
+			if (refs.length === 0) return;
+			return (
+				<div>
+					<Cell
+						title={refName}
+						value={
+							<div>
+								{refs.map((ref) => {
+									return (
+										<div>
+											{ref.referencedByModel} -{" "}
+											{ref.referencedByInstance}
+											<img
+												src={arrowRight}
+												alt="follow Reference"
+											/>
+										</div>
+									);
+								})}
+							</div>
+						}
+					/>
+				</div>
+			);
+		});
+	};
+
+	const renderInstanceSpecificReference = () => {
+		if (!instance) return;
+		if (!instance.Interrefs) return;
+		return (
+			<div>
+				{[
+					{
+						ref: instance.Interrefs.referencedAsset,
+						refName: "Referenced Asset",
+					},
+					{
+						ref: instance.Interrefs.referencedProcess,
+						refName: "Referenced Process",
+					},
+					{
+						ref: instance.Interrefs.referencedNote,
+						refName: "Referenced Note",
+					},
+					{
+						ref: instance.Interrefs["Referened Pool"],
+						refName: " Referenced Pool",
+					},
+					{
+						ref: instance.Interrefs["Referenced External Actor"],
+						refName: "Referenced External Actor",
+					},
+				].map(({ ref, refName }) => {
+					if (ref)
+						return (
+							<div>
+								<div>{refName}</div>
+								<div>{ref.tmodelname} - </div>
+								<div>{ref.tobjname}</div>
+								<img src={arrowRight} alt="follow Reference" />
+							</div>
+						);
+				})}
+			</div>
+		);
 	};
 
 	return (
@@ -87,52 +165,16 @@ const Details = () => {
 								</div>
 							}
 						/>
-
-						{instance.reference && (
-							<Cell
-								title={"Reference"}
-								value={
-									<div>
-										<Cell
-											title={"Model"}
-											value={instance.reference.modelName}
-										/>
-										<Cell
-											title={"Instance"}
-											value={
-												instance.reference
-													.referencedInstanceName
-											}
-										/>
-										<Cell
-											title={"Reference type"}
-											value={instance.reference.type}
-										/>
-										<Cell
-											title={"Follow reference"}
-											value={
-												<div
-													onClick={() =>
-														handleGoToReference(
-															instance.reference
-														)
-													}
-												>
-													<button>GO</button>
-												</div>
-											}
-										/>
-									</div>
-								}
-							/>
-						)}
-						<button
-							onClick={() =>
-								console.log(getReferencedBys(instance.name))
+						<Cell
+							title="Inter-model references"
+							value={<div>{renderInterModelReference()}</div>}
+						/>
+						<Cell
+							title="Single ref"
+							value={
+								<div>{renderInstanceSpecificReference()}</div>
 							}
-						>
-							REF
-						</button>
+						/>
 					</div>
 				)}
 			</div>
