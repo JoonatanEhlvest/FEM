@@ -147,13 +147,14 @@ const useFEM = () => {
 	};
 
 	const goToReference = (reference: Reference) => {
+		console.log(reference);
 		const models = state.models;
 		const referencedModel = models.find(
-			(m) => m.name === reference.modelName
+			(m) => m.name === reference.referencedByModel
 		);
 		if (referencedModel) {
 			const referencedInstance = referencedModel.instances.find(
-				(i) => i.name === reference.referencedInstanceName
+				(i) => i.name === reference.referencedByInstance
 			);
 			setCurrentModel(referencedModel.id);
 

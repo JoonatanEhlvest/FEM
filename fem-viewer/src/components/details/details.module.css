@@ -97,3 +97,8 @@
 .ref-link {
 	margin-left: auto;
 }
+
+.ref-link:hover {
+	background-color: rgba(142, 187, 223, 0.2);
+	border-radius: 50% 50%;
+}

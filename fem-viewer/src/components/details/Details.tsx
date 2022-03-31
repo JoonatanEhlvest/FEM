@@ -7,6 +7,7 @@ import styles from "./details.module.css";
 import arrowRight from "./arrow-right.svg";
 import { useState } from "react";
 import model from "./model.svg";
+import InstanceClass from "../../state/types/InstanceClass";
 
 const Details = () => {
 	const {
@@ -106,6 +107,9 @@ const Details = () => {
 												{ref.referencedByInstance}
 											</div>
 											<img
+												onClick={() =>
+													handleGoToReference(ref)
+												}
 												className={styles["ref-link"]}
 												src={arrowRight}
 												alt="follow Reference"
@@ -178,7 +182,21 @@ const Details = () => {
 										{ref.tobjname}
 									</div>
 									<img
-										className={styles["follow-ref"]}
+										onClick={() => {
+											const reference: Reference = {
+												modelName: "",
+												type: ref.type,
+												referencedInstanceName: "",
+												referencedClass:
+													ref.tclassname as InstanceClass,
+												referencedByInstance:
+													ref.tobjname,
+												referencedByModel:
+													ref.tmodelname,
+											};
+											handleGoToReference(reference);
+										}}
+										className={styles["ref-link"]}
 										src={arrowRight}
 										alt="follow Reference"
 									/>
