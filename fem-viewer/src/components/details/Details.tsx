@@ -5,6 +5,8 @@ import Header from "../header/Header";
 import Cell from "./Cell";
 import styles from "./details.module.css";
 import arrowRight from "./arrow-right.svg";
+import { useState } from "react";
+import model from "./model.svg";
 
 const Details = () => {
 	const {
@@ -16,6 +18,11 @@ const Details = () => {
 	} = useFEM();
 
 	const instance = getCurrentInstance();
+
+	const [dropdowns, setDropdowns] = useState({
+		interrefsOpen: false,
+		singlerefsOpen: false,
+	});
 
 	const handleGoToReference = (ref: Reference | null) => {
 		if (ref === null) {
@@ -50,27 +57,56 @@ const Details = () => {
 		setCurrentInstance(undefined);
 	};
 
+	const toggleDropdown = (dropdown: keyof typeof dropdowns) => {
+		setDropdowns((prev) => ({
+			...prev,
+			[dropdown]: !prev[dropdown],
+		}));
+	};
+
 	const renderInterModelReference = () => {
 		if (!instance) return;
-		return Object.entries(state.references).map(([refName, iref]) => {
-			const refs = getInstancesThatReference(
-				instance,
-				refName as InterrefType
-			);
+		return (
+			<div className={styles["ref-container"]}>
+				<div
+					className={styles["ref-header"]}
+					onClick={() => toggleDropdown("interrefsOpen")}
+				>
+					Intermodel References
+				</div>
+				{dropdowns.interrefsOpen &&
+					Object.entries(state.references).map(([refName, iref]) => {
+						const refs = getInstancesThatReference(
+							instance,
+							refName as InterrefType
+						);
 
-			if (refs.length === 0) return;
-			return (
-				<div>
-					<Cell
-						title={refName}
-						value={
-							<div>
+						if (refs.length === 0) return;
+						return (
+							<div className={styles["interref-container"]}>
+								<div className={styles["interref-title"]}>
+									{refName}
+								</div>
 								{refs.map((ref) => {
 									return (
-										<div>
-											{ref.referencedByModel} -{" "}
-											{ref.referencedByInstance}
+										<div className={styles["ref-item"]}>
+											<img src={model} alt="" />
+											<div
+												className={
+													styles["ref-item-model"]
+												}
+											>
+												{ref.referencedByModel}{" "}
+											</div>
+											<div
+												className={
+													styles["ref-item-instance"]
+												}
+											>
+												{ref.referencedByInstance}
+											</div>
 											<img
+												className={styles["ref-link"]}
 												src={arrowRight}
 												alt="follow Reference"
 											/>
@@ -78,50 +114,77 @@ const Details = () => {
 									);
 								})}
 							</div>
-						}
-					/>
-				</div>
-			);
-		});
+						);
+					})}
+			</div>
+		);
 	};
 
 	const renderInstanceSpecificReference = () => {
 		if (!instance) return;
 		if (!instance.Interrefs) return;
 		return (
-			<div>
-				{[
-					{
-						ref: instance.Interrefs.referencedAsset,
-						refName: "Referenced Asset",
-					},
-					{
-						ref: instance.Interrefs.referencedProcess,
-						refName: "Referenced Process",
-					},
-					{
-						ref: instance.Interrefs.referencedNote,
-						refName: "Referenced Note",
-					},
-					{
-						ref: instance.Interrefs["Referened Pool"],
-						refName: " Referenced Pool",
-					},
-					{
-						ref: instance.Interrefs["Referenced External Actor"],
-						refName: "Referenced External Actor",
-					},
-				].map(({ ref, refName }) => {
-					if (ref)
-						return (
-							<div>
-								<div>{refName}</div>
-								<div>{ref.tmodelname} - </div>
-								<div>{ref.tobjname}</div>
-								<img src={arrowRight} alt="follow Reference" />
-							</div>
-						);
-				})}
+			<div className={styles["ref-container"]}>
+				<div
+					className={styles["ref-header"]}
+					onClick={() => toggleDropdown("singlerefsOpen")}
+				>
+					Single references
+				</div>
+				{dropdowns.singlerefsOpen &&
+					[
+						{
+							ref: instance.Interrefs.referencedAsset,
+							refName: "Referenced Asset",
+						},
+						{
+							ref: instance.Interrefs.referencedProcess,
+							refName: "Referenced Process",
+						},
+						{
+							ref: instance.Interrefs.referencedNote,
+							refName: "Referenced Note",
+						},
+						{
+							ref: instance.Interrefs["Referened Pool"],
+							refName: " Referenced Pool",
+						},
+						{
+							ref: instance.Interrefs[
+								"Referenced External Actor"
+							],
+							refName: "Referenced External Actor",
+						},
+					].map(({ ref, refName }) => {
+						if (ref)
+							return (
+								<div className={styles["ref-item"]}>
+									<div
+										style={{
+											display: "flex",
+											flexDirection: "row",
+											alignItems: "center",
+										}}
+									>
+										{refName}
+									</div>
+									<img src={model} alt="" />
+									<div className={styles["ref-item-model"]}>
+										{ref.tmodelname}
+									</div>
+									<div
+										className={styles["ref-item-instance"]}
+									>
+										{ref.tobjname}
+									</div>
+									<img
+										className={styles["follow-ref"]}
+										src={arrowRight}
+										alt="follow Reference"
+									/>
+								</div>
+							);
+					})}
 			</div>
 		);
 	};
@@ -165,16 +228,10 @@ const Details = () => {
 								</div>
 							}
 						/>
-						<Cell
-							title="Inter-model references"
-							value={<div>{renderInterModelReference()}</div>}
-						/>
-						<Cell
-							title="Single ref"
-							value={
-								<div>{renderInstanceSpecificReference()}</div>
-							}
-						/>
+
+						{renderInterModelReference()}
+
+						{renderInstanceSpecificReference()}
 					</div>
 				)}
 			</div>
