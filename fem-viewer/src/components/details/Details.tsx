@@ -73,7 +73,7 @@ const Details = () => {
 					className={styles["ref-header"]}
 					onClick={() => toggleDropdown("interrefsOpen")}
 				>
-					Intermodel References
+					All Occurrences
 				</div>
 				{dropdowns.interrefsOpen &&
 					Object.entries(state.references).map(([refName, iref]) => {
@@ -91,7 +91,13 @@ const Details = () => {
 								{refs.map((ref) => {
 									return (
 										<div className={styles["ref-item"]}>
-											<img src={model} alt="" />
+											<img
+												className={
+													styles["ref-item-model-img"]
+												}
+												src={model}
+												alt=""
+											/>
 											<div
 												className={
 													styles["ref-item-model"]
@@ -129,80 +135,90 @@ const Details = () => {
 		if (!instance.Interrefs) return;
 		return (
 			<div className={styles["ref-container"]}>
-				<div
+				{/* <div
 					className={styles["ref-header"]}
 					onClick={() => toggleDropdown("singlerefsOpen")}
 				>
-					Single references
-				</div>
-				{dropdowns.singlerefsOpen &&
-					[
-						{
-							ref: instance.Interrefs.referencedAsset,
-							refName: "Referenced Asset",
-						},
-						{
-							ref: instance.Interrefs.referencedProcess,
-							refName: "Referenced Process",
-						},
-						{
-							ref: instance.Interrefs.referencedNote,
-							refName: "Referenced Note",
-						},
-						{
-							ref: instance.Interrefs["Referened Pool"],
-							refName: " Referenced Pool",
-						},
-						{
-							ref: instance.Interrefs[
-								"Referenced External Actor"
-							],
-							refName: "Referenced External Actor",
-						},
-					].map(({ ref, refName }) => {
-						if (ref)
-							return (
-								<div className={styles["ref-item"]}>
-									<div
-										style={{
-											display: "flex",
-											flexDirection: "row",
-											alignItems: "center",
-										}}
-									>
-										{refName}
-									</div>
-									<img src={model} alt="" />
-									<div className={styles["ref-item-model"]}>
-										{ref.tmodelname}
-									</div>
-									<div
-										className={styles["ref-item-instance"]}
-									>
-										{ref.tobjname}
-									</div>
-									<img
-										onClick={() => {
-											const reference: Reference = {
-												modelName: "",
-												type: ref.type,
-												referencedInstanceName: "",
-												referencedClass:
-													ref.tclassname as InstanceClass,
-												referencedByInstance:
-													ref.tobjname,
-												referencedByModel:
-													ref.tmodelname,
-											};
-											handleGoToReference(reference);
-										}}
-										className={styles["ref-link"]}
-										src={arrowRight}
-										alt="follow Reference"
-									/>
+					Single Ref
+				</div> */}
+				{[
+					{
+						ref: instance.Interrefs.referencedAsset,
+						refName: "Referenced Asset",
+					},
+					{
+						ref: instance.Interrefs.referencedProcess,
+						refName: "Referenced Process",
+					},
+					{
+						ref: instance.Interrefs.referencedNote,
+						refName: "Referenced Note",
+					},
+					{
+						ref: instance.Interrefs["Referened Pool"],
+						refName: " Referenced Pool",
+					},
+					{
+						ref: instance.Interrefs["Referenced External Actor"],
+						refName: "Referenced External Actor",
+					},
+				].map(({ ref, refName }) => {
+					if (ref)
+						return (
+							<div>
+								<div
+									className={styles["ref-header"]}
+									onClick={() =>
+										toggleDropdown("singlerefsOpen")
+									}
+								>
+									{refName}
 								</div>
-							);
-					})}
+								{dropdowns.singlerefsOpen && (
+									<div className={styles["ref-item"]}>
+										<img
+											className={
+												styles["ref-item-model-img"]
+											}
+											src={model}
+											alt=""
+										/>
+										<div
+											className={styles["ref-item-model"]}
+										>
+											{ref.tmodelname}
+										</div>
+										<div
+											className={
+												styles["ref-item-instance"]
+											}
+										>
+											{ref.tobjname}
+										</div>
+										<img
+											onClick={() => {
+												const reference: Reference = {
+													modelName: "",
+													type: ref.type,
+													referencedInstanceName: "",
+													referencedClass:
+														ref.tclassname as InstanceClass,
+													referencedByInstance:
+														ref.tobjname,
+													referencedByModel:
+														ref.tmodelname,
+												};
+												handleGoToReference(reference);
+											}}
+											className={styles["ref-link"]}
+											src={arrowRight}
+											alt="follow Reference"
+										/>{" "}
+									</div>
+								)}
+							</div>
+						);
+				})}
 			</div>
 		);
 	};

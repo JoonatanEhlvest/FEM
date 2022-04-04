@@ -76,7 +76,7 @@
 .ref-item {
 	display: flex;
 	flex-direction: row;
-
+	width: 100%;
 	height: 40px;
 }
 
@@ -101,4 +101,9 @@
 .ref-link:hover {
 	background-color: rgba(142, 187, 223, 0.2);
 	border-radius: 50% 50%;
+}
+
+.ref-item-model-img {
+	width: 30px;
+	height: auto;
 }
