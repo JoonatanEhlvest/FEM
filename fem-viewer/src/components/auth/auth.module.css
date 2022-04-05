@@ -1,9 +1,14 @@
-.header-content {
+.register-link-container {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-around;
+	width: 30%;
+	margin: auto;
 	align-items: center;
-	width: 100%;
+	justify-content: center;
+}
+
+.register-link-container > * {
+	margin: 10px;
 }
 
 form {
@@ -23,7 +28,7 @@ form {
 	text-align: start;
 }
 
-form > input[type="submit"] {
+form > button {
 	width: 10%;
 	height: 30px;
 	margin: auto;
@@ -38,7 +43,7 @@ form > input[type="submit"] {
 	transition: background-color 100ms ease-in, color 100ms ease-in;
 }
 
-form > input[type="submit"]:hover {
+form > button:hover {
 	background-color: var(--bg-primary);
 	color: white;
 }

@@ -115,24 +115,32 @@ const FileUpload = () => {
 				</div>
 			</Header>
 			<form onSubmit={onSubmit}>
-				<label>Model Group Name</label>
-				<input
-					onChange={(e) => setModelGroupUploadName(e.target.value)}
-					type="text"
-					name=""
-					id=""
-					value={modelGroupUploadName}
-				/>
-				<label>Input the XML export</label>
-				<input onChange={onXMLChange} type="file" accept=".xml" />
-				<label>Input the SVGs</label>
-				<input
-					onChange={onSVGSChange}
-					type="file"
-					multiple
-					accept=".svg"
-				/>
-				<input type="submit" />
+				<div className={styles["form-data"]}>
+					<label>Model Group Name</label>
+					<input
+						onChange={(e) =>
+							setModelGroupUploadName(e.target.value)
+						}
+						type="text"
+						name=""
+						id=""
+						value={modelGroupUploadName}
+					/>
+				</div>
+				<div className={styles["form-data"]}>
+					<label>Input the XML export</label>
+					<input onChange={onXMLChange} type="file" accept=".xml" />
+				</div>
+				<div className={styles["form-data"]}>
+					<label>Input the SVGs</label>
+					<input
+						onChange={onSVGSChange}
+						type="file"
+						multiple
+						accept=".svg"
+					/>
+				</div>
+				<input type="submit" value={"Upload"} />
 			</form>
 		</div>
 	);
