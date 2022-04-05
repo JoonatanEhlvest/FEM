@@ -4,6 +4,7 @@ services:
     db:
         container_name: femdb_container
         image: mysql:5.7
+        command: --default-authentication-plugin=mysql_native_password
         restart: always
         environment:
             MYSQL_DATABASE: ${MYSQL_DB}
