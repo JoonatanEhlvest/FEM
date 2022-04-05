@@ -6,10 +6,10 @@ services:
         image: mysql:5.7
         restart: always
         environment:
-            MYSQL_DATABASE: "femviewerdb"
-            MYSQL_USER: "femuser"
-            MYSQL_PASSWORD: "fempw"
-            MYSQL_ROOT_PASSWORD: "fempw"
+            MYSQL_DATABASE: ${MYSQL_DB}
+            MYSQL_USER: ${DB_USER}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
         ports:
             - "3306:3306"
         expose:
