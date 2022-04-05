@@ -104,6 +104,11 @@ const renderG = (g: svgXML[], zoom: FEMState["zoom"]) => {
 
 				const [type, text] = getElemType(elem);
 				if (!type) return;
+				if (type === "text") {
+					props["x"] = "0.0px";
+					props["y"] = `${-parseFloat(style["baselineShift"])}`;
+					delete style["baselineShift"];
+				}
 
 				return React.createElement(type, {
 					...props,

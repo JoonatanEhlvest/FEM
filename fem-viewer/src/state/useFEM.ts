@@ -56,7 +56,6 @@ const useFEM = () => {
 	const addModelGroup = (modelGroupId: string, navigate: any) => {
 		http.get(`/api/v1/modelgroup/${modelGroupId}`)
 			.then((res) => {
-				console.log(res);
 				const svgs = res.data.data.svgs;
 				svgs.forEach((svg: any) => {
 					addSvg(svg.name, svg.data);
@@ -64,7 +63,7 @@ const useFEM = () => {
 
 				const models = res.data.data.models;
 
-				setState((prevState) => {
+				setState((prevState: FEMState) => {
 					return {
 						...prevState,
 						models: [...prevState.models, ...models],
@@ -76,7 +75,6 @@ const useFEM = () => {
 				navigate("/viewer");
 			})
 			.catch((err) => {
-				console.log(err);
 				setError({
 					status: err.response.status,
 					message: err.response.data.message,
@@ -85,7 +83,7 @@ const useFEM = () => {
 	};
 
 	const addSvg = (name: string, svg: svgXML) => {
-		setState((prevState) => {
+		setState((prevState: FEMState) => {
 			return {
 				...prevState,
 				svgs: { ...prevState.svgs, [name]: svg },
@@ -108,7 +106,7 @@ const useFEM = () => {
 
 		const newModel = state.models.find((m) => m.id === id);
 		if (newModel) {
-			setState((prevState) => ({
+			setState((prevState: FEMState) => ({
 				...prevState,
 				currentModel: newModel,
 			}));
@@ -125,7 +123,7 @@ const useFEM = () => {
 		if (instance?.id === getCurrentInstance()?.id) {
 			return;
 		}
-		setState((prevState) => ({
+		setState((prevState: FEMState) => ({
 			...prevState,
 			currentInstance: instance,
 		}));
@@ -140,14 +138,13 @@ const useFEM = () => {
 			return;
 		}
 		const svg = getModelSvg(modelName);
-		setState((prevState) => ({
+		setState((prevState: FEMState) => ({
 			...prevState,
 			currentSvgElement: svg,
 		}));
 	};
 
 	const goToReference = (reference: Reference) => {
-		console.log(reference);
 		const models = state.models;
 		const referencedModel = models.find(
 			(m) => m.name === reference.referencedByModel
@@ -172,7 +169,7 @@ const useFEM = () => {
 	};
 
 	const setZoom = (zoom: number) => {
-		setState((prevState) => ({
+		setState((prevState: FEMState) => ({
 			...prevState,
 			zoom,
 		}));
@@ -183,7 +180,7 @@ const useFEM = () => {
 	};
 
 	const setError = (error: FEMState["error"]) => {
-		setState((prevState) => ({
+		setState((prevState: FEMState) => ({
 			...prevState,
 			error,
 		}));
@@ -273,7 +270,7 @@ const useFEM = () => {
 	};
 
 	const setPopup = (popUp: FEMState["popUp"]) => {
-		setState((prevState) => ({
+		setState((prevState: FEMState) => ({
 			...prevState,
 			popUp,
 		}));

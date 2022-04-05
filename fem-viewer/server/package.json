@@ -21,7 +21,7 @@
 	"scripts": {
 		"build": "tsc --p .",
 		"start:dev": "ts-node-dev --respawn --watch --exit-child --files server.ts",
-		"start": "yarn build && (node build/server.js)"
+		"start": "yarn build && (node build/server/server.js)"
 	},
 	"dependencies": {
 		"@prisma/client": "^3.11.0",

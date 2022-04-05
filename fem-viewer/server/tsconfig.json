@@ -3,7 +3,8 @@
 		"module": "commonjs",
 		"esModuleInterop": true,
 		"target": "es6",
-		"noImplicitAny": true,
+		"jsx": "react",
+		// "noImplicitAny": true,
 		"moduleResolution": "node",
 		"sourceMap": true,
 		"outDir": "build",
@@ -15,6 +16,6 @@
 		}
 	},
 	"include": ["src/**/*", "server.ts", "../src/parser/index.ts"],
-	"exclude": ["node_modules", "build"],
+	"exclude": ["node_modules", "build", "../src/**/*"],
 	"files": ["src/@types/index.d.ts"]
 }

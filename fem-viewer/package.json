@@ -25,7 +25,7 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"start": "yarn run build && (cd server && yarn start)"
+		"start": "NODE_ENV=production yarn run build && (cd server && yarn start)"
 	},
 	"eslintConfig": {
 		"extends": [

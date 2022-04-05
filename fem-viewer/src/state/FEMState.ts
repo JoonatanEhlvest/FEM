@@ -1,4 +1,3 @@
-import { ReactElement } from "react";
 import { svgXML } from "../components/svgrenderer/svgrenderer";
 import Instance, { InterrefType } from "./types/Instance";
 import Model from "./types/Model";

@@ -42,7 +42,6 @@ const FileUpload = () => {
 			},
 		})
 			.then((res) => {
-				console.log("Uploaded");
 				setPopup({ message: "Successfully uploaded" });
 			})
 			.catch((err) => {
