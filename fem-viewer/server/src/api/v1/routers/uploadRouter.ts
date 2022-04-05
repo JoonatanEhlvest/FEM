@@ -29,6 +29,12 @@ router.post("/upload", authorizeUser, async (req, res, next) => {
 			return next();
 		}
 
+		if (req.body.modelGroupName.length < 1) {
+			return res
+				.status(422)
+				.json({ message: "Please include a name for the model group" });
+		}
+
 		const modelGroupName = generateModelGroupName(
 			req.user.username,
 			req.body.modelGroupName

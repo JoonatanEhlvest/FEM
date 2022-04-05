@@ -17,6 +17,18 @@ router.post("/register", async (req, res, next) => {
 				.json({ message: "username or password not provided in body" });
 		}
 
+		if (username.length < 6) {
+			return res
+				.status(422)
+				.json({ message: "Username must be atleast 6 characters" });
+		}
+
+		if (password.length < 6) {
+			return res
+				.status(422)
+				.json({ message: "Password must be atleast 6 characters" });
+		}
+
 		hashPassword(password, async (hash) => {
 			db.user
 				.create({
