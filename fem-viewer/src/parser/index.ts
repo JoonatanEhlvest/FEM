@@ -55,6 +55,17 @@ class Parser {
 		return model[attr];
 	};
 
+	_getArrAttrWithFallback = (model: any, attr: any, fallBack: any): any => {
+		if (model[attr] === undefined) {
+			return fallBack;
+		}
+		if (Array.isArray(model[attr])) {
+			return model[attr];
+		}
+
+		return Array(model[attr]);
+	};
+
 	_flatten() {
 		if (!Array.isArray(this._parsedXML.ADOXML.MODELS.MODEL)) {
 			this._parsedXML.ADOXML.MODELS.MODEL = Array(
@@ -68,7 +79,7 @@ class Parser {
 					MODELATTRIBUTES: this._flattenAttributes(
 						model.MODELATTRIBUTES
 					),
-					INSTANCE: this._getAttrWithFallback(
+					INSTANCE: this._getArrAttrWithFallback(
 						model,
 						"INSTANCE",
 						[]
@@ -79,7 +90,7 @@ class Parser {
 						};
 					}),
 
-					CONNECTOR: this._getAttrWithFallback(
+					CONNECTOR: this._getArrAttrWithFallback(
 						model,
 						"CONNECTOR",
 						[]
