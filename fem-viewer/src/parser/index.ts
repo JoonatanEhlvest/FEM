@@ -56,6 +56,11 @@ class Parser {
 	};
 
 	_flatten() {
+		if (!Array.isArray(this._parsedXML.ADOXML.MODELS.MODEL)) {
+			this._parsedXML.ADOXML.MODELS.MODEL = Array(
+				this._parsedXML.ADOXML.MODELS.MODEL
+			);
+		}
 		this._parsedXML.ADOXML.MODELS.MODEL =
 			this._parsedXML.ADOXML.MODELS.MODEL.map((model: any) => {
 				return {
