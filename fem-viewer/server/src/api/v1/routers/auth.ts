@@ -1,4 +1,4 @@
-import e, { Router } from "express";
+import { Router } from "express";
 import db from "../../../db";
 import passport from "passport";
 import { hashPassword } from "../../../passportSetup";

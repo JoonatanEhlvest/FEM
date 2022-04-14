@@ -1,39 +1,19 @@
 import { Router } from "express";
 import { authorizeUser } from "./shared";
 import db from "../../../db";
+import ShowService from "../services/user/show";
 
 const router = Router();
 
 router.get("/user/:id", authorizeUser, async (req, res) => {
-	const user = await db.user.findUnique({
-		where: {
-			id: req.params.id,
-		},
-		select: {
-			username: true,
-			modelGroups: {
-				select: {
-					modelGroup: {
-						select: {
-							name: true,
-							id: true,
-							shares: {
-								where: {
-									OR: [
-										{ sharedByName: req.user.username },
-										{ sharedToName: req.user.username },
-									],
-								},
-							},
-						},
-					},
-					owner: true,
-				},
-			},
-		},
-	});
+	try {
+		const service = new ShowService(req, db);
+		const user = await service.execute();
 
-	res.json({ user });
+		res.json({ user });
+	} catch (err) {
+		return res.status(500).json({ message: err });
+	}
 });
 
 export default router;
