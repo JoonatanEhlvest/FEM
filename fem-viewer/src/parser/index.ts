@@ -352,6 +352,7 @@ class Parser {
 
 			Author: f("author"),
 			baseName: f("basename"),
+			name: f("name"),
 			changeCounter: this.tryGetNumAttr(modelAttributes, "changecounter"),
 			comment: f("comment"),
 			connectorMarks: f("connectormarks"),
@@ -383,7 +384,11 @@ class Parser {
 	}
 
 	parseModel(model: any) {
-		const name = this.tryGetStrProperty(model, "name");
+		const attributes = this.getModelAttributes(model.MODELATTRIBUTES);
+		let name = attributes.name;
+		if (!name || name === "") {
+			name = this.tryGetStrProperty(model, "name");
+		}
 		const parsedModel: Model = {
 			name,
 			id: this.tryGetStrProperty(model, "id"),
@@ -393,7 +398,7 @@ class Parser {
 			libtype: this.tryGetStrProperty(model, "libtype"),
 			connectors: this.getConnectors(model.CONNECTOR),
 			instances: this.getInstances(model.INSTANCE, name),
-			attributes: this.getModelAttributes(model.MODELATTRIBUTES),
+			attributes,
 		};
 		return parsedModel;
 	}

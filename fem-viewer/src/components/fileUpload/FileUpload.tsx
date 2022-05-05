@@ -110,7 +110,9 @@ const FileUpload = () => {
 				<div className={styles["header-content"]}>
 					<h1>Upload</h1>
 					<NavLink to="/dashboard">
-						<button>Dashboard</button>
+						<button className={styles["dashboard-btn"]}>
+							Dashboard
+						</button>
 					</NavLink>
 				</div>
 			</Header>

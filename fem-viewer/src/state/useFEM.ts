@@ -111,7 +111,7 @@ const useFEM = () => {
 				currentModel: newModel,
 			}));
 
-			setCurrentSvgElement(newModel.name);
+			setCurrentSvgElement(newModel);
 		}
 	};
 
@@ -133,11 +133,14 @@ const useFEM = () => {
 		return state.currentSvgElement;
 	};
 
-	const setCurrentSvgElement = (modelName: Model["name"]) => {
-		if (modelName === getCurrentModel()?.name) {
+	const setCurrentSvgElement = (model: Model) => {
+		if (model.name === getCurrentModel()?.name) {
 			return;
 		}
-		const svg = getModelSvg(modelName);
+		let svg = getModelSvg(model.name);
+		if (svg === undefined && model.attributes.baseName) {
+			svg = getModelSvg(model.attributes.baseName);
+		}
 		setState((prevState: FEMState) => ({
 			...prevState,
 			currentSvgElement: svg,
@@ -145,6 +148,7 @@ const useFEM = () => {
 	};
 
 	const goToReference = (reference: Reference) => {
+		console.log(reference);
 		const models = state.models;
 		const referencedModel = models.find(
 			(m) => m.name === reference.referencedByModel
@@ -163,7 +167,7 @@ const useFEM = () => {
 	};
 
 	const getModelSvg = (
-		modelName: Model["name"]
+		modelName: string
 	): FEMState["svgs"][keyof FEMState["svgs"]] => {
 		return state.svgs[modelName];
 	};

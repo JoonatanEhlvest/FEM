@@ -5,11 +5,19 @@ import useFEM from "../../state/useFEM";
 import styles from "./auth.module.css";
 
 const Register = () => {
-	const { register } = useFEM();
+	const { register, setError } = useFEM();
 
-	const { state, handleChange } = useForm({ username: "", password: "" });
+	const { state, handleChange } = useForm({
+		username: "",
+		password: "",
+		confirmPassword: "",
+	});
 
 	const handleRegister = () => {
+		if (state.password !== state.confirmPassword) {
+			setError({ status: 422, message: "Passwords do not match" });
+			return;
+		}
 		register(state.username, state.password);
 	};
 
@@ -33,6 +41,15 @@ const Register = () => {
 						onChange={handleChange}
 						type="password"
 						value={state.password}
+					/>
+				</div>
+				<div className={styles["form-data"]}>
+					<label>Confirm Password</label>
+					<input
+						name="confirmPassword"
+						onChange={handleChange}
+						type="password"
+						value={state.confirmPassword}
 					/>
 				</div>
 				<button onClick={handleRegister}>Register</button>

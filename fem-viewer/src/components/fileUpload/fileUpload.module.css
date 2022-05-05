@@ -42,3 +42,15 @@ form > input[type="submit"]:hover {
 	background-color: var(--bg-primary);
 	color: white;
 }
+
+.dashboard-btn {
+	color: black;
+	background-color: white;
+	border: white 4px solid;
+	border-radius: 5px 5px;
+	transition: transform 100ms ease-in;
+}
+
+.dashboard-btn:hover {
+	transform: scale(1.1);
+}
