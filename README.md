@@ -1,14 +1,10 @@
 ## Hardware requirements
 
----
-
 -   At least 1 GB of RAM
 -   At least 1 vCPU
 -   At least 25 GB of storage
 
 ## Installation
-
----
 
 Before installing the application, Node.js version >=16.14.0 should be installed together with a package manager. Yarn is recommended as it was used during development. In addition, a MySQL database connection credentials are required.
 
@@ -36,8 +32,6 @@ $ yarn prisma migrate reset
 ```
 
 ## Starting the application
-
----
 
 To start a **production build** run:
 
