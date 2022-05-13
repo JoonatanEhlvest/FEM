@@ -1,0 +1,41 @@
+{
+	"Asset": {
+		"class": true,
+		"denomination": true,
+		"description": true
+	},
+	"Process": {
+		"class": true,
+		"denomination": true,
+		"description": true
+	},
+	"Pool": {
+		"class": true,
+		"denomination": true,
+		"description": true
+	},
+	"External Actor": {
+		"class": true,
+		"denomination": true,
+		"description": true
+	},
+	"Process_Subclass": {
+		"class": true,
+		"denomination": true,
+		"description": true
+	},
+	"Asset_Subclass": {
+		"class": true,
+		"denomination": true,
+		"description": true
+	},
+	"External Actor_Subclass": {
+		"class": true,
+		"denomination": true,
+		"description": true
+	},
+	"Note": {
+		"class": true,
+		"description": true
+	}
+}

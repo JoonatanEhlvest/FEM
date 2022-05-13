@@ -148,7 +148,6 @@ const useFEM = () => {
 	};
 
 	const goToReference = (reference: Reference) => {
-		console.log(reference);
 		const models = state.models;
 		const referencedModel = models.find(
 			(m) => m.name === reference.referencedByModel

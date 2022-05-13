@@ -5,9 +5,10 @@ import Header from "../header/Header";
 import Cell from "./Cell";
 import styles from "./details.module.css";
 import arrowRight from "./arrow-right.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import model from "./model.svg";
 import InstanceClass from "../../state/types/InstanceClass";
+import attrConfig from "../../assets/instanceAttrConfig.json";
 
 const Details = () => {
 	const {
@@ -239,26 +240,52 @@ const Details = () => {
 							title="General Information"
 							value={
 								<div>
-									<Cell
+									{Object.keys(
+										attrConfig[instance.class]
+									).map((attr) => (
+										<Cell
+											title={
+												attr.charAt(0).toUpperCase() +
+												attr.slice(1)
+											}
+											value={
+												instance[
+													attr as keyof Instance
+												] as string
+											}
+										/>
+									))}
+									{/* <Cell
 										title={"Class"}
 										value={instance.class}
 									/>
+
+									{instance.class !== "Note" && (
+										<Cell
+											title={"Denomination"}
+											value={instance.denomination}
+										/>
+									)}
 									<Cell
+										title={"Description"}
+										value={instance.description}
+									/> */}
+									{/* <Cell
 										title={"Name"}
 										value={instance.name}
-									/>
-									<Cell
+									/> */}
+									{/* <Cell
 										title={getTitle(instance)}
 										value={getValue(instance)}
-									/>
-									<Cell
+									/> */}
+									{/* <Cell
 										title={"isGroup"}
 										value={instance.isGroup ? "Yes" : "No"}
 									/>
 									<Cell
 										title={"isGhost"}
 										value={instance.isGhost ? "Yes" : "No"}
-									/>
+									/> */}
 								</div>
 							}
 						/>

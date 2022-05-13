@@ -1,7 +1,7 @@
 .cell-row {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
+	/* justify-content: space-between; */
 
 	border: 1px solid var(--bg-primary);
 }
@@ -9,8 +9,8 @@
 .prop-title {
 	display: flex;
 	/* min-width: 25%; */
-
-	justify-content: center;
+	width: 125px;
+	justify-content: left;
 	align-items: center;
 	border-right: 1px solid var(--bg-primary);
 	background-color: rgba(95, 172, 208, 0.25);
@@ -19,11 +19,12 @@
 }
 
 .prop-value {
-	flex-grow: 1;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	text-align: left;
 	max-width: 200px;
+	margin-left: 10px;
 }
 
 .cell-row-child {
