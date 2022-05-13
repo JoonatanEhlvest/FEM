@@ -48,3 +48,5 @@ $ yarn start:dev
 ```
 
 in both the **fem-viewer** and **fem-viewer/server** directories
+
+Link to user manual: https://github.com/siimlangel/FEM/tree/master/fem-viewer
