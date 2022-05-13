@@ -7,6 +7,8 @@ import styles from "./dashboard.module.css";
 import { Parser } from "../../parser";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Popup from "reactjs-popup";
+import ConfirmationPopup from "../confirmationPopup/ConfirmationPopup";
 
 type Props = {
 	modelGroup: ModelGroup;
@@ -17,6 +19,8 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 	const { state, handleChange } = useForm({ usernameToShareWith: "" });
 	const { setError, addModelGroup, resetModels, setPopup } = useFEM();
 	const navigate = useNavigate();
+
+	const [showConfirmation, setShowConfirmation] = useState(false);
 
 	const handleShare = (modelGroupId: ModelGroup["modelGroup"]["id"]) => {
 		http.patch("/api/v1/modelgroup/share", {
@@ -68,8 +72,15 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 					alt="view model"
 				/>
 				{modelGroup.owner && (
-					<button onClick={handleDelete}>Delete</button>
+					<button onClick={() => setShowConfirmation(true)}>
+						Delete
+					</button>
 				)}
+				<ConfirmationPopup
+					showCondition={showConfirmation}
+					handleConfirm={handleDelete}
+					toggleConfirmation={setShowConfirmation}
+				/>
 			</div>
 			<div>
 				<div>{modelGroup.owner ? "Shared To" : "Shared by"}</div>

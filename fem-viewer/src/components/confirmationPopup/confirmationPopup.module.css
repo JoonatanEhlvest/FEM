@@ -1,0 +1,40 @@
+.btn-container {
+	height: 100px;
+	position: relative;
+}
+
+.btn-container > button {
+	bottom: 0;
+	position: absolute;
+}
+
+.btn-confirm {
+	background-color: white;
+	border: 1px solid var(--bg-primary);
+	color: var(--bg-primary);
+	width: 30%;
+	height: 30%;
+	left: 0;
+}
+
+.btn-confirm:hover {
+	background-color: var(--bg-primary);
+	border: 1px solid white;
+	color: white;
+}
+
+.btn-close {
+	color: red;
+	border: 1px solid red;
+	background-color: white;
+	width: 20%;
+	height: 30%;
+
+	right: 0;
+}
+
+.btn-close:hover {
+	color: white;
+	border: 1px solid white;
+	background-color: red;
+}
