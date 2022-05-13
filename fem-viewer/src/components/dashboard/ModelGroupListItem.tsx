@@ -77,6 +77,7 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 					</button>
 				)}
 				<ConfirmationPopup
+					message={`Are you sure you want to delete ${modelGroup.modelGroup.name} ?`}
 					showCondition={showConfirmation}
 					handleConfirm={handleDelete}
 					toggleConfirmation={setShowConfirmation}

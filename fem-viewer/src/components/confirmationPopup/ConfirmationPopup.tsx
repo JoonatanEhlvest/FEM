@@ -6,6 +6,7 @@ type Props = {
 	showCondition: boolean;
 	handleConfirm: () => void;
 	toggleConfirmation: (value: boolean) => void;
+	message: string;
 };
 
 const contentStyle: CSSProperties = {
@@ -23,6 +24,7 @@ const ConfirmationPopup: FC<Props> = ({
 	showCondition,
 	handleConfirm,
 	toggleConfirmation,
+	message,
 }) => {
 	return (
 		<Popup
@@ -31,7 +33,7 @@ const ConfirmationPopup: FC<Props> = ({
 			contentStyle={contentStyle}
 			overlayStyle={overlayStyle}
 		>
-			<div>Are you sure you want to delete this model?</div>
+			<div>{message}</div>
 			<div className={styles["btn-container"]}>
 				<button
 					className={styles["btn-confirm"]}
