@@ -58,7 +58,7 @@ const Viewer = () => {
 				{model && svg && (
 					<Model model={model} parentDimensions={dimensions} />
 				)}
-				<DetailsPopup />
+				<div id="popup-root" />
 			</div>
 		</div>
 	);

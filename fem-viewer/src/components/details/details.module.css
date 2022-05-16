@@ -78,6 +78,17 @@
 	flex-direction: row;
 	width: 100%;
 	height: 40px;
+	cursor: pointer;
+}
+
+.ref-item:hover {
+	background-color: var(--bg-primary);
+	color: white;
+}
+
+.ref-item:hover img {
+	-webkit-filter: invert(100%); /* Safari/Chrome */
+	filter: invert(100%);
 }
 
 .ref-item-model {
@@ -96,11 +107,6 @@
 
 .ref-link {
 	margin-left: auto;
-}
-
-.ref-link:hover {
-	background-color: rgba(142, 187, 223, 0.2);
-	border-radius: 50% 50%;
 }
 
 .ref-item-model-img {

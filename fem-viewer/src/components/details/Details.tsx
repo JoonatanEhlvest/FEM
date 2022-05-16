@@ -5,7 +5,7 @@ import Header from "../header/Header";
 import Cell from "./Cell";
 import styles from "./details.module.css";
 import arrowRight from "./arrow-right.svg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import model from "./model.svg";
 import InstanceClass from "../../state/types/InstanceClass";
 import attrConfig from "../../assets/instanceAttrConfig.json";
@@ -16,6 +16,7 @@ const Details = () => {
 		setCurrentInstance,
 		goToReference,
 		getInstancesThatReference,
+		goToAllOccurrences,
 		state,
 	} = useFEM();
 
@@ -66,7 +67,7 @@ const Details = () => {
 		}));
 	};
 
-	const renderInterModelReference = () => {
+	const renderAllOccurrences = () => {
 		if (!instance) return;
 		return (
 			<div className={styles["ref-container"]}>
@@ -82,48 +83,67 @@ const Details = () => {
 							instance,
 							refName as InterrefType
 						);
-
 						if (refs.length === 0) return;
+
+						const refsByModelName: {
+							[key: string]: Array<Reference>;
+						} = {};
+
+						refs.forEach((ref) => {
+							if (refsByModelName[ref.referencedByModel]) {
+								refsByModelName[ref.referencedByModel].push(
+									ref
+								);
+							} else {
+								refsByModelName[ref.referencedByModel] = [ref];
+							}
+						});
+
+						console.log(refsByModelName);
 						return (
 							<div className={styles["interref-container"]}>
 								<div className={styles["interref-title"]}>
 									{refName}
 								</div>
-								{refs.map((ref) => {
-									return (
-										<div className={styles["ref-item"]}>
-											<img
-												className={
-													styles["ref-item-model-img"]
-												}
-												src={model}
-												alt=""
-											/>
+								{Object.entries(refsByModelName).map(
+									([refModelName, refs]) => {
+										return (
 											<div
-												className={
-													styles["ref-item-model"]
-												}
-											>
-												{ref.referencedByModel}{" "}
-											</div>
-											<div
-												className={
-													styles["ref-item-instance"]
-												}
-											>
-												{ref.referencedByInstance}
-											</div>
-											<img
+												className={styles["ref-item"]}
 												onClick={() =>
-													handleGoToReference(ref)
+													goToAllOccurrences(
+														refModelName,
+														refs
+													)
 												}
-												className={styles["ref-link"]}
-												src={arrowRight}
-												alt="follow Reference"
-											/>
-										</div>
-									);
-								})}
+											>
+												<img
+													className={
+														styles[
+															"ref-item-model-img"
+														]
+													}
+													src={model}
+													alt=""
+												/>
+												<div
+													className={
+														styles["ref-item-model"]
+													}
+												>
+													{refModelName}{" "}
+												</div>
+												<img
+													className={
+														styles["ref-link"]
+													}
+													src={arrowRight}
+													alt="follow Reference"
+												/>
+											</div>
+										);
+									}
+								)}
 							</div>
 						);
 					})}
@@ -169,13 +189,22 @@ const Details = () => {
 							<div>
 								<div
 									className={styles["ref-header"]}
-									onClick={() =>
-										toggleDropdown("singlerefsOpen")
-									}
+									onClick={() => {
+										const reference: Reference = {
+											modelName: "",
+											type: ref.type,
+											referencedInstanceName: "",
+											referencedClass:
+												ref.tclassname as InstanceClass,
+											referencedByInstance: ref.tobjname,
+											referencedByModel: ref.tmodelname,
+										};
+										handleGoToReference(reference);
+									}}
 								>
 									{refName}
 								</div>
-								{dropdowns.singlerefsOpen && (
+								{/* {dropdowns.singlerefsOpen && (
 									<div className={styles["ref-item"]}>
 										<img
 											className={
@@ -197,26 +226,12 @@ const Details = () => {
 											{ref.tobjname}
 										</div>
 										<img
-											onClick={() => {
-												const reference: Reference = {
-													modelName: "",
-													type: ref.type,
-													referencedInstanceName: "",
-													referencedClass:
-														ref.tclassname as InstanceClass,
-													referencedByInstance:
-														ref.tobjname,
-													referencedByModel:
-														ref.tmodelname,
-												};
-												handleGoToReference(reference);
-											}}
 											className={styles["ref-link"]}
 											src={arrowRight}
 											alt="follow Reference"
 										/>{" "}
 									</div>
-								)}
+								)} */}
 							</div>
 						);
 				})}
@@ -240,57 +255,32 @@ const Details = () => {
 							title="General Information"
 							value={
 								<div>
-									{Object.keys(
+									{Object.entries(
 										attrConfig[instance.class]
-									).map((attr) => (
-										<Cell
-											title={
-												attr.charAt(0).toUpperCase() +
-												attr.slice(1)
-											}
-											value={
-												instance[
-													attr as keyof Instance
-												] as string
-											}
-										/>
-									))}
-									{/* <Cell
-										title={"Class"}
-										value={instance.class}
-									/>
-
-									{instance.class !== "Note" && (
-										<Cell
-											title={"Denomination"}
-											value={instance.denomination}
-										/>
-									)}
-									<Cell
-										title={"Description"}
-										value={instance.description}
-									/> */}
-									{/* <Cell
-										title={"Name"}
-										value={instance.name}
-									/> */}
-									{/* <Cell
-										title={getTitle(instance)}
-										value={getValue(instance)}
-									/> */}
-									{/* <Cell
-										title={"isGroup"}
-										value={instance.isGroup ? "Yes" : "No"}
-									/>
-									<Cell
-										title={"isGhost"}
-										value={instance.isGhost ? "Yes" : "No"}
-									/> */}
+									).map(([attr, shouldShow]) => {
+										if (!shouldShow) return;
+										return (
+											<Cell
+												key={`${instance.id}-${attr}`}
+												title={
+													attr
+														.charAt(0)
+														.toUpperCase() +
+													attr.slice(1)
+												}
+												value={
+													instance[
+														attr as keyof Instance
+													] as string
+												}
+											/>
+										);
+									})}
 								</div>
 							}
 						/>
 
-						{renderInterModelReference()}
+						{renderAllOccurrences()}
 
 						{renderInstanceSpecificReference()}
 					</div>

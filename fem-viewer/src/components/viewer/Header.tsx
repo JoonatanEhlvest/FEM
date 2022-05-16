@@ -23,7 +23,9 @@ const Header: FC<Props> = ({ model }) => {
 		<div className={styles["header-container"]}>
 			{model && (
 				<div className={styles["header-content"]}>
-					<div>{model.name}</div>
+					<div>
+						{model.name} ({model.modeltype})
+					</div>
 					<div style={{ width: "100px" }}> </div>
 
 					<div className={styles["slider"]}>

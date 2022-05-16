@@ -129,6 +129,26 @@ const useFEM = () => {
 		}));
 	};
 
+	const setInstanceAllOccurrencesHighlighting = (
+		instance: Instance,
+		value: boolean
+	) => {
+		setState((prevState: FEMState) => ({
+			...prevState,
+			allOccurrencesHighlightedInstances: [
+				...prevState.allOccurrencesHighlightedInstances,
+				instance.id,
+			],
+		}));
+	};
+
+	const clearAllOccurrencesHighlighting = () => {
+		setState((prevState: FEMState) => ({
+			...prevState,
+			allOccurrencesHighlightedInstances: [],
+		}));
+	};
+
 	const getCurrentSvgElement = (): FEMState["currentSvgElement"] => {
 		return state.currentSvgElement;
 	};
@@ -162,6 +182,25 @@ const useFEM = () => {
 				setCurrentInstance(undefined);
 				setCurrentInstance(referencedInstance);
 			}
+		}
+	};
+
+	const goToAllOccurrences = (
+		refModelName: Model["name"],
+		references: Reference[]
+	) => {
+		const models = state.models;
+		const referencedModel = models.find((m) => m.name === refModelName);
+		if (referencedModel) {
+			const referencedInstances = [];
+			referencedModel.instances.forEach((instance) => {
+				references.forEach((ref) => {
+					if (ref.referencedByInstance === instance.name) {
+						setInstanceAllOccurrencesHighlighting(instance, true);
+					}
+				});
+			});
+			setCurrentModel(referencedModel.id);
 		}
 	};
 
@@ -325,6 +364,8 @@ const useFEM = () => {
 		setPopup,
 		getPopup,
 		getInstancesThatReference,
+		goToAllOccurrences,
+		clearAllOccurrencesHighlighting,
 		state,
 	};
 };

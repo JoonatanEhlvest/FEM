@@ -25,6 +25,7 @@ export default interface FEMState {
 	popUp: {
 		message: string;
 	} | null;
+	allOccurrencesHighlightedInstances: Instance["id"][];
 }
 
 const initialState: FEMState = {
@@ -46,6 +47,7 @@ const initialState: FEMState = {
 		referencedProcess: [],
 	},
 	popUp: null,
+	allOccurrencesHighlightedInstances: [],
 };
 
 export { initialState };

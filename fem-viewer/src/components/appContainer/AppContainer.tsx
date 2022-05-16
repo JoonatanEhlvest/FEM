@@ -10,6 +10,7 @@ import axios from "axios";
 import { Parser } from "../../parser";
 import useFEM from "../../state/useFEM";
 import Error from "../error/Error";
+import DetailsPopup from "../viewer/DetailsPopup";
 
 const AppContainer = () => {
 	const { getError } = useFEM();
@@ -63,6 +64,7 @@ const AppContainer = () => {
 				</div>
 			</Resizable>
 			<Viewer />
+			<DetailsPopup />
 		</div>
 	);
 };

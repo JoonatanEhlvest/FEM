@@ -7,14 +7,22 @@ import Details from "../details/Details";
 type Props = {};
 
 const DetailsPopup: FC<Props> = () => {
-	const { getCurrentInstance, setCurrentInstance } = useFEM();
+	const {
+		getCurrentInstance,
+		setCurrentInstance,
+		clearAllOccurrencesHighlighting,
+	} = useFEM();
 
 	return (
 		<Popup
 			open={getCurrentInstance() !== undefined}
 			closeOnDocumentClick
 			closeOnEscape
-			onClose={() => setCurrentInstance(undefined)}
+			lockScroll={false}
+			onClose={() => {
+				setCurrentInstance(undefined);
+				clearAllOccurrencesHighlighting();
+			}}
 		>
 			<Draggable>
 				<div style={{ zIndex: 1000 }}>

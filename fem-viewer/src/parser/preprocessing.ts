@@ -108,13 +108,28 @@ const getCurrentInstanceStyles = (isCurr: boolean): CSSProperties => {
 	return {};
 };
 
+const getAllOccurrencesHighlightingStyles = (
+	allOccurrencesHighlightedInstances: FEMState["allOccurrencesHighlightedInstances"],
+	instance: Instance
+): CSSProperties => {
+	if (allOccurrencesHighlightedInstances.find((id) => id === instance.id))
+		return {
+			border: "orange 4px solid",
+			boxShadow: "0px 0px 40px orange",
+			filter: "contrast(200%) saturate(150%)",
+		};
+
+	return {};
+};
+
 // Position instances and apply shared styles
 // FIXME: Apply positions relative to the model worldArea and parent size
 const getStyle = (
 	i: Instance,
 	model: Model,
 	zoom: FEMState["zoom"],
-	isCurrentInstance: boolean
+	isCurrentInstance: boolean,
+	allOccurrencesHighlightedInstances: FEMState["allOccurrencesHighlightedInstances"]
 ): CSSProperties => {
 	// TODO: REMOVE
 	// const backgroundColor = getBgColor(i, model);
@@ -147,6 +162,10 @@ const getStyle = (
 			...border,
 			...transformOrigin,
 			...getCurrentInstanceStyles(isCurrentInstance),
+			...getAllOccurrencesHighlightingStyles(
+				allOccurrencesHighlightedInstances,
+				i
+			),
 		};
 	}
 	return {};

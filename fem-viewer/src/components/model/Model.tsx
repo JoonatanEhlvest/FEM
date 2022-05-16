@@ -21,13 +21,15 @@ const renderInstanceType = (
 	instance: Instance,
 	model: ModelType,
 	zoom: FEMState["zoom"],
-	isCurrentInstance: boolean
+	isCurrentInstance: boolean,
+	allOccurrencesHighlightedInstances: FEMState["allOccurrencesHighlightedInstances"]
 ) => {
 	const sharedStyles: CSSProperties = getStyle(
 		instance,
 		model,
 		zoom,
-		isCurrentInstance
+		isCurrentInstance,
+		allOccurrencesHighlightedInstances
 	);
 
 	switch (instance.class) {
@@ -52,7 +54,7 @@ const renderInstanceType = (
  * Instance classes (Process, Asset, Pool etc.) are responsible for actually visualizing an instance.
  */
 const Model: FC<Props> = ({ model, parentDimensions }) => {
-	const { setCurrentInstance, getZoom, getCurrentInstance } = useFEM();
+	const { setCurrentInstance, getZoom, getCurrentInstance, state } = useFEM();
 
 	const isCurrentInstance = (instance: FEMState["currentInstance"]) => {
 		return instance?.id === getCurrentInstance()?.id;
@@ -68,12 +70,12 @@ const Model: FC<Props> = ({ model, parentDimensions }) => {
 						setCurrentInstance(i);
 					}}
 				>
-					<div id="popup-root" />
 					{renderInstanceType(
 						i,
 						model,
 						getZoom(),
-						isCurrentInstance(i)
+						isCurrentInstance(i),
+						state.allOccurrencesHighlightedInstances
 					)}
 				</div>
 			))}
