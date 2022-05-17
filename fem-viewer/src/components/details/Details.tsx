@@ -17,6 +17,8 @@ const Details = () => {
 		goToReference,
 		getInstancesThatReference,
 		goToAllOccurrences,
+		getReferenceBackNavigation,
+		setCurrentModel,
 		state,
 	} = useFEM();
 
@@ -68,7 +70,9 @@ const Details = () => {
 	};
 
 	const renderAllOccurrences = () => {
-		if (!instance) return;
+		if (!instance || instance.isGhost) return;
+		let refsFound = 0;
+		const numRefs = Object.keys(state.references).length;
 		return (
 			<div className={styles["ref-container"]}>
 				<div
@@ -78,75 +82,97 @@ const Details = () => {
 					All Occurrences
 				</div>
 				{dropdowns.interrefsOpen &&
-					Object.entries(state.references).map(([refName, iref]) => {
-						const refs = getInstancesThatReference(
-							instance,
-							refName as InterrefType
-						);
-						if (refs.length === 0) return;
+					// Find instances that reference the current instance
+					Object.entries(state.references).map(
+						([refName, iref], i) => {
+							const refs = getInstancesThatReference(
+								instance,
+								refName as InterrefType
+							);
 
-						const refsByModelName: {
-							[key: string]: Array<Reference>;
-						} = {};
-
-						refs.forEach((ref) => {
-							if (refsByModelName[ref.referencedByModel]) {
-								refsByModelName[ref.referencedByModel].push(
-									ref
-								);
-							} else {
-								refsByModelName[ref.referencedByModel] = [ref];
+							if (
+								i === numRefs - 1 && // If last iteration
+								refsFound === 0 && // And still no refs found
+								refs.length === 0 // And this iteration found none as well
+							) {
+								return <div>No Ghosts Found</div>;
 							}
-						});
 
-						console.log(refsByModelName);
-						return (
-							<div className={styles["interref-container"]}>
-								<div className={styles["interref-title"]}>
-									{refName}
-								</div>
-								{Object.entries(refsByModelName).map(
-									([refModelName, refs]) => {
-										return (
-											<div
-												className={styles["ref-item"]}
-												onClick={() =>
-													goToAllOccurrences(
-														refModelName,
-														refs
-													)
-												}
-											>
-												<img
-													className={
-														styles[
-															"ref-item-model-img"
-														]
-													}
-													src={model}
-													alt=""
-												/>
+							if (refs.length === 0) {
+								return;
+							} else {
+								refsFound += 1;
+							}
+
+							// Group references by model name
+							const refsByModelName: {
+								[key: string]: Array<Reference>;
+							} = {};
+
+							refs.forEach((ref) => {
+								if (refsByModelName[ref.referencedByModel]) {
+									refsByModelName[ref.referencedByModel].push(
+										ref
+									);
+								} else {
+									refsByModelName[ref.referencedByModel] = [
+										ref,
+									];
+								}
+							});
+
+							return (
+								<div className={styles["interref-container"]}>
+									<div className={styles["interref-title"]}>
+										Models
+									</div>
+									{Object.entries(refsByModelName).map(
+										([refModelName, refs]) => {
+											return (
 												<div
 													className={
-														styles["ref-item-model"]
+														styles["ref-item"]
+													}
+													onClick={() =>
+														goToAllOccurrences(
+															refModelName,
+															refs
+														)
 													}
 												>
-													{refModelName}{" "}
+													<img
+														className={
+															styles[
+																"ref-item-model-img"
+															]
+														}
+														src={model}
+														alt=""
+													/>
+													<div
+														className={
+															styles[
+																"ref-item-model"
+															]
+														}
+													>
+														{refModelName}{" "}
+													</div>
+													<img
+														className={
+															styles["ref-link"]
+														}
+														src={arrowRight}
+														alt="follow Reference"
+													/>
 												</div>
-												<img
-													className={
-														styles["ref-link"]
-													}
-													src={arrowRight}
-													alt="follow Reference"
-												/>
-											</div>
-										);
-									}
-								)}
-							</div>
-						);
-					})}
+											);
+										}
+									)}
+								</div>
+							);
+						}
+					)}
 			</div>
 		);
 	};
@@ -239,12 +265,23 @@ const Details = () => {
 		);
 	};
 
+	const backNav = getReferenceBackNavigation();
 	return (
 		<div style={{ flexGrow: 1 }}>
 			<div className={styles["details-container"]}>
 				<Header>
 					<div className={styles["header-content"]}>
 						<div>Details</div>
+						{backNav && (
+							<button
+								onClick={() => {
+									setCurrentModel(backNav.modelToGoTo.id);
+									setCurrentInstance(backNav.instanceToGoTo);
+								}}
+							>
+								{backNav.modelToGoTo.name}
+							</button>
+						)}
 						<button onClick={handleClosePopup}>X</button>
 					</div>
 				</Header>

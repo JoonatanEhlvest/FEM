@@ -167,6 +167,19 @@ const useFEM = () => {
 		}));
 	};
 
+	const setReferenceBackNavigation = (
+		referenceBackNavigation: FEMState["referenceBackNavigation"]
+	) => {
+		setState((prevState: FEMState) => ({
+			...prevState,
+			referenceBackNavigation,
+		}));
+	};
+
+	const getReferenceBackNavigation = () => {
+		return state.referenceBackNavigation;
+	};
+
 	const goToReference = (reference: Reference) => {
 		const models = state.models;
 		const referencedModel = models.find(
@@ -181,6 +194,16 @@ const useFEM = () => {
 			if (referencedInstance) {
 				setCurrentInstance(undefined);
 				setCurrentInstance(referencedInstance);
+				if (!state.referenceBackNavigation) {
+					const modelToGoTo = getCurrentModel();
+					const instanceToGoTo = getCurrentInstance();
+					if (modelToGoTo && instanceToGoTo) {
+						setReferenceBackNavigation({
+							modelToGoTo,
+							instanceToGoTo,
+						});
+					}
+				}
 			}
 		}
 	};
@@ -200,7 +223,18 @@ const useFEM = () => {
 					}
 				});
 			});
+
 			setCurrentModel(referencedModel.id);
+			if (!state.referenceBackNavigation) {
+				const modelToGoTo = getCurrentModel();
+				const instanceToGoTo = getCurrentInstance();
+				if (modelToGoTo && instanceToGoTo) {
+					setReferenceBackNavigation({
+						modelToGoTo,
+						instanceToGoTo,
+					});
+				}
+			}
 		}
 	};
 
@@ -366,6 +400,8 @@ const useFEM = () => {
 		getInstancesThatReference,
 		goToAllOccurrences,
 		clearAllOccurrencesHighlighting,
+		getReferenceBackNavigation,
+		setReferenceBackNavigation,
 		state,
 	};
 };

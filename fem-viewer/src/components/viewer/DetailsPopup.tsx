@@ -11,6 +11,7 @@ const DetailsPopup: FC<Props> = () => {
 		getCurrentInstance,
 		setCurrentInstance,
 		clearAllOccurrencesHighlighting,
+		setReferenceBackNavigation,
 	} = useFEM();
 
 	return (
@@ -22,6 +23,7 @@ const DetailsPopup: FC<Props> = () => {
 			onClose={() => {
 				setCurrentInstance(undefined);
 				clearAllOccurrencesHighlighting();
+				setReferenceBackNavigation(null);
 			}}
 		>
 			<Draggable>

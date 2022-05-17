@@ -26,6 +26,10 @@ export default interface FEMState {
 		message: string;
 	} | null;
 	allOccurrencesHighlightedInstances: Instance["id"][];
+	referenceBackNavigation: {
+		modelToGoTo: Model;
+		instanceToGoTo: Instance;
+	} | null;
 }
 
 const initialState: FEMState = {
@@ -48,6 +52,7 @@ const initialState: FEMState = {
 	},
 	popUp: null,
 	allOccurrencesHighlightedInstances: [],
+	referenceBackNavigation: null,
 };
 
 export { initialState };
