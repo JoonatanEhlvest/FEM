@@ -26,7 +26,7 @@ export const validatePassword = (
 		if (!err) {
 			cb(result);
 		} else {
-			console.log("Error comparing password");
+			throw new Error("Error comparing password");
 		}
 	});
 };
@@ -50,6 +50,8 @@ const setupPassport = (passport: PassportStatic) => {
 				validatePassword(password, user.password, (isValid) => {
 					if (isValid) {
 						return done(null, user.id);
+					} else {
+						return done(null, false);
 					}
 				});
 			})
