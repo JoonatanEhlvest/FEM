@@ -274,6 +274,7 @@ const Details = () => {
 						<div>Details</div>
 						{backNav && (
 							<button
+								className={styles["back-nav"]}
 								onClick={() => {
 									setCurrentModel(backNav.modelToGoTo.id);
 									setCurrentInstance(backNav.instanceToGoTo);

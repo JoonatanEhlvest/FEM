@@ -113,3 +113,10 @@
 	width: 30px;
 	height: auto;
 }
+
+.back-nav {
+	font-size: 18px !important;
+	border-left: 2px solid black !important;
+	border-right: 2px solid black !important;
+	height: 100% !important;
+}
