@@ -13,7 +13,7 @@ import Error from "../error/Error";
 import DetailsPopup from "../viewer/DetailsPopup";
 
 const AppContainer = () => {
-	const { getError } = useFEM();
+	const { getError, getCurrentInstance } = useFEM();
 
 	const [state, setState] = useState(() => {
 		const appWidth = window.innerWidth;
@@ -64,7 +64,7 @@ const AppContainer = () => {
 				</div>
 			</Resizable>
 			<Viewer />
-			<DetailsPopup />
+			{getCurrentInstance() !== undefined && <DetailsPopup />}
 		</div>
 	);
 };

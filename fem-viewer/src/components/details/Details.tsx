@@ -19,6 +19,8 @@ const Details = () => {
 		goToAllOccurrences,
 		getReferenceBackNavigation,
 		setCurrentModel,
+		clearAllOccurrencesHighlighting,
+		setReferenceBackNavigation,
 		state,
 	} = useFEM();
 
@@ -60,6 +62,9 @@ const Details = () => {
 
 	const handleClosePopup = () => {
 		setCurrentInstance(undefined);
+		setCurrentInstance(undefined);
+		clearAllOccurrencesHighlighting();
+		setReferenceBackNavigation(null);
 	};
 
 	const toggleDropdown = (dropdown: keyof typeof dropdowns) => {
@@ -210,7 +215,8 @@ const Details = () => {
 						refName: "Referenced External Actor",
 					},
 				].map(({ ref, refName }) => {
-					if (ref)
+					if (ref) {
+						console.log(ref);
 						return (
 							<div>
 								<div
@@ -260,6 +266,7 @@ const Details = () => {
 								)} */}
 							</div>
 						);
+					}
 				})}
 			</div>
 		);
@@ -294,17 +301,24 @@ const Details = () => {
 							value={
 								<div>
 									{Object.entries(
-										attrConfig[instance.class]
-									).map(([attr, shouldShow]) => {
-										if (!shouldShow) return;
+										(attrConfig as any)[instance.class] as {
+											[Property in keyof InstanceClass]: {
+												display: boolean;
+												alias: string;
+											};
+										}
+									).map(([attr, props]) => {
+										if (!props.display) return;
 										return (
 											<Cell
 												key={`${instance.id}-${attr}`}
 												title={
-													attr
-														.charAt(0)
-														.toUpperCase() +
-													attr.slice(1)
+													props.alias === ""
+														? attr
+																.charAt(0)
+																.toUpperCase() +
+														  attr.slice(1)
+														: props.alias
 												}
 												value={
 													instance[

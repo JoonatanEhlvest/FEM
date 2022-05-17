@@ -6,32 +6,48 @@ import Details from "../details/Details";
 
 type Props = {};
 
-const DetailsPopup: FC<Props> = () => {
-	const {
-		getCurrentInstance,
-		setCurrentInstance,
-		clearAllOccurrencesHighlighting,
-		setReferenceBackNavigation,
-	} = useFEM();
+// const DetailsPopup: FC<Props> = () => {
+// 	const {
+// 		getCurrentInstance,
+// 		setCurrentInstance,
+// 		clearAllOccurrencesHighlighting,
+// 		setReferenceBackNavigation,
+// 	} = useFEM();
 
+// 	return (
+// 		<Popup
+// 			open={getCurrentInstance() !== undefined}
+// 			closeOnDocumentClick={false}
+// 			lockScroll={false}
+// 			onClose={() => {
+// 				setCurrentInstance(undefined);
+// 				clearAllOccurrencesHighlighting();
+// 				setReferenceBackNavigation(null);
+// 			}}
+// 		>
+// 			<Draggable>
+// 				<div>
+// 					<Details />
+// 				</div>
+// 			</Draggable>
+// 		</Popup>
+// 	);
+// };
+
+const DetailsPopup = () => {
 	return (
-		<Popup
-			open={getCurrentInstance() !== undefined}
-			closeOnDocumentClick
-			closeOnEscape
-			lockScroll={false}
-			onClose={() => {
-				setCurrentInstance(undefined);
-				clearAllOccurrencesHighlighting();
-				setReferenceBackNavigation(null);
-			}}
-		>
-			<Draggable>
-				<div style={{ zIndex: 1000 }}>
-					<Details />
-				</div>
-			</Draggable>
-		</Popup>
+		<Draggable>
+			<div
+				style={{
+					position: "absolute",
+					left: "50%",
+					top: "50%",
+					zIndex: 1000,
+				}}
+			>
+				<Details />
+			</div>
+		</Draggable>
 	);
 };
 
