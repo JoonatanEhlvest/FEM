@@ -290,6 +290,7 @@ const Details = () => {
 								onClick={() => {
 									setCurrentModel(backNav.modelToGoTo.id);
 									setCurrentInstance(backNav.instanceToGoTo);
+									clearAllOccurrencesHighlighting();
 								}}
 							>
 								{backNav.modelToGoTo.name}
