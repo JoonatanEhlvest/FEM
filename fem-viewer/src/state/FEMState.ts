@@ -45,7 +45,7 @@ const initialState: FEMState = {
 		"Referenced Bsubclass": [],
 		"Referenced External Actor": [],
 		"Referenced Subclass": [],
-		"Referened Pool": [],
+		"Referenced Pool": [],
 		referencedAsset: [],
 		referencedNote: [],
 		referencedProcess: [],

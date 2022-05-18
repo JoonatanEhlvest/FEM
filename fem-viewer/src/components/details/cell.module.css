@@ -9,7 +9,8 @@
 .prop-title {
 	display: flex;
 	/* min-width: 25%; */
-	width: 125px;
+	width: 30%;
+	overflow: scroll;
 	justify-content: left;
 	align-items: center;
 	border-right: 1px solid var(--bg-primary);

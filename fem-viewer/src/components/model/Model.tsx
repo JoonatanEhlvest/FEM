@@ -54,10 +54,29 @@ const renderInstanceType = (
  * Instance classes (Process, Asset, Pool etc.) are responsible for actually visualizing an instance.
  */
 const Model: FC<Props> = ({ model, parentDimensions }) => {
-	const { setCurrentInstance, getZoom, getCurrentInstance, state } = useFEM();
+	const {
+		setCurrentInstance,
+		getZoom,
+		getCurrentInstance,
+		setReferenceBackNavigation,
+		clearAllOccurrencesHighlighting,
+		state,
+	} = useFEM();
 
 	const isCurrentInstance = (instance: FEMState["currentInstance"]) => {
 		return instance?.id === getCurrentInstance()?.id;
+	};
+
+	const handleClick = (i: Instance, model: ModelType) => {
+		setCurrentInstance(i);
+		clearAllOccurrencesHighlighting();
+
+		if (model && i) {
+			setReferenceBackNavigation({
+				modelToGoTo: model,
+				instanceToGoTo: i,
+			});
+		}
 	};
 
 	return (
@@ -66,9 +85,7 @@ const Model: FC<Props> = ({ model, parentDimensions }) => {
 				<div
 					key={i.id}
 					className={styles["instance"]}
-					onClick={() => {
-						setCurrentInstance(i);
-					}}
+					onClick={() => handleClick(i, model)}
 				>
 					{renderInstanceType(
 						i,

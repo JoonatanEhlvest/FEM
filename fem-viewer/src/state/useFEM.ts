@@ -194,16 +194,6 @@ const useFEM = () => {
 			if (referencedInstance) {
 				setCurrentInstance(undefined);
 				setCurrentInstance(referencedInstance);
-				if (!state.referenceBackNavigation) {
-					const modelToGoTo = getCurrentModel();
-					const instanceToGoTo = getCurrentInstance();
-					if (modelToGoTo && instanceToGoTo) {
-						setReferenceBackNavigation({
-							modelToGoTo,
-							instanceToGoTo,
-						});
-					}
-				}
 			}
 		}
 	};
@@ -225,16 +215,6 @@ const useFEM = () => {
 			});
 
 			setCurrentModel(referencedModel.id);
-			if (!state.referenceBackNavigation) {
-				const modelToGoTo = getCurrentModel();
-				const instanceToGoTo = getCurrentInstance();
-				if (modelToGoTo && instanceToGoTo) {
-					setReferenceBackNavigation({
-						modelToGoTo,
-						instanceToGoTo,
-					});
-				}
-			}
 		}
 	};
 

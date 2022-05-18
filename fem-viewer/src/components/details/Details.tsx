@@ -5,10 +5,11 @@ import Header from "../header/Header";
 import Cell from "./Cell";
 import styles from "./details.module.css";
 import arrowRight from "./arrow-right.svg";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import model from "./model.svg";
 import InstanceClass from "../../state/types/InstanceClass";
 import attrConfig from "../../assets/instanceAttrConfig.json";
+import { Resizable, ResizeCallbackData } from "react-resizable";
 
 const Details = () => {
 	const {
@@ -21,6 +22,7 @@ const Details = () => {
 		setCurrentModel,
 		clearAllOccurrencesHighlighting,
 		setReferenceBackNavigation,
+
 		state,
 	} = useFEM();
 
@@ -61,7 +63,6 @@ const Details = () => {
 	};
 
 	const handleClosePopup = () => {
-		setCurrentInstance(undefined);
 		setCurrentInstance(undefined);
 		clearAllOccurrencesHighlighting();
 		setReferenceBackNavigation(null);
@@ -207,16 +208,19 @@ const Details = () => {
 						refName: "Referenced Note",
 					},
 					{
-						ref: instance.Interrefs["Referened Pool"],
+						ref: instance.Interrefs["Referenced Pool"],
 						refName: " Referenced Pool",
 					},
 					{
 						ref: instance.Interrefs["Referenced External Actor"],
 						refName: "Referenced External Actor",
 					},
+					{
+						ref: instance.Interrefs["Referenced Bsubclass"],
+						refName: "Referenced Bsubclass",
+					},
 				].map(({ ref, refName }) => {
 					if (ref) {
-						console.log(ref);
 						return (
 							<div>
 								<div
@@ -273,6 +277,7 @@ const Details = () => {
 	};
 
 	const backNav = getReferenceBackNavigation();
+
 	return (
 		<div style={{ flexGrow: 1 }}>
 			<div className={styles["details-container"]}>

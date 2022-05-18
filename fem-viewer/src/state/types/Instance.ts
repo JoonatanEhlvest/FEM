@@ -24,7 +24,7 @@ export type InterrefType =
 	| "referencedProcess"
 	| "referencedAsset"
 	| "referencedNote"
-	| "Referened Pool"
+	| "Referenced Pool"
 	| "Referenced External Actor"
 	| "Referenced Subclass"
 	| "Referenced Bsubclass";
