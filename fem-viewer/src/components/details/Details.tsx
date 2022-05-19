@@ -33,11 +33,22 @@ const Details = () => {
 		singlerefsOpen: false,
 	});
 
+	useEffect(() => {
+		setDropdowns((prev) => ({
+			interrefsOpen: false,
+			singlerefsOpen: false,
+		}));
+	}, [instance]);
+
 	const handleGoToReference = (ref: Reference | null) => {
 		if (ref === null) {
 			return;
 		}
 		goToReference(ref);
+		setDropdowns((prev) => ({
+			interrefsOpen: false,
+			singlerefsOpen: prev.singlerefsOpen,
+		}));
 	};
 
 	const getTitle = (instance: Instance): string => {
@@ -101,7 +112,7 @@ const Details = () => {
 								refsFound === 0 && // And still no refs found
 								refs.length === 0 // And this iteration found none as well
 							) {
-								return <div>No Ghosts Found</div>;
+								return <div>Nothing found</div>;
 							}
 
 							if (refs.length === 0) {
@@ -219,6 +230,10 @@ const Details = () => {
 						ref: instance.Interrefs["Referenced Bsubclass"],
 						refName: "Referenced Bsubclass",
 					},
+					{
+						ref: instance.Interrefs["Referenced Subclass"],
+						refName: "Referenced Subclass",
+					},
 				].map(({ ref, refName }) => {
 					if (ref) {
 						return (
@@ -277,6 +292,28 @@ const Details = () => {
 	};
 
 	const backNav = getReferenceBackNavigation();
+	const titles: string[] = [];
+	const values: string[] = [];
+
+	if (instance) {
+		Object.entries(
+			(attrConfig as any)[instance.class] as {
+				[Property in keyof InstanceClass]: {
+					display: boolean;
+					alias: string;
+				};
+			}
+		).forEach(([attr, props]) => {
+			if (props.display) {
+				titles.push(
+					props.alias === ""
+						? attr.charAt(0).toUpperCase() + attr.slice(1)
+						: props.alias
+				);
+				values.push(instance[attr as keyof Instance] as string);
+			}
+		});
+	}
 
 	return (
 		<div style={{ flexGrow: 1 }}>
@@ -302,41 +339,33 @@ const Details = () => {
 
 				{instance && (
 					<div className={styles["details-content"]}>
-						<Cell
-							title="General Information"
-							value={
-								<div>
-									{Object.entries(
-										(attrConfig as any)[instance.class] as {
-											[Property in keyof InstanceClass]: {
-												display: boolean;
-												alias: string;
-											};
+						<div className={styles["general-information-title"]}>
+							General Information
+						</div>
+						<table>
+							{titles.map((title, i) => (
+								<tr>
+									<td
+										className={
+											styles[
+												"general-information-item-title"
+											]
 										}
-									).map(([attr, props]) => {
-										if (!props.display) return;
-										return (
-											<Cell
-												key={`${instance.id}-${attr}`}
-												title={
-													props.alias === ""
-														? attr
-																.charAt(0)
-																.toUpperCase() +
-														  attr.slice(1)
-														: props.alias
-												}
-												value={
-													instance[
-														attr as keyof Instance
-													] as string
-												}
-											/>
-										);
-									})}
-								</div>
-							}
-						/>
+									>
+										{title}
+									</td>
+									<td
+										className={
+											styles[
+												"general-information-item-value"
+											]
+										}
+									>
+										{values[i]}
+									</td>
+								</tr>
+							))}
+						</table>
 
 						{renderAllOccurrences()}
 

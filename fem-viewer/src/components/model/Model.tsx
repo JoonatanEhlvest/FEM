@@ -68,6 +68,7 @@ const Model: FC<Props> = ({ model, parentDimensions }) => {
 	};
 
 	const handleClick = (i: Instance, model: ModelType) => {
+		console.log(i, model);
 		setCurrentInstance(i);
 		clearAllOccurrencesHighlighting();
 

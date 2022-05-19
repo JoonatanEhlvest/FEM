@@ -194,6 +194,10 @@ const useFEM = () => {
 			if (referencedInstance) {
 				setCurrentInstance(undefined);
 				setCurrentInstance(referencedInstance);
+				setReferenceBackNavigation({
+					modelToGoTo: referencedModel,
+					instanceToGoTo: referencedInstance,
+				});
 			}
 		}
 	};
