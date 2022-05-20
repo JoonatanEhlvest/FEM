@@ -1,64 +1,77 @@
-import { Router } from "express";
+import { Request, Router } from "express";
 import db from "../../../db";
 import passport from "passport";
 import { hashPassword } from "../../../passportSetup";
-import { Prisma } from "@prisma/client";
-import { authorizeUser } from "./shared";
+import { Prisma, UserRole } from "@prisma/client";
+import { checkAuth, authorize } from "./shared";
 
 const router = Router();
 
-router.post("/register", async (req, res, next) => {
-	try {
-		const { username, password } = req.body;
+router.post(
+	"/register",
+	[checkAuth, authorize(["ADMIN", "DEVELOPER"])],
+	async (req: Request, res, next) => {
+		const userRole = req.user.role;
+		try {
+			const { username, password, role } = req.body;
 
-		if (!username || !password) {
-			return res
-				.status(422)
-				.json({ message: "username or password not provided in body" });
-		}
-
-		if (username.length < 6) {
-			return res
-				.status(422)
-				.json({ message: "Username must be atleast 6 characters" });
-		}
-
-		if (password.length < 6) {
-			return res
-				.status(422)
-				.json({ message: "Password must be atleast 6 characters" });
-		}
-
-		hashPassword(password, async (hash) => {
-			db.user
-				.create({
-					data: {
-						username: username,
-						password: hash,
-					},
-				})
-				.then((user) => {
-					console.log("Register: ", user);
-					req.login(user.id as any, (err) => {
-						console.log("Login after Register: ", user);
-						return res.json({ user: user.id });
-					});
-				})
-				.catch((err) => {
-					if (err instanceof Prisma.PrismaClientKnownRequestError) {
-						if (err.code === "P2002") {
-							return res
-								.status(422)
-								.json({ message: "Username already taken" });
-						}
-					}
-					return res.status(500).json({ message: err });
+			if (userRole === "DEVELOPER" && (role as UserRole) !== "VIEWER") {
+				return res.status(422).json({
+					message:
+						"Developer accounts can only create Viewer accounts",
 				});
-		});
-	} catch (err) {
-		return res.status(500).json({ message: "Unable to register user" });
+			}
+
+			if (!username || !password) {
+				return res.status(422).json({
+					message: "username or password not provided in body",
+				});
+			}
+
+			if (username.length < 6) {
+				return res
+					.status(422)
+					.json({ message: "Username must be atleast 6 characters" });
+			}
+
+			if (password.length < 6) {
+				return res
+					.status(422)
+					.json({ message: "Password must be atleast 6 characters" });
+			}
+
+			hashPassword(password, async (hash) => {
+				db.user
+					.create({
+						data: {
+							username: username,
+							password: hash,
+							role,
+							createdById: req.user.id,
+						},
+					})
+					.then((user) => {
+						console.log("User created: ", user);
+						return res.status(200).json({ message: "success" });
+					})
+					.catch((err) => {
+						if (
+							err instanceof Prisma.PrismaClientKnownRequestError
+						) {
+							if (err.code === "P2002") {
+								return res.status(422).json({
+									message: "Username already taken",
+								});
+							}
+						}
+						return res.status(500).json({ message: err });
+					});
+			});
+		} catch (err) {
+			return res.status(500).json({ message: "Unable to register user" });
+		}
 	}
-});
+);
 
 router.post("/login", async (req, res, next) => {
 	passport.authenticate("local", (err, user) => {
@@ -72,7 +85,7 @@ router.post("/login", async (req, res, next) => {
 	})(req, res, next);
 });
 
-router.delete("/logout", authorizeUser, (req, res) => {
+router.delete("/logout", checkAuth, (req, res) => {
 	try {
 		req.logOut();
 		res.status(200).json({ message: "logged out" });
@@ -82,9 +95,9 @@ router.delete("/logout", authorizeUser, (req, res) => {
 });
 
 router.get("/session", async (req, res) => {
-	console.log("Session", req.user, req.session, req.headers);
+	console.log("Session", req.user);
 	if (req.isAuthenticated()) {
-		return res.json({ user: req.user.id });
+		return res.json({ user: req.user });
 	}
 	return res.json({ user: null });
 });

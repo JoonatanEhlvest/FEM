@@ -9,6 +9,7 @@ import Reference from "./types/Reference";
 import http from "../http";
 import Instance, { InterrefType } from "./types/Instance";
 import InstanceClass from "./types/InstanceClass";
+import { UserRole } from "../components/dashboard/Dashboard";
 
 export type XMLObj = {
 	[key: string]: string | number | XMLObj | XMLObj[];
@@ -54,7 +55,8 @@ const useFEM = () => {
 	};
 
 	const addModelGroup = (modelGroupId: string, navigate: any) => {
-		http.get(`/api/v1/modelgroup/${modelGroupId}`)
+		return http
+			.get(`/api/v1/modelgroup/${modelGroupId}`)
 			.then((res) => {
 				const svgs = res.data.data.svgs;
 				svgs.forEach((svg: any) => {
@@ -282,14 +284,10 @@ const useFEM = () => {
 			});
 	};
 
-	const register = (username: string, password: string) => {
-		http.post("/api/v1/register", { username, password })
-			.then((res) => {
-				setState((prev) => ({
-					...prev,
-					user: res.data.user,
-				}));
-			})
+	const register = (username: string, password: string, role: UserRole) => {
+		return http
+			.post("/api/v1/register", { username, password, role })
+
 			.catch((err) => {
 				setError({
 					status: err.response.status,
@@ -313,8 +311,11 @@ const useFEM = () => {
 		return state.user !== null;
 	};
 
+	const getUser = () => state.user;
+
 	const fetchUser = () => {
-		return http.get(`/api/v1/user/${state.user}`);
+		if (!state.user) return Promise.reject("User not logged in");
+		return http.get(`/api/v1/user/${state.user.id}`);
 	};
 
 	const resetModels = () => {
@@ -386,6 +387,7 @@ const useFEM = () => {
 		clearAllOccurrencesHighlighting,
 		getReferenceBackNavigation,
 		setReferenceBackNavigation,
+		getUser,
 		state,
 	};
 };

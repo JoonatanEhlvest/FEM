@@ -9,17 +9,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  ADMIN
+  DEVELOPER
+  VIEWER
+}
+
 model User {
   id  String @id @default(uuid())
 
   username String @unique
   password String @unique
 
+  role UserRole
+
   modelGroups ModelGroupsOnUsers[]
 
   sharedBy Share[] @relation("sharedBy")
 
   sharedTo Share[] @relation("sharedTo")
+
+  
+  createdById String?
+  createdBy User? @relation("createdBy", fields: [createdById], references: [id])
+  creator User? @relation("createdBy")
 }
 
 model File {

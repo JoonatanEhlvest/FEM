@@ -1,3 +1,4 @@
+import { UserRole } from "../components/dashboard/Dashboard";
 import { svgXML } from "../components/svgrenderer/svgrenderer";
 import Instance, { InterrefType } from "./types/Instance";
 import Model from "./types/Model";
@@ -5,6 +6,7 @@ import Reference from "./types/Reference";
 
 export interface User {
 	id: string;
+	role: UserRole;
 }
 
 export default interface FEMState {

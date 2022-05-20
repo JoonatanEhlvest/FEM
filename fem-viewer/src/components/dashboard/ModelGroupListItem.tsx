@@ -18,6 +18,7 @@ type Props = {
 const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 	const { state, handleChange } = useForm({ usernameToShareWith: "" });
 	const { setError, addModelGroup, resetModels, setPopup } = useFEM();
+	const [loadingModel, setLoadingModel] = useState(false);
 	const navigate = useNavigate();
 
 	const [showConfirmation, setShowConfirmation] = useState(false);
@@ -41,9 +42,15 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 	};
 
 	const handleView = () => {
+		console.log("Loading models");
 		resetModels();
 		const modelGroupId = modelGroup.modelGroup.id;
-		addModelGroup(modelGroupId, navigate);
+		setLoadingModel(true);
+		addModelGroup(modelGroupId, navigate)
+			.then(() => {
+				setLoadingModel(false);
+			})
+			.catch(() => setLoadingModel(false));
 	};
 
 	const handleDelete = () => {
@@ -67,6 +74,7 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 			<div className={styles["modelgroup-left-container"]}>
 				<div>Name: {modelGroup.modelGroup.name}</div>
 				<img
+					style={{ pointerEvents: loadingModel ? "none" : "auto" }}
 					onClick={handleView}
 					src={require("./view.svg").default}
 					alt="view model"

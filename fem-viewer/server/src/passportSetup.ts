@@ -2,6 +2,7 @@ import { PassportStatic } from "passport";
 import passportLocal from "passport-local";
 import db from "./db";
 import bcrypt from "bcrypt";
+import { User } from "@prisma/client";
 
 export const hashPassword = (password: string, cb: (hash: string) => void) => {
 	bcrypt.genSalt(10, (err, salt) => {
@@ -49,7 +50,11 @@ const setupPassport = (passport: PassportStatic) => {
 				}
 				validatePassword(password, user.password, (isValid) => {
 					if (isValid) {
-						return done(null, user.id);
+						return done(null, {
+							id: user.id,
+							role: user.role,
+							username: user.username,
+						});
 					} else {
 						return done(null, false);
 					}
@@ -71,10 +76,10 @@ const setupPassport = (passport: PassportStatic) => {
 		done(null, user);
 	});
 
-	passport.deserializeUser((userId, done) => {
+	passport.deserializeUser((user: Express.User, done) => {
 		db.user
 			.findUnique({
-				where: { id: userId as string },
+				where: { id: user.id as string },
 			})
 			.then((user) => {
 				if (!user) {

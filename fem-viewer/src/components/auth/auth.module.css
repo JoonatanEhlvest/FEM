@@ -47,3 +47,33 @@ form > button:hover {
 	background-color: var(--bg-primary);
 	color: white;
 }
+
+.form-checkbox {
+	display: flex;
+	flex-direction: row;
+
+	align-items: center;
+	position: relative;
+}
+
+.form-checkbox input {
+	position: absolute;
+	right: 0;
+}
+.dashboard-btn {
+	color: black;
+	background-color: white;
+	border: white 4px solid;
+	border-radius: 5px 5px;
+	transition: transform 100ms ease-in;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.header-content {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+}

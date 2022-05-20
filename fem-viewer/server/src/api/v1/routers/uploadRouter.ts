@@ -2,7 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 import storage from "../../../storage";
 import db from "../../../db/index";
-import { authorizeUser } from "./shared";
+import { checkAuth } from "./shared";
 import { generateModelGroupName } from "../../../storage";
 import { Prisma } from "@prisma/client";
 import fs from "fs/promises";
@@ -18,7 +18,7 @@ const upload = multer({
 
 const uploadArray = upload.array("files");
 
-router.post("/upload", authorizeUser, async (req, res, next) => {
+router.post("/upload", checkAuth, async (req, res, next) => {
 	uploadArray(req, res, async (err) => {
 		if (err) {
 			return res.status(422).json({ message: err.message });
@@ -98,7 +98,7 @@ router.post("/upload", authorizeUser, async (req, res, next) => {
 	});
 });
 
-router.get("/upload", authorizeUser, async (req, res) => {
+router.get("/upload", checkAuth, async (req, res) => {
 	const modelGroups = await db.modelGroup.findMany({
 		where: {
 			users: {

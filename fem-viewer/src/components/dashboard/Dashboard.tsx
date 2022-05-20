@@ -4,11 +4,19 @@ import Header from "../header/Header";
 import DashBoardModelGroupList from "./DashBoardModelGroupList";
 import styles from "./dashboard.module.css";
 import { NavLink } from "react-router-dom";
+import AuthComponent from "../auth/AuthComponent";
+
+export enum UserRole {
+	ADMIN = "ADMIN",
+	DEVELOPER = "DEVELOPER",
+	VIEWER = "VIEWER",
+}
 
 export interface ModelGroup {
 	modelGroup: {
 		id: string;
 		name: string;
+		role: UserRole;
 		shares: {
 			modelGroupId: string;
 			sharedByName: string;
@@ -46,7 +54,9 @@ const Dashboard = () => {
 				if (prev) {
 					return {
 						...prev,
-						modelGroups: prev.modelGroups.filter(m => m.modelGroup.id !== id)
+						modelGroups: prev.modelGroups.filter(
+							(m) => m.modelGroup.id !== id
+						),
 					};
 				}
 				return null;
@@ -64,14 +74,30 @@ const Dashboard = () => {
 				<div className={styles["header-content"]}>
 					<h1>Dashboard</h1>
 					<h3>Welcome {user?.username}</h3>
-					<NavLink
-						children={
-							<button className={styles["upload-btn"]}>
-								Upload
-							</button>
-						}
-						to="/upload"
-					/>
+					<AuthComponent
+						rolesAllowed={[UserRole.ADMIN, UserRole.DEVELOPER]}
+					>
+						<NavLink
+							children={
+								<button className={styles["upload-btn"]}>
+									Upload
+								</button>
+							}
+							to="/upload"
+						/>
+					</AuthComponent>
+					<AuthComponent
+						rolesAllowed={[UserRole.ADMIN, UserRole.DEVELOPER]}
+					>
+						<NavLink
+							children={
+								<button className={styles["upload-btn"]}>
+									Create user
+								</button>
+							}
+							to="/register"
+						/>
+					</AuthComponent>
 					<button
 						className={styles["logout-btn"]}
 						onClick={handleLogout}
@@ -81,7 +107,12 @@ const Dashboard = () => {
 				</div>
 			</Header>
 
-			{user && <DashBoardModelGroupList removeModelGroup={removeModelGroup} modelGroups={user.modelGroups} />}
+			{user && (
+				<DashBoardModelGroupList
+					removeModelGroup={removeModelGroup}
+					modelGroups={user.modelGroups}
+				/>
+			)}
 		</div>
 	);
 };

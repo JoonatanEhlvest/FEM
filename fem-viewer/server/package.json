@@ -21,7 +21,8 @@
 	"scripts": {
 		"build": "tsc --p .",
 		"start:dev": "ts-node-dev --respawn --watch --exit-child --files server.ts",
-		"start": "yarn build && (node build/server/server.js)"
+		"start": "yarn build && (node build/server/server.js)",
+		"user:create": "node build/server/src/scripts/createUser.js createuser"
 	},
 	"dependencies": {
 		"@prisma/client": "^3.11.0",
@@ -35,6 +36,7 @@
 		"passport": "^0.5.2",
 		"passport-local": "^1.0.0",
 		"prisma": "^3.11.0",
-		"ts-node-dev": "^1.1.8"
+		"ts-node-dev": "^1.1.8",
+		"yargs": "^17.5.1"
 	}
 }

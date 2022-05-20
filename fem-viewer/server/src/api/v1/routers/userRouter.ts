@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { authorizeUser } from "./shared";
+import { checkAuth, authorize } from "./shared";
 import db from "../../../db";
 import ShowService from "../services/user/show";
 
 const router = Router();
 
-router.get("/user/:id", authorizeUser, async (req, res) => {
+router.get("/user/:id", [checkAuth], async (req, res) => {
 	try {
 		const service = new ShowService(req, db);
 		const user = await service.execute();

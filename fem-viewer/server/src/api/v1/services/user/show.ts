@@ -8,6 +8,7 @@ class ShowService extends BaseService {
 			},
 			select: {
 				username: true,
+				role: true,
 				modelGroups: {
 					select: {
 						modelGroup: {

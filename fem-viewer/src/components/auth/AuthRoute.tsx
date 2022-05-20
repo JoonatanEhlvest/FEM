@@ -7,7 +7,7 @@ type Props = {
 	children: JSX.Element;
 };
 
-const RequireAuth: FC<Props> = ({ children }) => {
+const AuthRoute: FC<Props> = ({ children }) => {
 	const { isAuthenticated } = useFEM();
 
 	if (!isAuthenticated()) {
@@ -24,4 +24,4 @@ const RequireAuth: FC<Props> = ({ children }) => {
 	return <Navigate to="/dashboard" />;
 };
 
-export default RequireAuth;
+export default AuthRoute;

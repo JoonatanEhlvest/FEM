@@ -43,6 +43,8 @@ const FileUpload = () => {
 		})
 			.then((res) => {
 				setPopup({ message: "Successfully uploaded" });
+
+				setModelGroupUploadName("");
 			})
 			.catch((err) => {
 				setError({

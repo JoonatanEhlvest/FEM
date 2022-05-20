@@ -1,29 +1,48 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useForm } from "../../hooks/useForm";
 import useFEM from "../../state/useFEM";
+import { UserRole } from "../dashboard/Dashboard";
+import Header from "../header/Header";
 import styles from "./auth.module.css";
 
 const Register = () => {
-	const { register, setError } = useFEM();
+	const { register, setError, getUser, setPopup } = useFEM();
 
-	const { state, handleChange } = useForm({
+	const { state, handleChange, clearState } = useForm({
 		username: "",
 		password: "",
 		confirmPassword: "",
+		role: UserRole.VIEWER,
 	});
+
+	const user = getUser();
 
 	const handleRegister = () => {
 		if (state.password !== state.confirmPassword) {
 			setError({ status: 422, message: "Passwords do not match" });
 			return;
 		}
-		register(state.username, state.password);
+		register(state.username, state.password, state.role).then((_) => {
+			console.log("Register success");
+			setPopup({ message: `User '${state.username}' created` });
+			clearState();
+		});
 	};
 
 	return (
 		<div>
-			<h1>Register</h1>
+			<Header>
+				<div className={styles["header-content"]}>
+					<h2>FEM viewer</h2>
+					<NavLink to="/dashboard">
+						<button className={styles["dashboard-btn"]}>
+							Dashboard
+						</button>
+					</NavLink>
+				</div>
+			</Header>
+			<h1>Create User</h1>
 			<form onSubmit={(e) => e.preventDefault()}>
 				<div className={styles["form-data"]}>
 					<label>Username</label>
@@ -52,14 +71,40 @@ const Register = () => {
 						value={state.confirmPassword}
 					/>
 				</div>
-				<button onClick={handleRegister}>Register</button>
+				<h3>Role</h3>
+				<div className={styles["form-data"]} onChange={handleChange}>
+					{user?.role === UserRole.ADMIN && (
+						<div className={styles["form-checkbox"]}>
+							<label>Admin</label>
+							<input
+								type="radio"
+								name="role"
+								value={UserRole.ADMIN}
+							/>
+						</div>
+					)}
+					{user?.role === UserRole.ADMIN && (
+						<div className={styles["form-checkbox"]}>
+							<label>Developer</label>
+							<input
+								type="radio"
+								name="role"
+								value={UserRole.DEVELOPER}
+							/>
+						</div>
+					)}
+					<div className={styles["form-checkbox"]}>
+						<label>Viewer</label>
+						<input
+							defaultChecked
+							type="radio"
+							name="role"
+							value={UserRole.VIEWER}
+						/>
+					</div>
+				</div>
+				<button onClick={handleRegister}>Create</button>
 			</form>
-			<div className={styles["register-link-container"]}>
-				<p>Already have an account?</p>
-				<NavLink to="/login">
-					<strong>Log in here</strong>
-				</NavLink>
-			</div>
 		</div>
 	);
 };

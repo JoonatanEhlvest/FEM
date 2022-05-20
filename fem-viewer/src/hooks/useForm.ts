@@ -10,5 +10,9 @@ export const useForm = <T>(initialState: T) => {
 		}));
 	};
 
-	return { state, handleChange };
+	const clearState = () => {
+		setState(initialState);
+	};
+
+	return { state, handleChange, clearState };
 };

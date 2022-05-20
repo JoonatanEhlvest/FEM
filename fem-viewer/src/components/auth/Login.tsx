@@ -38,12 +38,6 @@ const Login = () => {
 
 				<button onClick={handleLogin}>Login</button>
 			</form>
-			<div className={styles["register-link-container"]}>
-				<p>New user?</p>
-				<NavLink to="/register">
-					<strong>Sign up here</strong>
-				</NavLink>
-			</div>
 		</div>
 	);
 };

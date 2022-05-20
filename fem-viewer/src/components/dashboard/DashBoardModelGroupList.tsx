@@ -1,5 +1,6 @@
 import React, { FC } from "react";
-import { ModelGroup } from "./Dashboard";
+import AuthComponent from "../auth/AuthComponent";
+import { ModelGroup, UserRole } from "./Dashboard";
 import styles from "./dashboard.module.css";
 import ModelGroupListItem from "./ModelGroupListItem";
 
@@ -32,22 +33,28 @@ const DashBoardModelGroupList: FC<Props> = ({
 		(m) => m.owner
 	);
 
+	const ownedModelGroupsRolesAllowed = [UserRole.DEVELOPER, UserRole.ADMIN];
+
 	return (
 		<div className={styles["modelgrouplist-container"]}>
-			<div className={styles["modelgrouplist-header"]}>
-				Your Model Groups
-			</div>
-			<div className={styles["modelgrouplist-list-container"]}>
-				{ownedModelGroups.map((m) => {
-					return (
-						<ModelGroupListItem
-							key={m.modelGroup.id}
-							modelGroup={m}
-							removeModelGroup={removeModelGroup}
-						/>
-					);
-				})}
-			</div>
+			<AuthComponent rolesAllowed={ownedModelGroupsRolesAllowed}>
+				<div className={styles["modelgrouplist-header"]}>
+					Your Model Groups
+				</div>
+			</AuthComponent>
+			<AuthComponent rolesAllowed={ownedModelGroupsRolesAllowed}>
+				<div className={styles["modelgrouplist-list-container"]}>
+					{ownedModelGroups.map((m) => {
+						return (
+							<ModelGroupListItem
+								key={m.modelGroup.id}
+								modelGroup={m}
+								removeModelGroup={removeModelGroup}
+							/>
+						);
+					})}
+				</div>
+			</AuthComponent>
 			<div className={styles["modelgrouplist-header"]}>
 				Model Groups Shared with you
 			</div>

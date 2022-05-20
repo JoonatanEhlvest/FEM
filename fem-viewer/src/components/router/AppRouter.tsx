@@ -3,18 +3,20 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import useFEM from "../../state/useFEM";
 import AppContainer from "../appContainer/AppContainer";
 import ApplicationError from "../applicationError/ApplicationError";
+import AuthorizedRoute from "../auth/AuthorizedRoute";
 import AuthRoute from "../auth/AuthRoute";
 import Login from "../auth/Login";
 import Register from "../auth/Register";
 import RequireAuth from "../auth/RequireAuth";
-import Dashboard from "../dashboard/Dashboard";
+import Dashboard, { UserRole } from "../dashboard/Dashboard";
 import FileUpload from "../fileUpload/FileUpload";
 import Popup from "../popUp/Popup";
 
 const AppRouter = () => {
-	const { getError, setError, getPopup, setPopup } = useFEM();
+	const { getError, setError, getPopup, setPopup, getUser } = useFEM();
 	const error = getError();
 	const popup = getPopup();
+	const user = getUser();
 	return (
 		<BrowserRouter>
 			{error && (
@@ -48,9 +50,12 @@ const AppRouter = () => {
 				<Route
 					path="/register"
 					element={
-						<AuthRoute>
+						<AuthorizedRoute
+							user={user}
+							rolesAllowed={[UserRole.DEVELOPER, UserRole.ADMIN]}
+						>
 							<Register />
-						</AuthRoute>
+						</AuthorizedRoute>
 					}
 				/>
 				<Route
@@ -64,9 +69,12 @@ const AppRouter = () => {
 				<Route
 					path="/upload"
 					element={
-						<RequireAuth>
+						<AuthorizedRoute
+							user={user}
+							rolesAllowed={[UserRole.DEVELOPER, UserRole.ADMIN]}
+						>
 							<FileUpload />
-						</RequireAuth>
+						</AuthorizedRoute>
 					}
 				/>
 				<Route

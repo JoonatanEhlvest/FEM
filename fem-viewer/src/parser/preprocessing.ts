@@ -89,7 +89,7 @@ export const getTransform = (
 	zoom: FEMState["zoom"]
 ): CSSProperties["transform"] => {
 	let zoomAmount = -50 / zoom;
-	if (i.class === "Note") {
+	if (i.class.includes("Note")) {
 		zoomAmount += 50;
 	}
 
