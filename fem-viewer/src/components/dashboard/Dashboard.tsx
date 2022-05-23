@@ -5,62 +5,26 @@ import DashBoardModelGroupList from "./DashBoardModelGroupList";
 import styles from "./dashboard.module.css";
 import { NavLink } from "react-router-dom";
 import AuthComponent from "../auth/AuthComponent";
+import DashboardCreatedUsersList from "./DashboardCreatedUsersList";
 
 export enum UserRole {
 	ADMIN = "ADMIN",
 	DEVELOPER = "DEVELOPER",
 	VIEWER = "VIEWER",
 }
-
-export interface ModelGroup {
-	modelGroup: {
-		id: string;
-		name: string;
-		role: UserRole;
-		shares: {
-			modelGroupId: string;
-			sharedByName: string;
-			sharedToName: string;
-		}[];
-	};
-	owner: boolean;
-}
-
-interface User {
-	username: string;
-	modelGroups: ModelGroup[];
-}
-
 const Dashboard = () => {
-	const { logout, fetchUser, setError } = useFEM();
-	const [user, setUser] = useState<User | null>(null);
+	const { logout, getUser, removeModelGroup, fetchModelGroups } = useFEM();
+	// const [user, setUser] = useState<User | null>(null);
+
+	const user = getUser();
 
 	useEffect(() => {
-		fetchUser()
-			.then((res) => {
-				setUser(res.data.user);
-			})
-			.catch((err) => {
-				setError({
-					status: err.response.status,
-					message: err.response.data.message,
-				});
-			});
+		fetchModelGroups();
 	}, []);
 
-	const removeModelGroup = (id: string) => {
+	const handleRemoveModelGroup = (id: string) => {
 		if (user) {
-			setUser((prev) => {
-				if (prev) {
-					return {
-						...prev,
-						modelGroups: prev.modelGroups.filter(
-							(m) => m.modelGroup.id !== id
-						),
-					};
-				}
-				return null;
-			});
+			removeModelGroup(id);
 		}
 	};
 
@@ -69,7 +33,7 @@ const Dashboard = () => {
 	};
 
 	return (
-		<div style={{ height: "100%", minHeight: "1000px", overflow: "auto" }}>
+		<div style={{ height: "100%", minHeight: "1000px", overflow: "" }}>
 			<Header>
 				<div className={styles["header-content"]}>
 					<h1>Dashboard</h1>
@@ -107,11 +71,19 @@ const Dashboard = () => {
 				</div>
 			</Header>
 
-			{user && (
+			{user?.modelGroups && (
 				<DashBoardModelGroupList
-					removeModelGroup={removeModelGroup}
+					removeModelGroup={handleRemoveModelGroup}
 					modelGroups={user.modelGroups}
 				/>
+			)}
+
+			{user && (
+				<AuthComponent
+					rolesAllowed={[UserRole.ADMIN, UserRole.DEVELOPER]}
+				>
+					<DashboardCreatedUsersList user={user} />
+				</AuthComponent>
 			)}
 		</div>
 	);

@@ -4,9 +4,24 @@ import Instance, { InterrefType } from "./types/Instance";
 import Model from "./types/Model";
 import Reference from "./types/Reference";
 
+export interface ModelGroup {
+	modelGroup: {
+		id: string;
+		name: string;
+		shares: {
+			modelGroupId: string;
+			sharedByName: string;
+			sharedToName: string;
+		}[];
+	};
+	owner: boolean;
+}
+
 export interface User {
 	id: string;
+	username: string;
 	role: UserRole;
+	modelGroups: ModelGroup[];
 }
 
 export default interface FEMState {

@@ -30,9 +30,9 @@ model User {
   sharedTo Share[] @relation("sharedTo")
 
   
+  accounts User[] @relation("createdBy")
+  createdBy User? @relation("createdBy", fields: [createdById], references: [id]) 
   createdById String?
-  createdBy User? @relation("createdBy", fields: [createdById], references: [id])
-  creator User? @relation("createdBy")
 }
 
 model File {

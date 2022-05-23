@@ -47,14 +47,21 @@ router.post(
 							username: username,
 							password: hash,
 							role,
-							createdById: req.user.id,
+							createdBy: {
+								connect: {
+									id: req.user.id,
+								},
+							},
 						},
 					})
 					.then((user) => {
 						console.log("User created: ", user);
-						return res.status(200).json({ message: "success" });
+						return res
+							.status(200)
+							.json({ username: user.username });
 					})
 					.catch((err) => {
+						console.log(err);
 						if (
 							err instanceof Prisma.PrismaClientKnownRequestError
 						) {

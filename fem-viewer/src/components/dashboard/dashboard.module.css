@@ -61,7 +61,7 @@
 
 .modelgrouplist-list-container {
 	width: 90%;
-	height: 90%;
+	min-height: 200px;
 	/* background-color: var(--bg-primary); */
 	background-color: var(--subtitle-bg);
 	border: var(--bg-primary) 4px solid;
@@ -124,6 +124,30 @@
 }
 
 .share-container > button:hover {
+	background-color: rgb(31, 172, 237);
+	border-color: rgb(31, 172, 237);
+}
+
+.modelgroup-right-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: center;
+	flex: 1;
+}
+
+.modelgroup-right-container > button {
+	width: 200px;
+	height: 30px;
+	margin-right: 10px;
+	background-color: var(--bg-primary);
+	border: var(--bg-primary) 4px solid;
+
+	transition: background-color 100ms;
+	color: white;
+}
+
+.modelgroup-right-container > button:hover {
 	background-color: rgb(31, 172, 237);
 	border-color: rgb(31, 172, 237);
 }

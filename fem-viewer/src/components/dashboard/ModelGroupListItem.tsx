@@ -2,13 +2,13 @@ import http from "../../http";
 import React, { FC, useState } from "react";
 import { useForm } from "../../hooks/useForm";
 import useFEM from "../../state/useFEM";
-import { ModelGroup } from "./Dashboard";
 import styles from "./dashboard.module.css";
 import { Parser } from "../../parser";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Popup from "reactjs-popup";
 import ConfirmationPopup from "../confirmationPopup/ConfirmationPopup";
+import { ModelGroup } from "../../state/FEMState";
 
 type Props = {
 	modelGroup: ModelGroup;

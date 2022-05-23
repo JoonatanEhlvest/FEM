@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import FEMContext from "./FEMContext";
-import FEMState, { initialState } from "./FEMState";
+import FEMState, { initialState, ModelGroup } from "./FEMState";
 
 import Model from "./types/Model";
 
@@ -287,7 +287,9 @@ const useFEM = () => {
 	const register = (username: string, password: string, role: UserRole) => {
 		return http
 			.post("/api/v1/register", { username, password, role })
-
+			.then((res) => {
+				setPopup({ message: `User '${res.data.username}' created` });
+			})
 			.catch((err) => {
 				setError({
 					status: err.response.status,
@@ -316,6 +318,40 @@ const useFEM = () => {
 	const fetchUser = () => {
 		if (!state.user) return Promise.reject("User not logged in");
 		return http.get(`/api/v1/user/${state.user.id}`);
+	};
+
+	const fetchModelGroups = () => {
+		if (!state.user) return Promise.reject("User not logged in");
+		http.get(`/api/v1/user/${state.user.id}`).then((res) => {
+			console.log(res);
+			setState((prevState: FEMState) => {
+				if (!prevState.user) return prevState;
+				return {
+					...prevState,
+					user: {
+						...prevState.user,
+						modelGroups: res.data.user.modelGroups,
+					},
+				};
+			});
+		});
+	};
+
+	const removeModelGroup = (idToRemove: ModelGroup["modelGroup"]["id"]) => {
+		setState((prevState: FEMState) => {
+			if (prevState.user) {
+				return {
+					...prevState,
+					user: {
+						...prevState.user,
+						modelGroups: prevState.user?.modelGroups.filter(
+							(m) => m.modelGroup.id !== idToRemove
+						),
+					},
+				};
+			}
+			return prevState;
+		});
 	};
 
 	const resetModels = () => {
@@ -388,6 +424,8 @@ const useFEM = () => {
 		getReferenceBackNavigation,
 		setReferenceBackNavigation,
 		getUser,
+		removeModelGroup,
+		fetchModelGroups,
 		state,
 	};
 };

@@ -24,8 +24,6 @@ const Register = () => {
 			return;
 		}
 		register(state.username, state.password, state.role).then((_) => {
-			console.log("Register success");
-			setPopup({ message: `User '${state.username}' created` });
 			clearState();
 		});
 	};

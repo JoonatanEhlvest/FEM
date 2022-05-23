@@ -1,11 +1,12 @@
 import React, { FC } from "react";
+import { User } from "../../state/FEMState";
 import AuthComponent from "../auth/AuthComponent";
-import { ModelGroup, UserRole } from "./Dashboard";
+import { UserRole } from "./Dashboard";
 import styles from "./dashboard.module.css";
 import ModelGroupListItem from "./ModelGroupListItem";
 
 interface Props {
-	modelGroups: ModelGroup[];
+	modelGroups: User["modelGroups"];
 	removeModelGroup: (id: string) => void;
 }
 
