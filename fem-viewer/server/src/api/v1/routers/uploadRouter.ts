@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Router } from "express";
 import multer from "multer";
 import storage from "../../../storage";
 import db from "../../../db/index";
@@ -23,7 +23,6 @@ router.post("/upload", checkAuth, async (req, res, next) => {
 		if (err) {
 			return res.status(422).json({ message: err.message });
 		}
-
 		const files = req.files as Express.Multer.File[];
 		if (!files) {
 			return next();
