@@ -1,11 +1,9 @@
-import { UPLOAD_DIR } from "../../../../../applicationPaths";
-import path from "path";
 import BaseService from "../baseService";
-import fs from "fs/promises";
 
 class DeleteService extends BaseService {
 	async execute() {
 		const { modelGroupId } = this.req.params;
+		const { modelGroupName } = this.req.body;
 		await this.db.modelGroupsOnUsers.deleteMany({
 			where: {
 				modelGroupId: modelGroupId,
@@ -20,12 +18,8 @@ class DeleteService extends BaseService {
 
 		const modelGroup = await this.db.modelGroup.delete({
 			where: {
-				id: modelGroupId,
+				name: modelGroupName,
 			},
-		});
-
-		await fs.rm(path.join(UPLOAD_DIR, modelGroup.name), {
-			recursive: true,
 		});
 
 		return modelGroup;

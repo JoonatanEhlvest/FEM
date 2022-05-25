@@ -323,7 +323,6 @@ const useFEM = () => {
 	const fetchModelGroups = () => {
 		if (!state.user) return Promise.reject("User not logged in");
 		http.get(`/api/v1/user/${state.user.id}`).then((res) => {
-			console.log(res);
 			setState((prevState: FEMState) => {
 				if (!prevState.user) return prevState;
 				return {

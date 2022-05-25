@@ -196,3 +196,11 @@
 .modelgroup-left-container > img:hover {
 	transform: scale(1.2);
 }
+
+.created-left-item {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	padding-left: 10px;
+}

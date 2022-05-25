@@ -5,6 +5,7 @@ import AppContainer from "../appContainer/AppContainer";
 import ApplicationError from "../applicationError/ApplicationError";
 import AuthorizedRoute from "../auth/AuthorizedRoute";
 import AuthRoute from "../auth/AuthRoute";
+import ChangePassword from "../auth/ChangePassword";
 import Login from "../auth/Login";
 import Register from "../auth/Register";
 import RequireAuth from "../auth/RequireAuth";
@@ -75,6 +76,14 @@ const AppRouter = () => {
 						>
 							<FileUpload />
 						</AuthorizedRoute>
+					}
+				/>
+				<Route
+					path="/changepassword"
+					element={
+						<RequireAuth>
+							<ChangePassword />
+						</RequireAuth>
 					}
 				/>
 				<Route

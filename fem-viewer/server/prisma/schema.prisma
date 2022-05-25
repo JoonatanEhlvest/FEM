@@ -31,7 +31,7 @@ model User {
 
   
   accounts User[] @relation("createdBy")
-  createdBy User? @relation("createdBy", fields: [createdById], references: [id]) 
+  createdBy User? @relation("createdBy", fields: [createdById], references: [id], onDelete: Cascade) 
   createdById String?
 }
 
@@ -50,16 +50,16 @@ model ModelGroup {
   name String @unique
 
 
-  files File[]
+  files File[] 
   users ModelGroupsOnUsers[]
   shares Share[]
 }
 
 model ModelGroupsOnUsers {
-  modelGroup  ModelGroup  @relation(fields: [modelGroupId], references: [id])
+  modelGroup  ModelGroup  @relation(fields: [modelGroupId], references: [id], onDelete: Cascade)
   modelGroupId  String
 
-  user  User  @relation(fields: [userId], references: [id])
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   owner Boolean
@@ -70,13 +70,13 @@ model ModelGroupsOnUsers {
 model Share {
   id  String @id @default(uuid())
 
-  modelGroup  ModelGroup  @relation(fields: [modelGroupId], references: [id])
+  modelGroup  ModelGroup  @relation(fields: [modelGroupId], references: [id], onDelete: Cascade)
   modelGroupId  String
 
-  sharedBy  User  @relation("sharedBy", fields: [sharedByName], references: [username])
+  sharedBy  User  @relation("sharedBy", fields: [sharedByName], references: [username], onDelete: Cascade)
   sharedByName String
 
-  sharedTo  User  @relation("sharedTo", fields: [sharedToName], references: [username])
+  sharedTo  User  @relation("sharedTo", fields: [sharedToName], references: [username], onDelete: Cascade)
   sharedToName String
 }
 

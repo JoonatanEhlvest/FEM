@@ -9,7 +9,9 @@ class ListService extends BaseService {
 				createdById,
 			},
 			select: {
+				id: true,
 				username: true,
+				role: true,
 			},
 		});
 

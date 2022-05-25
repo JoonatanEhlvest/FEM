@@ -54,9 +54,14 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 	};
 
 	const handleDelete = () => {
+		const modelGroupName = modelGroup.modelGroup.name;
 		const modelGroupId = modelGroup.modelGroup.id;
 		axios
-			.delete(`/api/v1/modelgroup/${modelGroupId}`)
+			.delete(`/api/v1/modelgroup/${modelGroupId}`, {
+				data: {
+					modelGroupName,
+				},
+			})
 			.then((res) => {
 				setPopup({ message: "Deletion successful" });
 				removeModelGroup(res.data.modelGroup.id);

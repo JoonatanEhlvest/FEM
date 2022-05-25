@@ -3,25 +3,29 @@ import http from "../../http";
 import { User } from "../../state/FEMState";
 import useFEM from "../../state/useFEM";
 import ConfirmationPopup from "../confirmationPopup/ConfirmationPopup";
+import CreatedUserListItem from "./CreatedUserListItem";
+import { UserRole } from "./Dashboard";
 import styles from "./dashboard.module.css";
 
 type Props = {
 	user: User;
 };
 
-type CreatedUser = {
+export type CreatedUser = {
+	id: string;
 	username: string;
+	role: UserRole;
 };
 
 const DashboardCreatedUsersList: FC<Props> = ({ user }) => {
 	const [createdUsers, setCreatedUsers] = useState<CreatedUser[]>([]);
-	const [showConfirmation, setShowConfirmation] = useState(false);
 
-	const handleDelete = () => {};
+	const handleDelete = (toDeleteId: CreatedUser["id"]) => {
+		setCreatedUsers((prev) => prev.filter((u) => u.id !== toDeleteId));
+	};
 
 	useEffect(() => {
 		http.get(`/api/v1/user/created/${user.id}`).then((res) => {
-			console.log(res);
 			setCreatedUsers(res.data.users);
 		});
 	}, []);
@@ -36,40 +40,11 @@ const DashboardCreatedUsersList: FC<Props> = ({ user }) => {
 				{createdUsers &&
 					createdUsers.map((u) => {
 						return (
-							<div
-								className={styles["modelgroup-item-container"]}
-							>
-								<div
-									className={
-										styles["modelgroup-left-container"]
-									}
-								>
-									<div style={{ padding: "10px" }}>
-										Username: {u.username}
-									</div>
-								</div>
-								<div
-									className={
-										styles["modelgroup-right-container"]
-									}
-								>
-									<button
-										onClick={() =>
-											setShowConfirmation(true)
-										}
-									>
-										Delete
-									</button>
-								</div>
-								<div>
-									<ConfirmationPopup
-										message={`Are you sure you want to delete ${u.username} ?`}
-										showCondition={showConfirmation}
-										handleConfirm={handleDelete}
-										toggleConfirmation={setShowConfirmation}
-									/>
-								</div>
-							</div>
+							<CreatedUserListItem
+								key={`created-${u.id}`}
+								createdUser={u}
+								deleteCallback={handleDelete}
+							/>
 						);
 					})}
 			</div>
