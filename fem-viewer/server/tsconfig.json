@@ -18,5 +18,5 @@
 	},
 	"files": ["@types/index.d.ts"],
 	"include": ["src/**/*", "server.ts", "../src/parser/index.ts", "types"],
-	"exclude": ["node_modules", "build", ".."]
+	"exclude": ["node_modules", "build"]
 }
