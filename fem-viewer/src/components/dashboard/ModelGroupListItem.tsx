@@ -42,7 +42,6 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 	};
 
 	const handleView = () => {
-		console.log("Loading models");
 		resetModels();
 		const modelGroupId = modelGroup.modelGroup.id;
 		setLoadingModel(true);

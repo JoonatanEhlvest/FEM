@@ -2,7 +2,6 @@ import { PassportStatic } from "passport";
 import passportLocal from "passport-local";
 import db from "./db";
 import bcrypt from "bcrypt";
-import { User } from "@prisma/client";
 
 export const hashPassword = (password: string, cb: (hash: string) => void) => {
 	bcrypt.genSalt(10, (err, salt) => {

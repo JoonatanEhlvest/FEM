@@ -11,12 +11,9 @@
 		"baseUrl": ".",
 
 		"types": [],
-		"typeRoots": ["./@types"],
-		"paths": {
-			"*": ["node_modules/*"]
-		}
+		"typeRoots": ["./@types", "./node_modules/@types"]
 	},
 	"files": ["@types/index.d.ts"],
-	"include": ["src/**/*", "server.ts", "../src/parser/index.ts", "types"],
-	"exclude": ["node_modules", "build"]
+	"include": ["src", "server.ts", "types"],
+	"exclude": ["node_modules", "build", "../src"]
 }

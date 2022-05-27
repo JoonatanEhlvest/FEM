@@ -80,6 +80,10 @@ const getElemType = (elem: svgXML): [string | null, string | null] => {
 		"polyline",
 		"line",
 		"path",
+		"g",
+		"linearGradient",
+		"stop",
+		"clipPath",
 	];
 	for (const type of types) {
 		if (elem[type]) {
@@ -93,29 +97,51 @@ const getElemType = (elem: svgXML): [string | null, string | null] => {
 	return [null, null];
 };
 
-const renderG = (g: svgXML[], zoom: FEMState["zoom"]) => {
+const createElem = (elem: svgXML, i: number, zoom: FEMState["zoom"]) => {
+	const [type, text] = getElemType(elem);
+
+	if (type === "g") {
+		return renderG(
+			elem.g as unknown as svgXML[],
+			zoom,
+			getStrProp(elem, "clip-path")
+		);
+	}
+	const props = getObjProp(elem, ":@");
+	const style = getStyleObjectFromString(getStrProp(elem, "style"));
+
+	if (!type) return;
+	if (type === "text") {
+		props["x"] = "0.0px";
+		props["y"] = `${-parseFloat(style["baselineShift"])}`;
+		delete style["baselineShift"];
+	}
+
+	if (type === "clipPath" || type === "linearGradient") {
+		const children: any = (elem[type] as svgXML[]).map((e, i) => {
+			return createElem(e, i, zoom);
+		});
+		return React.createElement(type, {
+			...props,
+			style,
+			children,
+			key: `svgElem-${i}`,
+		});
+	}
+
+	return React.createElement(type, {
+		...props,
+		style,
+		children: text,
+		key: `svgElem-${i}`,
+	});
+};
+
+const renderG = (g: svgXML[], zoom: FEMState["zoom"], clipPath: any = null) => {
 	return (
-		<g transform={`scale(${zoom})`}>
+		<g transform={`scale(${zoom})`} clipPath={clipPath}>
 			{g.map((elem, i) => {
-				const props = getObjProp(elem, ":@");
-				const style = getStyleObjectFromString(
-					getStrProp(elem, "style")
-				);
-
-				const [type, text] = getElemType(elem);
-				if (!type) return;
-				if (type === "text") {
-					props["x"] = "0.0px";
-					props["y"] = `${-parseFloat(style["baselineShift"])}`;
-					delete style["baselineShift"];
-				}
-
-				return React.createElement(type, {
-					...props,
-					style,
-					children: text,
-					key: `svgElem-${i}`,
-				});
+				return createElem(elem, i, zoom);
 			})}
 		</g>
 	);
