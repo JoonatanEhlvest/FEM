@@ -104,7 +104,8 @@ const createElem = (elem: svgXML, i: number, zoom: FEMState["zoom"]) => {
 		return renderG(
 			elem.g as unknown as svgXML[],
 			zoom,
-			getStrProp(elem, "clip-path")
+			getStrProp(elem, "clip-path"),
+			-50 / zoom
 		);
 	}
 	const props = getObjProp(elem, ":@");
@@ -137,9 +138,18 @@ const createElem = (elem: svgXML, i: number, zoom: FEMState["zoom"]) => {
 	});
 };
 
-const renderG = (g: svgXML[], zoom: FEMState["zoom"], clipPath: any = null) => {
+const renderG = (
+	g: svgXML[],
+	zoom: FEMState["zoom"],
+	clipPath: any = null,
+	leftAlign: number | null = null
+) => {
+	let transform = `scale(${zoom}) `;
+	if (leftAlign) {
+		transform = `scale(${zoom}) translate(${leftAlign}%, ${leftAlign}%)`;
+	}
 	return (
-		<g transform={`scale(${zoom})`} clipPath={clipPath}>
+		<g transform={transform} clipPath={clipPath}>
 			{g.map((elem, i) => {
 				return createElem(elem, i, zoom);
 			})}
