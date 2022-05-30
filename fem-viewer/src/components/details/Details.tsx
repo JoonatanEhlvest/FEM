@@ -5,7 +5,7 @@ import Header from "../header/Header";
 import Cell from "./Cell";
 import styles from "./details.module.css";
 import arrowRight from "./arrow-right.svg";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import model from "./model.svg";
 import InstanceClass from "../../state/types/InstanceClass";
 import attrConfig from "../../assets/instanceAttrConfig.json";
@@ -86,7 +86,7 @@ const Details = () => {
 		}));
 	};
 
-	const renderAllOccurrences = () => {
+	const renderAllOccurrences = useCallback(() => {
 		if (!instance || instance.isGhost) return;
 		let refsFound = 0;
 		const numRefs = Object.keys(state.references).length;
@@ -106,6 +106,7 @@ const Details = () => {
 								instance,
 								refName as InterrefType
 							);
+							console.log(refs, instance.id);
 
 							if (
 								i === numRefs - 1 && // If last iteration
@@ -192,7 +193,7 @@ const Details = () => {
 					)}
 			</div>
 		);
-	};
+	}, [instance, dropdowns.interrefsOpen]);
 
 	const renderInstanceSpecificReference = () => {
 		if (!instance) return;
