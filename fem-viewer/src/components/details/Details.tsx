@@ -106,7 +106,6 @@ const Details = () => {
 								instance,
 								refName as InterrefType
 							);
-							console.log(refs, instance.id);
 
 							if (
 								i === numRefs - 1 && // If last iteration

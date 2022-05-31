@@ -190,7 +190,9 @@ const useFEM = () => {
 		);
 		if (referencedModel) {
 			const referencedInstance = referencedModel.instances.find(
-				(i) => i.name === reference.referencedByInstance
+				(i) =>
+					i.name === reference.referencedByInstance &&
+					i.class === reference.referencedClass
 			);
 			setCurrentModel(referencedModel.id);
 
