@@ -47,6 +47,7 @@ export default interface FEMState {
 		modelToGoTo: Model;
 		instanceToGoTo: Instance;
 	} | null;
+	currentModelGroup: ModelGroup | null;
 }
 
 const initialState: FEMState = {
@@ -70,6 +71,7 @@ const initialState: FEMState = {
 	popUp: null,
 	allOccurrencesHighlightedInstances: [],
 	referenceBackNavigation: null,
+	currentModelGroup: null,
 };
 
 export { initialState };

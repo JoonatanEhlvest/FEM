@@ -10,6 +10,13 @@ class ShowService extends BaseService {
 				username: true,
 				role: true,
 				modelGroups: {
+					orderBy: [
+						{
+							modelGroup: {
+								name: "asc",
+							},
+						},
+					],
 					select: {
 						modelGroup: {
 							select: {

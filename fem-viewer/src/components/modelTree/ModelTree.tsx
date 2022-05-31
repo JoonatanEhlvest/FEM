@@ -1,21 +1,18 @@
-import React, { CSSProperties, useState } from "react";
-import { Resizable, ResizeCallbackData } from "react-resizable";
+import React, { CSSProperties, useEffect } from "react";
+
 import useFEM from "../../state/useFEM";
 import Header from "../header/Header";
 import styles from "./modelTree.module.css";
-import sharedStyles from "../../utlitity/sharedStyles.module.css";
+
 import Model from "../../state/types/Model";
 
-const itemPreStylesIfSelected: CSSProperties = {
-	backgroundColor: "blue",
-};
-
-const itemStylesIfSelected: CSSProperties = {
-	textDecoration: "underline",
-};
-
 const ModelTree = () => {
-	const { getModelTree, setCurrentModel, getCurrentModel } = useFEM();
+	const {
+		getModelTree,
+		setCurrentModel,
+		getCurrentModel,
+		getCurrentModelGroup,
+	} = useFEM();
 
 	const isCurrentModelSelected = (model: Model): boolean => {
 		return model.id === getCurrentModel()?.id;
@@ -29,13 +26,25 @@ const ModelTree = () => {
 		return "";
 	};
 
+	const getCurrentModelGroupName = () => {
+		return getCurrentModelGroup()?.modelGroup.name.split("-")[0];
+	};
+
+	const models = getModelTree();
+
+	useEffect(() => {
+		try {
+			setCurrentModel(models[0].id);
+		} catch {}
+	}, []);
+
 	return (
 		<div className={styles["model-tree-container"]}>
 			<Header>
-				<div>Model Tree</div>
+				<div>Model Tree: {getCurrentModelGroupName()}</div>
 			</Header>
 			<div className={styles["model-tree-content"]}>
-				{getModelTree().map((model) => (
+				{models.map((model) => (
 					<div
 						className={styles["model-tree-item-container"]}
 						key={model.id}

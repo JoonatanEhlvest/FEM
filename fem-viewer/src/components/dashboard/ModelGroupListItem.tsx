@@ -3,10 +3,10 @@ import React, { FC, useState } from "react";
 import { useForm } from "../../hooks/useForm";
 import useFEM from "../../state/useFEM";
 import styles from "./dashboard.module.css";
-import { Parser } from "../../parser";
+
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Popup from "reactjs-popup";
+
 import ConfirmationPopup from "../confirmationPopup/ConfirmationPopup";
 import { ModelGroup } from "../../state/FEMState";
 
@@ -43,9 +43,9 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 
 	const handleView = () => {
 		resetModels();
-		const modelGroupId = modelGroup.modelGroup.id;
+
 		setLoadingModel(true);
-		addModelGroup(modelGroupId, navigate)
+		addModelGroup(modelGroup, navigate)
 			.then(() => {
 				setLoadingModel(false);
 			})
@@ -73,10 +73,16 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 			});
 	};
 
+	const formatModelGroupName = (name: string): string => {
+		return name.split("-").join(" (") + ")";
+	};
+
 	return (
 		<div className={styles["modelgroup-item-container"]}>
 			<div className={styles["modelgroup-left-container"]}>
-				<div>Name: {modelGroup.modelGroup.name}</div>
+				<div>
+					Name: {formatModelGroupName(modelGroup.modelGroup.name)}
+				</div>
 				<img
 					style={{ pointerEvents: loadingModel ? "none" : "auto" }}
 					onClick={handleView}
@@ -89,7 +95,9 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 					</button>
 				)}
 				<ConfirmationPopup
-					message={`Are you sure you want to delete ${modelGroup.modelGroup.name} ?`}
+					message={`Are you sure you want to delete ${formatModelGroupName(
+						modelGroup.modelGroup.name
+					)} ?`}
 					showCondition={showConfirmation}
 					handleConfirm={handleDelete}
 					toggleConfirmation={setShowConfirmation}

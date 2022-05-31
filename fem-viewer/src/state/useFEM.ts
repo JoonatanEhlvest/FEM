@@ -54,9 +54,9 @@ const useFEM = () => {
 		});
 	};
 
-	const addModelGroup = (modelGroupId: string, navigate: any) => {
+	const addModelGroup = (modelGroup: ModelGroup, navigate: any) => {
 		return http
-			.get(`/api/v1/modelgroup/${modelGroupId}`)
+			.get(`/api/v1/modelgroup/${modelGroup.modelGroup.id}`)
 			.then((res) => {
 				const svgs = res.data.data.svgs;
 				svgs.forEach((svg: any) => {
@@ -69,6 +69,7 @@ const useFEM = () => {
 					return {
 						...prevState,
 						models: [...prevState.models, ...models],
+						currentModelGroup: modelGroup,
 					};
 				});
 
@@ -94,7 +95,7 @@ const useFEM = () => {
 	};
 
 	const getModelTree = (): FEMState["models"] => {
-		return state.models;
+		return state.models.sort((a, b) => a.name.localeCompare(b.name));
 	};
 
 	const getCurrentModel = (): Model | undefined => {
@@ -393,6 +394,10 @@ const useFEM = () => {
 		});
 	};
 
+	const getCurrentModelGroup = () => {
+		return state.currentModelGroup;
+	};
+
 	return {
 		getModelTree,
 		addModelGroup,
@@ -425,6 +430,7 @@ const useFEM = () => {
 		getUser,
 		removeModelGroup,
 		fetchModelGroups,
+		getCurrentModelGroup,
 		state,
 	};
 };
