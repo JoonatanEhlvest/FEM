@@ -400,6 +400,80 @@ const useFEM = () => {
 		return state.currentModelGroup;
 	};
 
+	const removeShare = (
+		modelGroupId: ModelGroup["modelGroup"]["id"],
+		sharedToName: string
+	) => {
+		setState((prevState: FEMState) => {
+			if (!prevState.user) {
+				return prevState;
+			}
+			return {
+				...prevState,
+				user: {
+					...prevState.user,
+					modelGroups: prevState.user.modelGroups.map((m) => {
+						if (m.modelGroup.id !== modelGroupId) return m;
+
+						return {
+							...m,
+							modelGroup: {
+								...m.modelGroup,
+								shares: m.modelGroup.shares.filter(
+									(s) => s.sharedToName !== sharedToName
+								),
+							},
+						};
+					}),
+				},
+			};
+		});
+	};
+
+	const addShare = (share: ModelGroup["modelGroup"]["shares"][0]) => {
+		setState((prevState: FEMState) => {
+			if (!prevState.user) return prevState;
+			return {
+				...prevState,
+				user: {
+					...prevState.user,
+					modelGroups: prevState.user.modelGroups.map((m) => {
+						if (m.modelGroup.id !== share.modelGroupId) return m;
+						return {
+							...m,
+							modelGroup: {
+								...m.modelGroup,
+								shares: [...m.modelGroup.shares, share],
+							},
+						};
+					}),
+				},
+			};
+		});
+	};
+
+	const removeSharesToUser = (sharedToName: string) => {
+		setState((prevState: FEMState) => {
+			if (!prevState.user) return prevState;
+
+			return {
+				...prevState,
+				user: {
+					...prevState.user,
+					modelGroups: prevState.user.modelGroups.map((m) => ({
+						...m,
+						modelGroup: {
+							...m.modelGroup,
+							shares: m.modelGroup.shares.filter(
+								(s) => s.sharedToName !== sharedToName
+							),
+						},
+					})),
+				},
+			};
+		});
+	};
+
 	return {
 		getModelTree,
 		addModelGroup,
@@ -433,6 +507,9 @@ const useFEM = () => {
 		removeModelGroup,
 		fetchModelGroups,
 		getCurrentModelGroup,
+		removeShare,
+		addShare,
+		removeSharesToUser,
 		state,
 	};
 };

@@ -16,12 +16,17 @@ type Props = {
 };
 
 const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
+	const { removeShare, addShare } = useFEM();
 	const { state, handleChange } = useForm({ usernameToShareWith: "" });
 	const { setError, addModelGroup, resetModels, setPopup } = useFEM();
 	const [loadingModel, setLoadingModel] = useState(false);
 	const navigate = useNavigate();
 
 	const [showConfirmation, setShowConfirmation] = useState(false);
+	const [showShareConfirmation, setShowShareConfirmation] = useState({
+		show: false,
+		sharedToName: "",
+	});
 
 	const handleShare = (modelGroupId: ModelGroup["modelGroup"]["id"]) => {
 		http.patch("/api/v1/modelgroup/share", {
@@ -29,6 +34,7 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 			usernameToShareWith: state.usernameToShareWith,
 		})
 			.then((res) => {
+				addShare(res.data);
 				setPopup({
 					message: "Sharing successful",
 				});
@@ -77,6 +83,32 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 		return name.split("-").join(" (") + ")";
 	};
 
+	const toggleDeleteShareConfirmation = (show: boolean) => {
+		setShowShareConfirmation((prev) => ({
+			...prev,
+			show,
+		}));
+	};
+	const handleRemoveShare = (sharedToName: string) => {
+		http.delete(`/api/v1/modelgroup/share`, {
+			data: {
+				modelGroupId: modelGroup.modelGroup.id,
+				sharedToName,
+			},
+		})
+			.then((res) => {
+				console.log(res);
+				removeShare(res.data.modelGroupId, res.data.sharedToName);
+				toggleDeleteShareConfirmation(false);
+			})
+			.catch((err) => {
+				setError({
+					status: err.response.staus,
+					message: err.reponse.data.message,
+				});
+			});
+	};
+
 	return (
 		<div className={styles["modelgroup-item-container"]}>
 			<div className={styles["modelgroup-left-container"]}>
@@ -112,11 +144,35 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 					}
 
 					return (
-						<div key={share.sharedByName + share.sharedToName}>
-							{shareUsername}
+						<div
+							key={share.sharedByName + share.sharedToName}
+							className={styles["share-item-container"]}
+						>
+							<div>{shareUsername}</div>
+							{modelGroup.owner && (
+								<button
+									onClick={() => {
+										setShowShareConfirmation((prev) => ({
+											...prev,
+											sharedToName: share.sharedToName,
+										}));
+										toggleDeleteShareConfirmation(true);
+									}}
+								>
+									X
+								</button>
+							)}
 						</div>
 					);
 				})}
+				<ConfirmationPopup
+					message={`Are you sure you want to unshare ?`}
+					showCondition={showShareConfirmation.show}
+					handleConfirm={() =>
+						handleRemoveShare(showShareConfirmation.sharedToName)
+					}
+					toggleConfirmation={toggleDeleteShareConfirmation}
+				/>
 			</div>
 
 			{modelGroup.owner && (

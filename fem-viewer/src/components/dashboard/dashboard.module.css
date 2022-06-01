@@ -204,3 +204,23 @@
 	align-items: flex-start;
 	padding-left: 10px;
 }
+
+.share-item-container {
+	display: flex;
+	flex-direction: row;
+}
+
+.share-item-container > button {
+	color: red;
+	border: 1px solid red;
+	background-color: white;
+	width: 30%;
+	height: 30%;
+	margin-left: 5px;
+}
+
+.share-item-container > button:hover {
+	color: white;
+	border: 1px solid white;
+	background-color: red;
+}

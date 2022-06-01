@@ -40,13 +40,15 @@ class ShareService extends BaseService {
 			},
 		});
 
-		await this.db.share.create({
+		const share = await this.db.share.create({
 			data: {
 				sharedByName: this.req.user.username,
 				sharedToName: usernameToShareWith,
 				modelGroupId: modelGroupId,
 			},
 		});
+
+		return share;
 	}
 }
 

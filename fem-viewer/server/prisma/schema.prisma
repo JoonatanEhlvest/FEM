@@ -16,7 +16,7 @@ enum UserRole {
 }
 
 model User {
-  id  String @id @default(uuid())
+  id String @id @default(uuid())
 
   username String @unique
   password String @unique
@@ -29,37 +29,37 @@ model User {
 
   sharedTo Share[] @relation("sharedTo")
 
-  
-  accounts User[] @relation("createdBy")
-  createdBy User? @relation("createdBy", fields: [createdById], references: [id], onDelete: Cascade) 
+
+  accounts    User[]  @relation("createdBy")
+  createdBy   User?   @relation("createdBy", fields: [createdById], references: [id], onDelete: Cascade)
   createdById String?
 }
 
 model File {
-  id  String @id @default(uuid())
+  id String @id @default(uuid())
 
-  modelGroup ModelGroup @relation(fields: [modelGroupId], references: [id], onDelete: Cascade)
+  modelGroup   ModelGroup @relation(fields: [modelGroupId], references: [id], onDelete: Cascade)
   modelGroupId String
 
   name String
 }
 
 model ModelGroup {
-  id  String @id @default(uuid())
+  id String @id @default(uuid())
 
   name String @unique
 
 
-  files File[] 
-  users ModelGroupsOnUsers[]
+  files  File[]
+  users  ModelGroupsOnUsers[]
   shares Share[]
 }
 
 model ModelGroupsOnUsers {
-  modelGroup  ModelGroup  @relation(fields: [modelGroupId], references: [id], onDelete: Cascade)
-  modelGroupId  String
+  modelGroup   ModelGroup @relation(fields: [modelGroupId], references: [id], onDelete: Cascade)
+  modelGroupId String
 
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   owner Boolean
@@ -68,16 +68,15 @@ model ModelGroupsOnUsers {
 }
 
 model Share {
-  id  String @id @default(uuid())
 
-  modelGroup  ModelGroup  @relation(fields: [modelGroupId], references: [id], onDelete: Cascade)
-  modelGroupId  String
+  modelGroup   ModelGroup @relation(fields: [modelGroupId], references: [id], onDelete: Cascade)
+  modelGroupId String
 
-  sharedBy  User  @relation("sharedBy", fields: [sharedByName], references: [username], onDelete: Cascade)
+  sharedBy     User   @relation("sharedBy", fields: [sharedByName], references: [username], onDelete: Cascade)
   sharedByName String
 
-  sharedTo  User  @relation("sharedTo", fields: [sharedToName], references: [username], onDelete: Cascade)
+  sharedTo     User   @relation("sharedTo", fields: [sharedToName], references: [username], onDelete: Cascade)
   sharedToName String
+
+  @@id([sharedToName, modelGroupId, sharedByName])
 }
-
-

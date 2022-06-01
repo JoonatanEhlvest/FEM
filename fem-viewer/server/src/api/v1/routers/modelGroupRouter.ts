@@ -5,6 +5,7 @@ import { Prisma } from "@prisma/client";
 import ShowService from "../services/modelGroup/show";
 import ShareService from "../services/modelGroup/share";
 import DeleteService from "../services/modelGroup/delete";
+import ShareDeleteService from "../services/modelGroup/share/delete";
 import ApplicationError from "../../../error/ApplicationError";
 
 const router = Router();
@@ -23,8 +24,8 @@ router.patch(
 
 		try {
 			const service = new ShareService(req, db);
-			await service.execute();
-			return res.status(200).end();
+			const response = await service.execute();
+			return res.status(200).json(response);
 		} catch (err) {
 			if (err instanceof Prisma.PrismaClientKnownRequestError) {
 				if (err.code === "P2002") {
@@ -45,6 +46,21 @@ router.patch(
 			}
 
 			return res.status(500).json({ message: err });
+		}
+	}
+);
+
+router.delete(
+	"/modelgroup/share",
+	[checkAuth, authorize(["ADMIN", "DEVELOPER"])],
+	async (req, res) => {
+		const service = new ShareDeleteService(req, db);
+		try {
+			const response = await service.execute();
+
+			return res.json(response);
+		} catch (err) {
+			res.status(422).json({ message: err });
 		}
 	}
 );
