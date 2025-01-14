@@ -21,6 +21,8 @@ To upload a model, navigate to the upload page from your dashboard by clicking t
 
 Once on the upload page, enter a desired name for the model group you wish to upload. After that, choose the FEM toolkit XML export for the models you wish to upload. Next choose the FEM toolkit SVG exports for the same models. Click the upload button to finalize the process. On success a popup is displayed, saying that the model was successfully uploaded. You can continue uploading or choose to navigate back to your dashboard clicking the button in the header.
 
+**Important:** The uploaded svg files must have the same name as the models they are exporting.
+
 ![image](https://user-images.githubusercontent.com/55451470/167419131-dbd9b8b2-646b-46af-b343-e6397c81e54a.png)
 
 ## Sharing model groups
