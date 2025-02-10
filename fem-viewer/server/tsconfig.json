@@ -10,10 +10,18 @@
 		"outDir": "build",
 		"baseUrl": ".",
 
-		"types": [],
+		"types": [
+			"jest",
+			"node"
+		],
 		"typeRoots": ["./@types", "./node_modules/@types"]
 	},
 	"files": ["@types/index.d.ts"],
-	"include": ["src", "server.ts", "types"],
+	"include": [
+		"src",
+		"server.ts",
+		"types",
+		"**/*.test.ts"
+	],
 	"exclude": ["node_modules", "build", "../src"]
 }
