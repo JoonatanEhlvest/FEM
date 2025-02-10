@@ -1,58 +1,60 @@
 {
-	"name": "fem-viewer",
-	"version": "0.1.0",
-	"private": true,
-	"dependencies": {
-		"@testing-library/jest-dom": "^5.14.1",
-		"@testing-library/react": "^12.0.0",
-		"@testing-library/user-event": "^13.2.1",
-		"axios": "^0.25.0",
-		"fast-xml-parser": "^4.0.2",
-		"path": "^0.12.7",
-		"rc-slider": "^10.0.0-alpha.4",
-		"react": "^17.0.2",
-		"react-dom": "^17.0.2",
-		"react-draggable": "^4.4.4",
-		"react-resizable": "^3.0.4",
-		"react-router-dom": "^6.2.2",
-		"react-scripts": "5.0.0",
-		"reactjs-popup": "^2.0.5",
-		"typescript": "^4.4.2",
-		"web-vitals": "^2.1.0"
-	},
-	"scripts": {
-		"start:dev": "PORT=3001 react-scripts start",
-		"db:start": "cd server && docker-compose up -d",
-		"db:stop": "cd server && docker-compose down",
-		"build": "react-scripts build",
-		"test": "react-scripts test",
-		"eject": "react-scripts eject",
-		"start": "NODE_ENV=production yarn run build && (cd server && yarn start)"
-	},
-	"eslintConfig": {
-		"extends": [
-			"react-app",
-			"react-app/jest"
-		]
-	},
-	"browserslist": {
-		"production": [
-			">0.2%",
-			"not dead",
-			"not op_mini all"
-		],
-		"development": [
-			"last 1 chrome version",
-			"last 1 firefox version",
-			"last 1 safari version"
-		]
-	},
-	"devDependencies": {
-		"@types/jest": "^27.4.1",
-		"@types/rc-slider": "^9.3.1",
-		"@types/react": "^17.0.43",
-		"@types/react-dom": "^17.0.14",
-		"@types/react-resizable": "^1.7.4"
-	},
-	"proxy": "http://localhost:3000"
+  "name": "fem-viewer",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "axios": "^0.25.0",
+    "fast-xml-parser": "^4.0.2",
+    "path": "^0.12.7",
+    "rc-slider": "9.7.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-draggable": "^4.4.4",
+    "react-resizable": "^3.0.4",
+    "react-router-dom": "^6.2.2",
+    "react-scripts": "5.0.0",
+    "reactjs-popup": "^2.0.5",
+    "typescript": "4.4.3",
+    "web-vitals": "^2.1.0"
+  },
+  "scripts": {
+    "start:dev": "PORT=3001 react-scripts start",
+    "start:dev:all": "concurrently \"yarn start:dev\" \"cd server && yarn start:dev\"",
+    "db:start": "cd server && docker-compose up -d",
+    "db:stop": "cd server && docker-compose down",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "start": "NODE_ENV=production yarn run build && (cd server && yarn start)"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "^27.4.1",
+    "@types/rc-slider": "^9.3.1",
+    "@types/react": "^17.0.43",
+    "@types/react-dom": "^17.0.14",
+    "@types/react-resizable": "^1.7.4",
+    "concurrently": "^9.1.2"
+  },
+  "proxy": "http://localhost:3000"
 }
