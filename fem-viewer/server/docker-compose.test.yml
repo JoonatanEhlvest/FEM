@@ -1,0 +1,24 @@
+services:
+    db_test:
+        container_name: femdb_test_container
+        image: mysql:5.7
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            MYSQL_DATABASE: ${MYSQL_DB}
+            MYSQL_USER: ${DB_USER}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+        ports:
+            - "${DB_PORT}:3306"
+        expose:
+            - "3306"
+        volumes:
+            - femdb_test:/var/lib/mysql
+        ulimits:
+            nofile:
+                soft: 262144
+                hard: 262144
+
+volumes:
+    femdb_test: 

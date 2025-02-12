@@ -12,7 +12,12 @@ import sessionStore from "./src/sessionStorage";
 import passport from "passport";
 import setupPassport from "./src/passportSetup";
 
-dotenv.config();
+// Load environment variables based on NODE_ENV
+if (process.env.NODE_ENV === 'test') {
+	dotenv.config({ path: '.env.test' });
+} else {
+	dotenv.config();
+}
 
 const PRODUCTION = process.env.NODE_ENV === "production";
 startup();
@@ -67,6 +72,12 @@ app.use((req, res, next) => {
 	res.sendFile(path.join(CLIENT_PATH, "build", "index.html"));
 });
 
-app.listen(process.env.PORT || 5000, () => {
-	console.log(`Server started on ${process.env.PORT || 5000}`);
+// Move server creation to separate function for testing
+const server = app.listen(process.env.PORT || 5000, () => {
+	if (process.env.NODE_ENV !== 'test') {
+		console.log(`Server started on ${process.env.PORT || 5000}`);
+	}
 });
+
+// Export for testing
+export { app, server };
