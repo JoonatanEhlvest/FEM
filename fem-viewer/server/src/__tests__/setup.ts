@@ -1,32 +1,31 @@
-import { PrismaClient } from '@prisma/client';
+// Written with help from claude-3.5-sonnet and Cursor
 import dotenv from 'dotenv';
 import { hashPassword } from '../passportSetup';
 import sessionStore from '../sessionStorage';
+import { getPrisma, TEST_ADMIN, getApp } from './testUtils';
+import ServerInstance from '../../server';
 
 // Ensure we're using test environment
 process.env.NODE_ENV = 'test';
 
+const prisma = getPrisma();
 // Load test environment variables
 dotenv.config({ path: '.env.test' });
 
-const prisma = new PrismaClient();
-
-// Test user credentials that can be used across tests
-export const TEST_ADMIN = {
-    username: 'testadmin',
-    password: 'testpass123',
-    role: 'ADMIN' as const
-};
-
-// Global setup before all tests
 beforeAll(async () => {
+    // Clean database first
+    await prisma.file.deleteMany({});
+    await prisma.modelGroup.deleteMany({});
+    await prisma.user.deleteMany({});
+
     // Create admin user
     await new Promise<void>((resolve) => {
         hashPassword(TEST_ADMIN.password, async (hash) => {
             try {
+                // Try to create user, if it fails (already exists) just continue
                 await prisma.user.upsert({
                     where: { username: TEST_ADMIN.username },
-                    update: {},
+                    update: {},  // No updates if exists
                     create: {
                         username: TEST_ADMIN.username,
                         password: hash,
@@ -35,27 +34,26 @@ beforeAll(async () => {
                 });
                 resolve();
             } catch (error) {
-                console.error('Error creating test admin:', error);
+                console.error('Error in test setup:', error);
                 resolve();
             }
         });
     });
 });
 
-// Global teardown after all tests
 afterAll(async () => {
-    // Close database connection
     await prisma.$disconnect();
     
-    // Close session store
+    // Close server and session store
+    const serverInstance = ServerInstance.getInstance();
+    if (serverInstance.getServer()) {
+        await new Promise<void>((resolve) => {
+            serverInstance.getServer()?.close(() => resolve());
+        });
+    }
     await new Promise<void>((resolve) => {
         sessionStore.close(() => resolve());
     });
-});
-
-// Reset database between tests if needed
-beforeEach(async () => {
-    // Add any per-test setup here
 });
 
 afterEach(async () => {
@@ -67,4 +65,4 @@ afterEach(async () => {
             }
         }
     });
-}); 
+});

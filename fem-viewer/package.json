@@ -23,10 +23,12 @@
   "scripts": {
     "start:dev": "PORT=3001 react-scripts start",
     "start:dev:all": "concurrently \"yarn start:dev\" \"cd server && yarn start:dev\"",
-    "db:start": "cd server && docker-compose up -d",
-    "db:stop": "cd server && docker-compose down",
+    "db:start": "cd server && yarn db:start",
+    "db:stop": "cd server && yarn db:stop",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "cd server && yarn test",
+    "test:setup": "cd server && yarn test:setup",
+    "test:teardown": "cd server && yarn test:teardown",
     "eject": "react-scripts eject",
     "start": "NODE_ENV=production yarn run build && (cd server && yarn start)"
   },

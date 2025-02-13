@@ -2,7 +2,14 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "setupFilesAfterEnv": ["<rootDir>/src/__tests__/setup.ts"],
-    "testMatch": ["**/?(*.)+(integration.test).ts"],
+    "testMatch": [
+        "**/__tests__/**/*.integration.test.ts"
+    ],
+    "testPathIgnorePatterns": [
+        "/node_modules/",
+        "setup.ts",
+        "testUtils.ts"
+    ],
     "transform": {
         "^.+\\.ts$": "ts-jest"
     }

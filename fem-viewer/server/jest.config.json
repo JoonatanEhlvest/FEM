@@ -6,6 +6,11 @@
         "**/__tests__/**/*.ts",
         "**/?(*.)+(spec|test|integration.test).ts"
     ],
+    "testPathIgnorePatterns": [
+        "/node_modules/",
+        "setup.ts",
+        "testUtils.ts"
+    ],
     "transform": {
         "^.+\\.ts$": "ts-jest"
     }

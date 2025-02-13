@@ -1,19 +1,18 @@
-import { app, server } from '../../../server';
-import supertest from 'supertest';
-import { TEST_ADMIN } from '../setup';
-import { PrismaClient } from '@prisma/client';
-const request = supertest(app);
-const prisma = new PrismaClient();
+// Written with help from claude-3.5-sonnet and Cursor
+import { getPrisma, TEST_ADMIN, request, createTestAgent } from '../testUtils';
+
+const prisma = getPrisma();
 
 describe('Authentication', () => {
+    const agent = createTestAgent();  // Fresh agent for this suite
+
     afterAll(async () => {
         await prisma.$disconnect();
-        server.close();
     });
 
     describe('POST /api/v1/login', () => {
         it('should login successfully with correct credentials', async () => {
-            const response = await request
+            const response = await agent
                 .post('/api/v1/login')
                 .send({
                     username: TEST_ADMIN.username,
@@ -53,30 +52,30 @@ describe('Authentication', () => {
 
     describe('GET /api/v1/session', () => {
         it('should return null for unauthenticated user', async () => {
+            // Use request for unauthenticated test
             const response = await request.get('/api/v1/session');
-            
             expect(response.status).toBe(200);
             expect(response.body.user).toBeNull();
         });
 
         it('should return user data for authenticated user', async () => {
-            const agent = supertest.agent(app);
-            
             // Login first
-            await agent
+            const loginResponse = await agent
                 .post('/api/v1/login')
                 .send({
                     username: TEST_ADMIN.username,
                     password: TEST_ADMIN.password
                 });
 
-            // Check session
-            const response = await agent.get('/api/v1/session');
-            
-            expect(response.status).toBe(200);
-            expect(response.body.user).toBeDefined();
-            expect(response.body.user.username).toBe(TEST_ADMIN.username);
-            expect(response.body.user.role).toBe(TEST_ADMIN.role);
+            expect(loginResponse.status).toBe(200);
+            expect(loginResponse.body.user).toBeDefined();
+
+            // Now check session
+            const sessionResponse = await agent.get('/api/v1/session');
+            expect(sessionResponse.status).toBe(200);
+            expect(sessionResponse.body.user).toBeDefined();
+            expect(sessionResponse.body.user.username).toBe(TEST_ADMIN.username);
+            expect(sessionResponse.body.user.role).toBe(TEST_ADMIN.role);
         });
     });
 }); 
