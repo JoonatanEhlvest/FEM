@@ -4,7 +4,6 @@ import React, { ChangeEvent, useState } from "react";
 import useFEM from "../../state/useFEM";
 import { ATTR_PREFIX } from "../../utlitity";
 import createParser from "../../parser";
-import { upload } from "@testing-library/user-event/dist/upload";
 import Header from "../header/Header";
 import { NavLink } from "react-router-dom";
 import styles from "./fileUpload.module.css";
