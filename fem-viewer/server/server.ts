@@ -100,7 +100,10 @@ class ServerInstance {
 
 	public start(port: number = Number(process.env.PORT) || 5000): Server {
 		if (!this.server) {
-			this.server = this.app.listen(port, () => {
+			this.server = this.app.listen(port, (error) => {
+				if (error) {
+					throw error; // e.g. EADDRINUSE
+				}
 				console.log(`Server started on ${port}`);
 			});
 		}
