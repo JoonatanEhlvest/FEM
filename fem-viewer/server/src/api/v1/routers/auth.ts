@@ -104,16 +104,20 @@ router.delete("/logout", checkAuth, (req, res) => {
 router.get("/session", async (req, res) => {
 	console.log("Session", req.user);
 	if (req.isAuthenticated()) {
-		return res.json({ user: req.user });
+		res.json({ user: req.user });
+		return 
 	}
-	return res.json({ user: null });
-});
+	res.json({ user: null });
+	return 
+	});
 
 router.get("/authenticated", async (req, res, next) => {
 	if (req.isAuthenticated()) {
-		return res.json({ session: req.session, user: req.user });
+		res.json({ session: req.session, user: req.user });
+		return 
 	} else {
-		return res.status(401).json({ message: "Unauthenticated" });
+		res.status(401).json({ message: "Unauthenticated" });
+		return 
 	}
 });
 
