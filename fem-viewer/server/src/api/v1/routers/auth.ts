@@ -94,8 +94,13 @@ router.post("/login", async (req, res, next) => {
 
 router.delete("/logout", checkAuth, (req, res) => {
 	try {
-		req.logOut();
-		res.status(200).json({ message: "logged out" });
+		req.logOut((err) => {
+			if (err) {
+				res.status(400).json({ message: err });
+				return;
+			}
+			res.status(200).json({ message: "logged out" });
+		});
 	} catch (e) {
 		res.status(400).json({ message: e });
 	}
