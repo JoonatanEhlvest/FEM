@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -7,11 +7,13 @@ import FEMState, { initialState } from "./state/FEMState";
 import { checkLoggedIn } from "./utlitity/session";
 
 const renderApp = (preloadedState: FEMState) => {
-	ReactDOM.render(
+	const container = document.getElementById("root");
+	if (!container) throw new Error("Root element not found");
+	const root = createRoot(container);
+	root.render(
 		<React.StrictMode>
 			<App preloadedState={preloadedState} />
-		</React.StrictMode>,
-		document.getElementById("root")
+		</React.StrictMode>
 	);
 };
 
