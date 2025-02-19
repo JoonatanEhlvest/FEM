@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC, JSX } from "react";
 import { Navigate } from "react-router-dom";
 import { User } from "../../state/FEMState";
 import { UserRole } from "../dashboard/Dashboard";
