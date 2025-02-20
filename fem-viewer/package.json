@@ -16,7 +16,7 @@
     "react-resizable": "^3.0.4",
     "react-router-dom": "7.2.0",
     "react-scripts": "5.0.1",
-    "reactjs-popup": "^2.0.5",
+    "@radix-ui/react-dialog": "^1.1.6",
     "typescript": "5.7.3",
     "web-vitals": "4.2.4"
   },
