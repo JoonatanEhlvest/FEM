@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, Router, NextFunction } from "express";
 import multer from "multer";
 import storage from "../../../storage";
 import db from "../../../db/index";
@@ -18,20 +18,21 @@ const upload = multer({
 
 const uploadArray = upload.array("files");
 
-router.post("/upload", checkAuth, async (req, res, next) => {
+router.post("/upload", checkAuth, async (req: Request, res: Response, next: NextFunction) => {
 	uploadArray(req, res, async (err) => {
 		if (err) {
-			return res.status(422).json({ message: err.message });
+			res.status(422).json({ message: err.message });
+			return;
 		}
 		const files = req.files as Express.Multer.File[];
 		if (!files) {
-			return next();
+			next();
+			return;
 		}
 
 		if (req.body.modelGroupName.length < 1) {
-			return res
-				.status(422)
-				.json({ message: "Please include a name for the model group" });
+			res.status(422).json({ message: "Please include a name for the model group" });
+			return;
 		}
 
 		const modelGroupName = generateModelGroupName(
@@ -47,17 +48,15 @@ router.post("/upload", checkAuth, async (req, res, next) => {
 				await fs.rm(path.join(UPLOAD_DIR, modelGroupName), {
 					recursive: true,
 				});
-				return res
-					.status(422)
-					.json({ message: "No xml file provided" });
+				res.status(422).json({ message: "No xml file provided" });
+				return;
 			}
 		} catch (err) {
 			await fs.rm(path.join(UPLOAD_DIR, modelGroupName), {
 				recursive: true,
 			});
-			return res
-				.status(422)
-				.json({ message: `Couldn't parse ${xml.originalname}` });
+			res.status(422).json({ message: `Couldn't parse ${xml.originalname}` });
+			return;
 		}
 
 		try {
@@ -84,20 +83,21 @@ router.post("/upload", checkAuth, async (req, res, next) => {
 				},
 			});
 
-			return res.status(200).end();
+			res.status(200).end();
 		} catch (err) {
 			if (err instanceof Prisma.PrismaClientKnownRequestError) {
 				if (err.code === "P2002") {
-					return res.status(422).json({
+					res.status(422).json({
 						message: "Model group with this name already taken",
 					});
+					return;
 				}
 			}
 		}
 	});
 });
 
-router.get("/upload", checkAuth, async (req, res) => {
+router.get("/upload", checkAuth, async (req: Request, res: Response) => {
 	const modelGroups = await db.modelGroup.findMany({
 		where: {
 			users: {

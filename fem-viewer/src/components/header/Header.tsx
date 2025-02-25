@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC } from "react";
+import React, { CSSProperties, FC, JSX } from "react";
 import styles from "./header.module.css";
 
 type Props = {

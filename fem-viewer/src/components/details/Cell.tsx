@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC, JSX } from "react";
 import styles from "./cell.module.css";
 
 type Props = {

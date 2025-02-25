@@ -1,8 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import http from "../../http";
 import { User } from "../../state/FEMState";
-import useFEM from "../../state/useFEM";
-import ConfirmationPopup from "../confirmationPopup/ConfirmationPopup";
 import CreatedUserListItem from "./CreatedUserListItem";
 import { UserRole } from "./Dashboard";
 import styles from "./dashboard.module.css";

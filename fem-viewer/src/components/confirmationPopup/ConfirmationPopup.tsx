@@ -1,5 +1,5 @@
-import React, { CSSProperties, FC } from "react";
-import Popup from "reactjs-popup";
+import React, { FC } from "react";
+import * as Dialog from '@radix-ui/react-dialog';
 import styles from "./confirmationPopup.module.css";
 
 type Props = {
@@ -9,17 +9,6 @@ type Props = {
 	message: string;
 };
 
-const contentStyle: CSSProperties = {
-	background: "rgb(255, 255, 255)",
-	padding: "10px",
-	border: "4px solid var(--bg-primary)",
-	borderRadius: "10px 10px",
-};
-
-const overlayStyle: CSSProperties = {
-	backgroundColor: "rgba(100, 100, 100, 0.5)",
-};
-
 const ConfirmationPopup: FC<Props> = ({
 	showCondition,
 	handleConfirm,
@@ -27,28 +16,27 @@ const ConfirmationPopup: FC<Props> = ({
 	message,
 }) => {
 	return (
-		<Popup
-			open={showCondition}
-			onClose={() => toggleConfirmation(false)}
-			contentStyle={contentStyle}
-			overlayStyle={overlayStyle}
-		>
-			<div>{message}</div>
-			<div className={styles["btn-container"]}>
-				<button
-					className={styles["btn-confirm"]}
-					onClick={handleConfirm}
-				>
-					Delete
-				</button>
-				<button
-					className={styles["btn-close"]}
-					onClick={() => toggleConfirmation(false)}
-				>
-					X
-				</button>
-			</div>
-		</Popup>
+		<Dialog.Root open={showCondition} onOpenChange={toggleConfirmation}>
+			<Dialog.Portal>
+				<Dialog.Overlay className={styles["dialog-overlay"]} />
+				<Dialog.Content className={styles["dialog-content"]}>
+					<div>{message}</div>
+					<div className={styles["btn-container"]}>
+						<button
+							className={styles["btn-confirm"]}
+							onClick={handleConfirm}
+						>
+							Delete
+						</button>
+						<Dialog.Close asChild>
+							<button className={styles["btn-close"]}>
+								X
+							</button>
+						</Dialog.Close>
+					</div>
+				</Dialog.Content>
+			</Dialog.Portal>
+		</Dialog.Root>
 	);
 };
 

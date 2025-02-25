@@ -1,11 +1,14 @@
 {
 	"compilerOptions": {
-		"module": "commonjs",
+		"module": "node16",
 		"esModuleInterop": true,
-		"target": "ES6",
+		"target": "es2022",
 		"jsx": "react",
+		// "strict": true,
+		// "skipLibCheck": true,
+		// "forceConsistentCasingInFileNames": true,
 		// "noImplicitAny": true,
-		"moduleResolution": "node",
+		"moduleResolution": "node16",
 		"sourceMap": true,
 		"outDir": "build",
 		"baseUrl": ".",
