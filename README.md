@@ -50,3 +50,18 @@ $ yarn start:dev
 in both the **fem-viewer** and **fem-viewer/server** directories
 
 Link to user manual: https://github.com/siimlangel/FEM/tree/master/fem-viewer
+
+## Running a docker database
+
+in the **fem-viewer/server** directory
+
+To start a mysql docker server locally run:
+
+```console
+$ docker compose up
+```
+You can use
+```
+$ yarn user:create -u [username] -p [password] -r ADMIN
+```
+to create an admin user

@@ -1,11 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import Draggable from "react-draggable";
-import { Navigate } from "react-router-dom";
-import Popup from "reactjs-popup";
 import useFEM from "../../state/useFEM";
 import Model from "../model/Model";
 import RenderSVG from "../svgrenderer/svgrenderer";
-import DetailsPopup from "./DetailsPopup";
 import Header from "./Header";
 import styles from "./viewer.module.css";
 

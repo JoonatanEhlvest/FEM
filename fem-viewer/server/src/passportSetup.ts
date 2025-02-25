@@ -2,6 +2,8 @@ import { PassportStatic } from "passport";
 import passportLocal from "passport-local";
 import db from "./db";
 import bcrypt from "bcrypt";
+import type { User } from "@prisma/client";
+import type { SerializedUser } from "../@types";
 
 export const hashPassword = (password: string, cb: (hash: string) => void) => {
 	bcrypt.genSalt(10, (err, salt) => {
@@ -49,11 +51,7 @@ const setupPassport = (passport: PassportStatic) => {
 				}
 				validatePassword(password, user.password, (isValid) => {
 					if (isValid) {
-						return done(null, {
-							id: user.id,
-							role: user.role,
-							username: user.username,
-						});
+						return done(null, user);
 					} else {
 						return done(null, false);
 					}
@@ -71,20 +69,25 @@ const setupPassport = (passport: PassportStatic) => {
 
 	passport.use(strategy);
 
-	passport.serializeUser((user, done) => {
-		done(null, user);
+	passport.serializeUser((user: User, done) => {
+		const sessionUser: SerializedUser = {
+			id: user.id,
+			role: user.role,
+			username: user.username,
+			createdById: user.createdById
+		};
+		done(null, sessionUser);
 	});
 
-	passport.deserializeUser((user: Express.User, done) => {
+	passport.deserializeUser((sessionUser: SerializedUser, done) => {
 		db.user
 			.findUnique({
-				where: { id: user.id as string },
+				where: { id: sessionUser.id },
 			})
 			.then((user) => {
 				if (!user) {
 					return done(null, false);
 				}
-
 				return done(null, user);
 			})
 			.catch((err) => {

@@ -1,4 +1,4 @@
-import { Request, Router } from "express";
+import { Request, Response, Router } from "express";
 import { checkAuth, authorize } from "./shared";
 import db from "../../../db";
 import ShowService from "../services/user/show";
@@ -12,13 +12,13 @@ const router = Router();
 router.get(
 	"/user/created/:createdById",
 	[authorize(["ADMIN", "DEVELOPER"])],
-	async (req, res) => {
+	async (req: Request, res: Response) => {
 		try {
 			const service = new ListService(req, db);
 			const users = await service.execute();
 			res.json({ users });
 		} catch (err) {
-			return res.status(500).json({ message: err.message });
+			res.status(500).json({ message: err.message });
 		}
 	}
 );
@@ -26,44 +26,41 @@ router.get(
 router.delete(
 	"/user/created/:toDeleteId",
 	[authorize(["ADMIN", "DEVELOPER"])],
-	async (req, res) => {
+	async (req: Request, res: Response) => {
 		try {
 			const service = new DeleteService(req, db);
 			const user = await service.execute();
 			res.json({ user });
 		} catch (err) {
 			if (err instanceof UnauthorizedError) {
-				return res.status(err.code).json({ message: err.message });
+				res.status(err.code).json({ message: err.message });
 			} else {
-				return res.status(500).json({ message: err.message });
+				res.status(500).json({ message: err.message });
 			}
 		}
 	}
 );
 
-router.get("/user/:id", [checkAuth], async (req, res) => {
+router.get("/user/:id", [checkAuth], async (req: Request, res: Response) => {
 	try {
 		const service = new ShowService(req, db);
 		const user = await service.execute();
-
 		res.json({ user });
 	} catch (err) {
-		return res.status(500).json({ message: err.message });
+		res.status(500).json({ message: err.message });
 	}
 });
 
 router.patch(
 	"/user/changepassword/",
 	[checkAuth],
-	async (req: Request, res) => {
+	async (req: Request, res: Response) => {
 		try {
 			const service = new ChangePasswordService(req, db);
-
 			await service.execute();
-
 			res.status(200).json({ message: "successfully changed password" });
 		} catch (err) {
-			return res.status();
+			res.status(500).json({ message: err.message });
 		}
 	}
 );

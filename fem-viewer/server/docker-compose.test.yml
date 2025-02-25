@@ -1,6 +1,6 @@
 services:
-    db:
-        container_name: femdb_container
+    db_test:
+        container_name: femdb_test_container
         image: mysql:5.7
         command: --default-authentication-plugin=mysql_native_password
         restart: always
@@ -14,11 +14,11 @@ services:
         expose:
             - "3306"
         volumes:
-            - femdb:/var/lib/mysql
-        ulimits: # Setting this can prevent memory issues on linux
+            - femdb_test:/var/lib/mysql
+        ulimits:
             nofile:
                 soft: 262144
                 hard: 262144
 
 volumes:
-    femdb:
+    femdb_test: 

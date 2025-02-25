@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model>
+    <node id="1" x="0" y="0" z="0"/>
+    <node id="2" x="1" y="0" z="0"/>
+    <element type="bar" node1="1" node2="2"/>
+</model> 

@@ -1,19 +1,30 @@
 {
 	"compilerOptions": {
-		"module": "commonjs",
+		"module": "node16",
 		"esModuleInterop": true,
-		"target": "ES6",
+		"target": "es2022",
 		"jsx": "react",
+		// "strict": true,
+		// "skipLibCheck": true,
+		// "forceConsistentCasingInFileNames": true,
 		// "noImplicitAny": true,
-		"moduleResolution": "node",
+		"moduleResolution": "node16",
 		"sourceMap": true,
 		"outDir": "build",
 		"baseUrl": ".",
 
-		"types": [],
+		"types": [
+			"jest",
+			"node"
+		],
 		"typeRoots": ["./@types", "./node_modules/@types"]
 	},
 	"files": ["@types/index.d.ts"],
-	"include": ["src", "server.ts", "types"],
+	"include": [
+		"src",
+		"server.ts",
+		"types",
+		"**/*.test.ts"
+	],
 	"exclude": ["node_modules", "build", "../src"]
 }
