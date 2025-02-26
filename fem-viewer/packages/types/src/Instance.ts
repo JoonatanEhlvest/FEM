@@ -1,5 +1,4 @@
-import InstanceClass from "./InstanceClass";
-import Reference from "./Reference";
+import { InstanceClass } from "./InstanceClass";
 
 export interface InstancePosition {
 	x: number;
@@ -33,7 +32,7 @@ export type Interrefs = {
 	[key in InterrefType]: Iref | undefined;
 };
 
-export default interface Instance {
+export interface Instance {
 	id: string;
 	name: string;
 	class: InstanceClass;
@@ -59,11 +58,11 @@ export default interface Instance {
 	Interrefs: Interrefs;
 }
 
-const INSTANCE_DEFAULTS: { [key: string]: number | string } = {
+export const INSTANCE_DEFAULTS: { [key: string]: number | string } = {
 	fontsize: 10,
 };
 
-const isSubclass = (i: Instance): boolean => {
+export const isSubclass = (i: Instance): boolean => {
 	const subclasses: InstanceClass[] = [
 		"Asset_Subclass",
 		"Process_Subclass",
@@ -71,5 +70,3 @@ const isSubclass = (i: Instance): boolean => {
 	];
 	return subclasses.includes(i.class);
 };
-
-export { INSTANCE_DEFAULTS, isSubclass };

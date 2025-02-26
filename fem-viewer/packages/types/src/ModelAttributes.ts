@@ -13,7 +13,7 @@ export type ModelAttributeColors = {
 	};
 };
 
-export default interface ModelAttributes {
+export interface ModelAttributes {
 	colors: ModelAttributeColors;
 
 	// TODO: move these into ModelAttributeColors

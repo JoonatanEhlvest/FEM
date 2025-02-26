@@ -1,8 +1,8 @@
-import Connector from "./Connector";
-import Instance from "./Instance";
-import ModelAttributes from "./ModelAttributes";
+import { Connector } from "./Connector";
+import { Instance } from "./Instance";
+import { ModelAttributes } from "./ModelAttributes";
 
-export default interface Model {
+export interface Model {
 	id: string;
 	applib: string;
 	libtype: string;

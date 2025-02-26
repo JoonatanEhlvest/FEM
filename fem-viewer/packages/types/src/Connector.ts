@@ -1,6 +1,6 @@
-import Instance from "./Instance";
+import { Instance } from "./Instance";
 
-export default interface Connector {
+export interface Connector {
 	id: string;
 	class: string;
 	fromId: Instance["id"];

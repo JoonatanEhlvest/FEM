@@ -1,0 +1,60 @@
+{
+  "name": "@fem-viewer/types",
+  "version": "0.1.0",
+  "description": "Type definitions for FEM Viewer",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./Model": {
+      "types": "./dist/Model.d.ts",
+      "default": "./dist/Model.js"
+    },
+    "./Instance": {
+      "types": "./dist/Instance.d.ts",
+      "default": "./dist/Instance.js"
+    },
+    "./Connector": {
+      "types": "./dist/Connector.d.ts",
+      "default": "./dist/Connector.js"
+    },
+    "./ModelAttributes": {
+      "types": "./dist/ModelAttributes.d.ts",
+      "default": "./dist/ModelAttributes.js"
+    },
+    "./InstanceClass": {
+      "types": "./dist/InstanceClass.d.ts",
+      "default": "./dist/InstanceClass.js"
+    },
+    "./Reference": {
+      "types": "./dist/Reference.d.ts",
+      "default": "./dist/Reference.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist",
+    "dev": "tsc --watch",
+    "lint": "eslint src --ext .ts",
+    "test": "jest"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "5.7.3",
+    "rimraf": "^5.0.5",
+    "eslint": "^8.57.0",
+    "@types/node": "22.13.4"
+  },
+  "peerDependencies": {
+    "typescript": ">=5.0.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+} 

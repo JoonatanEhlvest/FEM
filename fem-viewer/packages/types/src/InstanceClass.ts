@@ -9,6 +9,4 @@ export type InstanceSubclass =
 	| "Asset_Subclass"
 	| "External Actor_Subclass";
 
-type InstanceClass = BaseInstanceClass | InstanceSubclass;
-
-export default InstanceClass;
+export type InstanceClass = BaseInstanceClass | InstanceSubclass;
