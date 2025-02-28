@@ -1,0 +1,37 @@
+{
+	"compilerOptions": {
+		"module": "node16",
+		"esModuleInterop": true,
+		"target": "es2022",
+		"jsx": "react",
+		// "strict": true,
+		"skipLibCheck": true,
+		// "forceConsistentCasingInFileNames": true,
+		// "noImplicitAny": true,
+		"moduleResolution": "node16",
+		"sourceMap": true,
+		"outDir": "build",
+		"baseUrl": ".",
+		"paths": {
+			"@fem-viewer/types": ["../types/src"],
+			"@fem-viewer/parser": ["../parser/src"]
+		},
+		"types": [
+			"jest",
+			"node"
+		],
+		"typeRoots": [
+			"./node_modules/@types", 
+			"./@types",
+			"../../node_modules/@types"
+		]
+	},
+	"files": ["@types/index.d.ts"],
+	"include": [
+		"src",
+		"server.ts",
+		"types",
+		"**/*.test.ts"
+	],
+	"exclude": ["node_modules", "build"]
+}
