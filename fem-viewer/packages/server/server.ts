@@ -67,7 +67,7 @@ class ServerInstance {
 					httpOnly: true,
 					maxAge: 1000 * 60 * 60 * 24 * 7,
 					sameSite: true,
-					secure: PRODUCTION,
+					secure: PRODUCTION, // Recuires HTTPS for cookies, will cause issues in local development
 				},
 			})
 		);
