@@ -2,36 +2,36 @@
   "name": "@fem-viewer/types",
   "version": "0.1.0",
   "description": "Core domain model type definitions for FEM Viewer - shared between frontend and backend",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
     },
     "./Model": {
-      "types": "./dist/Model.d.ts",
-      "default": "./dist/Model.js"
+      "types": "./dist/src/Model.d.ts",
+      "default": "./dist/src/Model.js"
     },
     "./Instance": {
-      "types": "./dist/Instance.d.ts",
-      "default": "./dist/Instance.js"
+      "types": "./dist/src/Instance.d.ts",
+      "default": "./dist/src/Instance.js"
     },
     "./Connector": {
-      "types": "./dist/Connector.d.ts",
-      "default": "./dist/Connector.js"
+      "types": "./dist/src/Connector.d.ts",
+      "default": "./dist/src/Connector.js"
     },
     "./ModelAttributes": {
-      "types": "./dist/ModelAttributes.d.ts",
-      "default": "./dist/ModelAttributes.js"
+      "types": "./dist/src/ModelAttributes.d.ts",
+      "default": "./dist/src/ModelAttributes.js"
     },
     "./InstanceClass": {
-      "types": "./dist/InstanceClass.d.ts",
-      "default": "./dist/InstanceClass.js"
+      "types": "./dist/src/InstanceClass.d.ts",
+      "default": "./dist/src/InstanceClass.js"
     },
     "./Reference": {
-      "types": "./dist/Reference.d.ts",
-      "default": "./dist/Reference.js"
+      "types": "./dist/src/Reference.d.ts",
+      "default": "./dist/src/Reference.js"
     }
   },
   "files": [

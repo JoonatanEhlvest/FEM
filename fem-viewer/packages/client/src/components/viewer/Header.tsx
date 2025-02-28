@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FC } from "react";
-import Model from "../../state/types/Model";
+import { Model } from "@fem-viewer/types";
 import useFEM from "../../state/useFEM";
 import styles from "./header.module.css";
 import Slider from "rc-slider";

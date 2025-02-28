@@ -1,5 +1,6 @@
 // Written with help from claude-3.5-sonnet and Cursor
 import { getPrisma, TEST_ADMIN, request, createTestAgent } from '../testUtils';
+import { describe, it, expect, afterAll } from '@jest/globals';
 
 const prisma = getPrisma();
 

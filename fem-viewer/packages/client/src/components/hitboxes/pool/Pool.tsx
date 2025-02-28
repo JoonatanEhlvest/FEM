@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import Instance from "../../../state/types/Instance";
 import SharedInstanceProps from "../../shared/SharedInstanceProps";
 import styles from "./pool.module.css";
 

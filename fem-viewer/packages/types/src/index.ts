@@ -6,9 +6,10 @@
  */
 
 // Core interfaces
-export { Model } from './Model';
-export { Instance } from './Instance';
-export { Connector } from './Connector';
-export { ModelAttributes } from './ModelAttributes';
-export { InstanceClass } from './InstanceClass';
-export { Reference } from './Reference';
+export type { Model } from './Model';
+export type { Instance } from './Instance';
+export type { Connector } from './Connector';
+export type { ModelAttributes } from './ModelAttributes';
+export type { InstanceClass } from './InstanceClass';
+export type { Reference } from './Reference';
+

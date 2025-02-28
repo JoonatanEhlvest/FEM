@@ -9,11 +9,12 @@
     "packages/*"
   ],
   "scripts": {
-    "start": "yarn build && yarn workspace @fem-viewer/client start",
+    "start": "NODE_ENV=production yarn workspace @fem-viewer/server start",
     "start:dev": "concurrently \"yarn workspace @fem-viewer/client start:dev\" \"yarn workspace @fem-viewer/server start:dev\"",
     "db:start": "yarn workspace @fem-viewer/server db:start",
     "db:stop": "yarn workspace @fem-viewer/server db:stop",
-    "build": "yarn workspaces run build",
+    "prebuild": "yarn clean",
+    "build": "yarn build:types && yarn build:parser && yarn build:client && yarn build:server",
     "build:types": "yarn workspace @fem-viewer/types build",
     "build:parser": "yarn workspace @fem-viewer/parser build",
     "build:client": "yarn workspace @fem-viewer/client build",

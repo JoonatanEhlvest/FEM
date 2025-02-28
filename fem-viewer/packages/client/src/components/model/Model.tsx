@@ -1,6 +1,6 @@
 import React, { CSSProperties, FC, useEffect } from "react";
-import Instance from "../../state/types/Instance";
-import ModelType from "../../state/types/Model";
+import { Instance } from "@fem-viewer/types";
+import { Model as ModelType } from "@fem-viewer/types";
 import Asset from "../hitboxes/asset/Asset";
 import Pool from "../hitboxes/pool/Pool";
 import Process from "../hitboxes/process/Process";

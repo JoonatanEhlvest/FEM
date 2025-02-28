@@ -4,7 +4,7 @@ import useFEM from "../../state/useFEM";
 import Header from "../header/Header";
 import styles from "./modelTree.module.css";
 
-import Model from "../../state/types/Model";
+import { Model } from "@fem-viewer/types";
 
 const ModelTree = () => {
 	const {

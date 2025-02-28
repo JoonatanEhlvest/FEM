@@ -1,5 +1,5 @@
 import { CSSProperties } from "react";
-import Instance from "../../state/types/Instance";
+import { Instance } from "@fem-viewer/types";
 
 interface SharedInstanceProps {
 	instance: Instance;

@@ -6,7 +6,7 @@ import { checkAuth } from "./shared";
 import { generateModelGroupName } from "../../../storage";
 import { Prisma } from "@prisma/client";
 import fs from "fs/promises";
-import createParser from "../../../../../src/parser";
+import createParser from "@fem-viewer/parser";
 import { UPLOAD_DIR } from "../../../../applicationPaths";
 import path from "path";
 

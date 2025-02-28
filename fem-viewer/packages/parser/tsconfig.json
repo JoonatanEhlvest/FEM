@@ -15,7 +15,15 @@
       "@fem-viewer/types": ["../types/src"],
       "@fem-viewer/types/*": ["../types/src/*"],
       "*": ["node_modules/*"]
-    }
+    },
+    "typeRoots": [
+      "./node_modules/@types",
+      "../../node_modules/@types"
+    ],
+    "types": [
+      "node",
+      "jest"
+    ]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"],

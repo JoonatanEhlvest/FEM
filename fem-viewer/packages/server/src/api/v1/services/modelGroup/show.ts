@@ -1,9 +1,9 @@
-import { PrismaClient } from "@prisma/client";
 import { Model } from "@fem-viewer/types";
 import fs from "fs/promises";
 import path from "path";
 import createParser, { parseXMLToModel } from "@fem-viewer/parser";
 import BaseService from "../baseService";
+import { UPLOAD_DIR } from "../../../../../applicationPaths";
 
 class ShowService extends BaseService {
 	async execute() {
