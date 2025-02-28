@@ -1,7 +1,7 @@
 {
   "name": "@fem-viewer/types",
   "version": "0.1.0",
-  "description": "Type definitions for FEM Viewer",
+  "description": "Core domain model type definitions for FEM Viewer - shared between frontend and backend",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {

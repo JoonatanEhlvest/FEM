@@ -13,6 +13,7 @@
     "baseUrl": ".",
     "paths": {
       "@fem-viewer/types": ["../types/src"],
+      "@fem-viewer/types/*": ["../types/src/*"],
       "*": ["node_modules/*"]
     }
   },

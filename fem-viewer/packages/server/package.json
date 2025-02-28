@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "@fem-viewer/server",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
@@ -30,8 +30,8 @@
   "scripts": {
     "build": "tsc --p .",
     "start:dev": "ts-node-dev --respawn --watch --exit-child --files server.ts",
-    "start": "yarn build && (node build/server/server.js)",
-    "user:create": "node build/server/src/scripts/createUser.js createuser",
+    "start": "node build/server.js",
+    "user:create": "node build/src/scripts/createUser.js createuser",
     "dtm": "dependency-time-machine --update --install --install-script 'yarn install' --auto --test-script 'yarn test'",
     "db:start": "docker compose -f docker-compose.yml up -d",
     "db:stop": "docker compose -f docker-compose.yml down",
@@ -43,9 +43,12 @@
     "db:test:start": "cross-env NODE_ENV=test docker-compose -f docker-compose.test.yml up -d",
     "db:test:stop": "cross-env NODE_ENV=test docker-compose -f docker-compose.test.yml down",
     "test:integration:setup": "yarn db:test:start && yarn test:db:reset",
-    "test:integration:teardown": "yarn db:test:stop"
+    "test:integration:teardown": "yarn db:test:stop",
+    "clean": "rm -rf build"
   },
   "dependencies": {
+    "@fem-viewer/parser": "0.1.0",
+    "@fem-viewer/types": "0.1.0",
     "@prisma/client": "^6.3.1",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",

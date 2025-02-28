@@ -2,18 +2,14 @@ import { useContext } from "react";
 import FEMContext from "./FEMContext";
 import FEMState, { initialState, ModelGroup } from "./FEMState";
 
-import Model from "./types/Model";
+import { Model } from "@fem-viewer/types";
 
 import { svgXML } from "../components/svgrenderer/svgrenderer";
-import Reference from "./types/Reference";
+import { Reference } from "@fem-viewer/types";
 import http from "../http";
-import Instance, { InterrefType } from "./types/Instance";
-import InstanceClass from "./types/InstanceClass";
+import { Instance, InterrefType } from "@fem-viewer/types/Instance";
+import { InstanceClass } from "@fem-viewer/types";
 import { UserRole } from "../components/dashboard/Dashboard";
-
-export type XMLObj = {
-	[key: string]: string | number | XMLObj | XMLObj[];
-};
 
 const useFEM = () => {
 	const [state, setState] = useContext(FEMContext);

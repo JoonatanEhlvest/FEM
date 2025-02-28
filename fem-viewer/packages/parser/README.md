@@ -2,10 +2,8 @@
 
 This package contains XML parsing functionality for the FEM Viewer application.
 
-## Purpose
-
-The parser package provides utilities for parsing XML data into structured objects that conform to the types defined in `@fem-viewer/types`. It abstracts away the complexities of XML parsing and provides a clean API for working with FEM model data.
-
+This parser logic was previously in the `(clint)/src/parser` directory, but was moved to a separate package since it
+was used in the backend as well.
 ## Usage
 
 ```typescript

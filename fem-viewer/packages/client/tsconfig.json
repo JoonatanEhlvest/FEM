@@ -16,7 +16,12 @@
 		"noEmit": true,
 		"jsx": "react-jsx",
 		"outDir": "build",
+		"paths": {
+			"@fem-viewer/types": ["../types/src"],
+			"@fem-viewer/types/*": ["../types/src/*"],
+			"@fem-viewer/parser": ["../parser/src"]
+		}
 	},
 	"include": ["src"],
-	"exclude": ["server"]
+	"exclude": ["node_modules", "build"]
 }

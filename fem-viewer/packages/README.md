@@ -1,7 +1,5 @@
 # FEM Viewer Packages
 
-This directory contains all the packages that make up the FEM Viewer application. Each package is designed to be focused on a specific domain or functionality.
-
 ## Package Structure
 
 - **@fem-viewer/types**: Type definitions shared across all packages
@@ -42,19 +40,10 @@ yarn dev
 
 The packages have the following dependency structure:
 
-```
-types <-- parser
-  ^        ^
-  |        |
-  |        |
-client    server
-```
-
-This means:
 - `types` has no dependencies on other packages
 - `parser` depends on `types`
-- `client` depends on `types` and may depend on `parser`
-- `server` depends on `types` and may depend on `parser`
+- `client` depends on `types` and `parser`
+- `server` depends on `types` and `parser`
 
 ## Adding New Packages
 

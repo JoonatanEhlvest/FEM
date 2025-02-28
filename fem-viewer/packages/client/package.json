@@ -1,0 +1,64 @@
+{
+  "name": "@fem-viewer/client",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "@fem-viewer/parser": "0.1.0",
+    "@fem-viewer/types": "0.1.0",
+    "@radix-ui/react-dialog": "^1.1.6",
+    "axios": "1.7.9",
+    "fast-xml-parser": "4.5.1",
+    "path": "^0.12.7",
+    "rc-slider": "11.1.8",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-draggable": "^4.4.4",
+    "react-resizable": "^3.0.4",
+    "react-router-dom": "7.2.0",
+    "react-scripts": "5.0.1",
+    "typescript": "5.7.3",
+    "web-vitals": "4.2.4"
+  },
+  "scripts": {
+    "start:dev": "PORT=3001 react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "dtm": "dependency-time-machine --update --install --install-script 'yarn install' --auto --test-script 'yarn test'",
+    "clean": "rm -rf build"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "6.6.3",
+    "@testing-library/react": "16.2.0",
+    "@testing-library/user-event": "14.6.1",
+    "@types/jest": "^29.5.14",
+    "@types/rc-slider": "^9.3.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/react-resizable": "^3.0.8",
+    "dependency-time-machine": "^1.3.4"
+  },
+  "proxy": "http://localhost:3000"
+}

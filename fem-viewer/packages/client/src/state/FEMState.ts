@@ -1,8 +1,8 @@
 import { UserRole } from "../components/dashboard/Dashboard";
 import { svgXML } from "../components/svgrenderer/svgrenderer";
-import Instance, { InterrefType } from "./types/Instance";
-import Model from "./types/Model";
-import Reference from "./types/Reference";
+import { Instance, InterrefType } from "@fem-viewer/types/Instance";
+import { Model } from "@fem-viewer/types/Model";
+import { Reference } from "@fem-viewer/types/Reference";
 
 export interface ModelGroup {
 	modelGroup: {

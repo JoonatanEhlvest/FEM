@@ -1,6 +1,6 @@
 # @fem-viewer/types
 
-This package contains shared type definitions for the FEM Viewer application.
+This package contains core type definitions for the FEM Viewer application.
 
 ## Usage
 

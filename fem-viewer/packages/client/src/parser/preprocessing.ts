@@ -1,7 +1,7 @@
 import { CSSProperties } from "react";
 import FEMState from "../state/FEMState";
-import Instance from "../state/types/Instance";
-import Model from "../state/types/Model";
+import { Instance } from "@fem-viewer/types";
+import { Model } from "@fem-viewer/types";
 
 const DEFAULT_COLOR = "#ffc0cb";
 

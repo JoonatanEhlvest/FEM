@@ -5,66 +5,27 @@
   "engines": {
     "node": ">=22.0.0"
   },
-  "dependencies": {
-    "@radix-ui/react-dialog": "^1.1.6",
-    "axios": "1.7.9",
-    "fast-xml-parser": "4.5.1",
-    "path": "^0.12.7",
-    "rc-slider": "11.1.8",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "react-draggable": "^4.4.4",
-    "react-resizable": "^3.0.4",
-    "react-router-dom": "7.2.0",
-    "react-scripts": "5.0.1",
-    "typescript": "5.7.3",
-    "web-vitals": "4.2.4"
-  },
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "start:dev": "PORT=3001 react-scripts start",
-    "start:dev:all": "concurrently \"yarn start:dev\" \"cd server && yarn start:dev\"",
-    "db:start": "cd server && yarn db:start",
-    "db:stop": "cd server && yarn db:stop",
-    "build": "react-scripts build",
-    "test": "cd server && yarn test",
-    "test:setup": "cd server && yarn test:setup",
-    "test:teardown": "cd server && yarn test:teardown",
-    "eject": "react-scripts eject",
-    "start": "NODE_ENV=production yarn run build && (cd server && yarn start)",
-    "dtm": "dependency-time-machine --update --install --install-script 'yarn install' --auto --test-script 'yarn test'",
-    "dependency-graph": "madge --image dependency-graph.png --extensions ts,tsx src/ server/"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "start": "yarn build && yarn workspace @fem-viewer/client start",
+    "start:dev": "concurrently \"yarn workspace @fem-viewer/client start:dev\" \"yarn workspace @fem-viewer/server start:dev\"",
+    "db:start": "yarn workspace @fem-viewer/server db:start",
+    "db:stop": "yarn workspace @fem-viewer/server db:stop",
+    "build": "yarn workspaces run build",
+    "build:types": "yarn workspace @fem-viewer/types build",
+    "build:parser": "yarn workspace @fem-viewer/parser build",
+    "build:client": "yarn workspace @fem-viewer/client build",
+    "build:server": "yarn workspace @fem-viewer/server build",
+    "test": "yarn workspaces run test",
+    "test:setup": "yarn workspace @fem-viewer/server test:setup",
+    "test:teardown": "yarn workspace @fem-viewer/server test:teardown",
+    "clean": "yarn workspaces run clean",
+    "dependency-graph": "madge --image dependency-graph.svg --extensions ts,tsx packages/client/src/ packages/server/src/ packages/types/src/ packages/parser/src/"
   },
   "devDependencies": {
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "6.6.3",
-    "@testing-library/react": "16.2.0",
-    "@testing-library/user-event": "14.6.1",
-    "@types/jest": "^29.5.14",
-    "@types/rc-slider": "^9.3.1",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "@types/react-resizable": "^3.0.8",
     "concurrently": "^9.1.2",
-    "dependency-time-machine": "^1.3.4",
     "madge": "^8.0.0"
-  },
-  "proxy": "http://localhost:3000"
-}
+  }
+} 

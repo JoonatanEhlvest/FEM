@@ -1,15 +1,13 @@
-import Instance, { InterrefType, isSubclass } from "../../state/types/Instance";
-import Reference from "../../state/types/Reference";
+import { Instance, InterrefType, isSubclass } from "@fem-viewer/types/Instance";
+import { Reference } from "@fem-viewer/types";
 import useFEM from "../../state/useFEM";
 import Header from "../header/Header";
-import Cell from "./Cell";
 import styles from "./details.module.css";
 import arrowRight from "./arrow-right.svg";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import model from "./model.svg";
-import InstanceClass from "../../state/types/InstanceClass";
+import { InstanceClass } from "@fem-viewer/types";
 import attrConfig from "../../assets/instanceAttrConfig.json";
-import { Resizable, ResizeCallbackData } from "react-resizable";
 
 const Details = () => {
 	const {
