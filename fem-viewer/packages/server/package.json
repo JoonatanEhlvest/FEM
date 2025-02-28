@@ -44,7 +44,8 @@
     "db:test:stop": "cross-env NODE_ENV=test docker-compose -f docker-compose.test.yml down",
     "test:integration:setup": "yarn db:test:start && yarn test:db:reset",
     "test:integration:teardown": "yarn db:test:stop",
-    "clean": "rm -rf build"
+    "clean": "rm -rf build",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@fem-viewer/parser": "0.1.0",
