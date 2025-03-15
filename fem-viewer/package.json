@@ -16,6 +16,7 @@
     "db:stop": "yarn workspace @fem-viewer/server db:stop",
     "prebuild": "yarn clean",
     "build": "yarn build:types && yarn build:parser && yarn build:client && yarn build:server",
+    "build:watch": "yarn build:types --watch && yarn build:parser --watch && yarn build:client --watch && yarn build:server --watch",
     "build:types": "yarn workspace @fem-viewer/types build",
     "build:parser": "yarn workspace @fem-viewer/parser build",
     "build:client": "yarn workspace @fem-viewer/client build",
@@ -31,4 +32,5 @@
     "concurrently": "^9.1.2",
     "madge": "^8.0.0"
   }
-} 
+}
+

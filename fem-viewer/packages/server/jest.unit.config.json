@@ -1,0 +1,13 @@
+{
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testMatch": [
+        "**/__tests__/unit/**/*.ts"
+    ],
+    "testPathIgnorePatterns": [
+        "/node_modules/"
+    ],
+    "transform": {
+        "^.+\\.ts$": "ts-jest"
+    }
+} 
