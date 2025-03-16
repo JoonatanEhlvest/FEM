@@ -7,7 +7,7 @@ import ShareService from "../services/modelGroup/share";
 import DeleteService from "../services/modelGroup/delete";
 import ShareDeleteService from "../services/modelGroup/share/delete";
 import ApplicationError from "../../../error/ApplicationError";
-
+import UpdateInstanceDescriptionService from "../services/modelGroup/instance/update";
 const router = Router();
 
 router.patch(
@@ -82,7 +82,7 @@ router.get(
 
 router.delete(
 	"/modelgroup/:modelGroupId",
-	checkAuth,
+	[checkAuth, authorize(["ADMIN", "DEVELOPER"])],
 	async (req: Request, res: Response) => {
 		try {
 			const service = new DeleteService(req, db);
@@ -96,5 +96,31 @@ router.delete(
 		}
 	}
 );
+
+/**
+ * Updates the description of an instance (node) in a model group
+ * req: {
+ * 	modelGroupId: string;
+ * 	instanceId: string;
+ * 	description: string;
+ * }
+ */
+router.patch(
+	"/modelgroup/:modelGroupId/instance/:instanceId/description",
+	[checkAuth, authorize(["ADMIN", "DEVELOPER"])],
+	async (req: Request, res: Response) => {
+		try {
+			const service = new UpdateInstanceDescriptionService(req, db);
+			const response = await service.execute();
+			res.json(response);
+		} catch (err) {
+			console.log(err);
+			res.status(500).json({
+				message: `Couldn't update instance description: ${err}`,
+			});
+		}
+	}
+);
+
 
 export default router;
