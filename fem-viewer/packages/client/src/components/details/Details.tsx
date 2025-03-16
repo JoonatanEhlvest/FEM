@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from "react";
 import model from "./model.svg";
 import { InstanceClass } from "@fem-viewer/types";
 import attrConfig from "../../assets/instanceAttrConfig.json";
+import { UserRole } from "../dashboard/Dashboard";
 
 const Details = () => {
 	const {
@@ -23,11 +24,16 @@ const Details = () => {
 		setReferenceBackNavigation,
 		updateInstanceDescription,
 		getCurrentModelGroup,
+		getUser,
 		state,
 	} = useFEM();
 
 	const instance = getCurrentInstance();
 	const currentModelGroup = getCurrentModelGroup();
+	const user = getUser();
+
+	// Check if user has edit permissions (admin or developer)
+	const hasEditPermission = user && (user.role === UserRole.ADMIN || user.role === UserRole.DEVELOPER);
 
 	const [dropdowns, setDropdowns] = useState({
 		interrefsOpen: false,
@@ -418,13 +424,16 @@ const Details = () => {
 							<div className={styles["description-text"]}>
 								{values[descriptionIndex] || "No description"}
 							</div>
-							<img 
-								src={editIcon} 
-								alt="Edit" 
-								title="Edit description"
-								className={styles["edit-icon"]}
-								onClick={handleEditDescription}
-							/>
+							{/* Only show edit icon if user has permission */}
+							{hasEditPermission && (
+								<img 
+									src={editIcon} 
+									alt="Edit" 
+									title="Edit description"
+									className={styles["edit-icon"]}
+									onClick={handleEditDescription}
+								/>
+							)}
 						</div>
 					)}
 				</td>
