@@ -4,6 +4,7 @@ import useFEM from "../../state/useFEM";
 import Header from "../header/Header";
 import styles from "./details.module.css";
 import arrowRight from "./arrow-right.svg";
+import editIcon from "./edit-icon.svg";
 import { useCallback, useEffect, useState } from "react";
 import model from "./model.svg";
 import { InstanceClass } from "@fem-viewer/types";
@@ -20,22 +21,35 @@ const Details = () => {
 		setCurrentModel,
 		clearAllOccurrencesHighlighting,
 		setReferenceBackNavigation,
-
+		updateInstanceDescription,
+		getCurrentModelGroup,
 		state,
 	} = useFEM();
 
 	const instance = getCurrentInstance();
+	const currentModelGroup = getCurrentModelGroup();
 
 	const [dropdowns, setDropdowns] = useState({
 		interrefsOpen: false,
 		singlerefsOpen: false,
 	});
 
+	// State for description editing
+	const [isEditingDescription, setIsEditingDescription] = useState(false);
+	const [editedDescription, setEditedDescription] = useState("");
+	const [isUpdating, setIsUpdating] = useState(false);
+	const [updateError, setUpdateError] = useState("");
+
 	useEffect(() => {
 		setDropdowns((prev) => ({
 			interrefsOpen: false,
 			singlerefsOpen: false,
 		}));
+		
+		// Reset editing state when instance changes
+		setIsEditingDescription(false);
+		setEditedDescription("");
+		setUpdateError("");
 	}, [instance]);
 
 	const handleGoToReference = (ref: Reference | null) => {
@@ -82,6 +96,48 @@ const Details = () => {
 			...prev,
 			[dropdown]: !prev[dropdown],
 		}));
+	};
+
+	// Handle starting description edit
+	const handleEditDescription = () => {
+		if (instance) {
+			setEditedDescription(instance.description);
+			setIsEditingDescription(true);
+		}
+	};
+
+	// Handle saving description edit
+	const handleSaveDescription = async () => {
+		if (!instance || !currentModelGroup) return;
+		
+		setIsUpdating(true);
+		setUpdateError("");
+		
+		try {
+			const result = await updateInstanceDescription(
+				currentModelGroup.modelGroup.id,
+				instance.id,
+				editedDescription
+			);
+			
+			if (result.success) {
+				setIsEditingDescription(false);
+			} else {
+				setUpdateError(result.error || "Failed to update description");
+			}
+		} catch (error) {
+			setUpdateError("An unexpected error occurred");
+			console.error("Error updating description:", error);
+		} finally {
+			setIsUpdating(false);
+		}
+	};
+
+	// Handle canceling description edit
+	const handleCancelEdit = () => {
+		setIsEditingDescription(false);
+		setEditedDescription("");
+		setUpdateError("");
 	};
 
 	const renderAllOccurrences = useCallback(() => {
@@ -313,6 +369,69 @@ const Details = () => {
 		});
 	}
 
+	// Render the description editor
+	const renderDescriptionEditor = () => {
+		// Find the description index in the titles array
+		const descriptionIndex = titles.findIndex(title => title === "Description");
+		if (descriptionIndex === -1) return null;
+		
+		return (
+			<tr>
+				<td className={styles["general-information-item-title"]}>
+					Description
+				</td>
+				<td className={styles["general-information-item-value"]}>
+					{isEditingDescription ? (
+						<div className={styles["description-editor"]}>
+							<textarea
+								value={editedDescription}
+								onChange={(e) => setEditedDescription(e.target.value)}
+								className={styles["description-textarea"]}
+								rows={4}
+								placeholder="Enter description..."
+								autoFocus
+							/>
+							<div className={styles["description-actions"]}>
+								<button 
+									onClick={handleSaveDescription}
+									disabled={isUpdating}
+									className={styles["save-button"]}
+								>
+									{isUpdating ? "Saving..." : "Save"}
+								</button>
+								<button 
+									onClick={handleCancelEdit}
+									disabled={isUpdating}
+									className={styles["cancel-button"]}
+								>
+									Cancel
+								</button>
+							</div>
+							{updateError && (
+								<div className={styles["update-error"]}>
+									{updateError}
+								</div>
+							)}
+						</div>
+					) : (
+						<div className={styles["description-display"]}>
+							<div className={styles["description-text"]}>
+								{values[descriptionIndex] || "No description"}
+							</div>
+							<img 
+								src={editIcon} 
+								alt="Edit" 
+								title="Edit description"
+								className={styles["edit-icon"]}
+								onClick={handleEditDescription}
+							/>
+						</div>
+					)}
+				</td>
+			</tr>
+		);
+	};
+
 	return (
 		<div style={{ flexGrow: 1 }}>
 			<div className={styles["details-container"]}>
@@ -341,28 +460,34 @@ const Details = () => {
 							General Information
 						</div>
 						<table>
-							{titles.map((title, i) => (
-								<tr>
-									<td
-										className={
-											styles[
-												"general-information-item-title"
-											]
-										}
-									>
-										{title}
-									</td>
-									<td
-										className={
-											styles[
-												"general-information-item-value"
-											]
-										}
-									>
-										{values[i]}
-									</td>
-								</tr>
-							))}
+							{titles.map((title, i) => {
+								// Skip the description as we'll render it separately
+								if (title === "Description") return null;
+								
+								return (
+									<tr>
+										<td
+											className={
+												styles[
+													"general-information-item-title"
+												]
+											}
+										>
+											{title}
+										</td>
+										<td
+											className={
+												styles[
+													"general-information-item-value"
+												]
+											}
+										>
+											{values[i]}
+										</td>
+									</tr>
+								);
+							})}
+							{renderDescriptionEditor()}
 						</table>
 
 						{renderAllOccurrences()}

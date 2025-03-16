@@ -470,6 +470,67 @@ const useFEM = () => {
 		});
 	};
 
+	const updateInstanceDescription = async (
+		modelGroupId: string,
+		instanceId: string,
+		description: string
+	) => {
+		try {
+			const response = await http.patch(
+				`/api/v1/modelgroup/${modelGroupId}/instance/${instanceId}/description`,
+				{ description }
+			);
+			
+			if (response.data && response.data.models) {
+				setState((prevState: FEMState) => {
+					const updatedModels = response.data.models;
+					
+					// Find the updated instance
+					let updatedCurrentInstance = prevState.currentInstance;
+					if (prevState.currentInstance && prevState.currentInstance.id === instanceId) {
+						for (const model of updatedModels) {
+							const instance = model.instances.find(
+								(inst: Instance) => inst.id === instanceId
+							);
+							if (instance) {
+								updatedCurrentInstance = instance;
+								break;
+							}
+						}
+					}
+					
+					// Find the updated current model
+					let updatedCurrentModel = prevState.currentModel;
+					if (prevState.currentModel) {
+						const updatedModel = updatedModels.find(
+							(m: Model) => m.id === prevState.currentModel?.id
+						);
+						if (updatedModel) {
+							updatedCurrentModel = updatedModel;
+						}
+					}
+					
+					return {
+						...prevState,
+						models: updatedModels,
+						currentInstance: updatedCurrentInstance,
+						currentModel: updatedCurrentModel
+					};
+				});
+				
+				return { success: true };
+			}
+			
+			return { success: false, error: "No models returned from server" };
+		} catch (error: any) {
+			console.error("Error updating instance description:", error);
+			return { 
+				success: false, 
+				error: error.response?.data?.message || "Failed to update description" 
+			};
+		}
+	};
+
 	return {
 		getModelTree,
 		addModelGroup,
@@ -506,6 +567,7 @@ const useFEM = () => {
 		removeShare,
 		addShare,
 		removeSharesToUser,
+		updateInstanceDescription,
 		state,
 	};
 };

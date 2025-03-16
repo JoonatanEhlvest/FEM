@@ -9,7 +9,6 @@ import useFEM from "../../state/useFEM";
 import { getStyle, getTransform } from "../../parser/preprocessing";
 import Note from "../hitboxes/note/Note";
 import FEMState from "../../state/FEMState";
-import DetailsPopup from "../viewer/DetailsPopup";
 
 type Props = {
 	model: ModelType;
