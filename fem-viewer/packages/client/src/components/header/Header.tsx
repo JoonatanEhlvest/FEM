@@ -8,7 +8,7 @@ type Props = {
 
 const Header: FC<Props> = ({ children, extraStyles }) => {
 	return (
-		<div className={styles["header-container"]} style={extraStyles}>
+		<div className={`${styles["header-container"]} draggable-handle`} style={extraStyles}>
 			{children}
 		</div>
 	);

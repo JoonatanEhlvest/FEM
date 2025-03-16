@@ -1,0 +1,4 @@
+/* Add a cursor style to indicate the header is draggable */
+.detailsPopupContainer :global(.draggable-handle) {
+  cursor: move !important; /* Show move cursor on the header */
+}

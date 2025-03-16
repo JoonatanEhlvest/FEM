@@ -1,16 +1,19 @@
 import React, { useRef, RefObject } from "react";
 import Draggable from "react-draggable";
 import Details from "../details/Details";
+import styles from "./detailsPopup.module.css";
 
 const DetailsPopup = () => {
 	const dragRef = useRef<HTMLDivElement>(null);
 
 	return (
-		// Provide ref to child element to work around the findDOMNode being deprecated in React 19
-		// https://github.com/react-grid-layout/react-draggable/issues/771
-		<Draggable nodeRef={dragRef as RefObject<HTMLElement>}>
+		<Draggable 
+			nodeRef={dragRef as RefObject<HTMLElement>}
+			handle=".draggable-handle"
+		>
 			<div
 				ref={dragRef}
+				className={styles.detailsPopupContainer}
 				style={{
 					position: "absolute",
 					left: "50%",
