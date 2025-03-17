@@ -152,13 +152,129 @@
 
 .general-information-item-value {
 	text-align: left;
-
-	/* background-color: rgba(95, 172, 208, 0.25); */
 	border-bottom: 1px solid var(--bg-primary);
 	font-weight: bolder;
-	padding: 4px;
+	padding: 4px 8px;
+	width: 70%;
+	box-sizing: border-box;
+	vertical-align: top;
+	overflow-wrap: break-word;
 }
 
 table {
 	border-collapse: collapse;
+	width: 100%;
+	table-layout: fixed; /* This ensures the table respects column widths */
+}
+
+/* Description editor styles */
+.description-editor {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.description-textarea {
+	width: 100%;
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-family: inherit;
+	font-size: 14px;
+	resize: vertical;
+	margin-bottom: 8px;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	min-height: 80px;
+	font-weight: normal;
+}
+
+.description-actions {
+	display: flex;
+	gap: 8px;
+	margin-top: 4px;
+	flex-wrap: wrap;
+}
+
+.save-button, .cancel-button {
+	padding: 6px 12px;
+	border-radius: 4px;
+	font-size: 12px;
+	cursor: pointer;
+	border: none;
+	transition: background-color 0.2s;
+	flex-shrink: 0;
+}
+
+.save-button {
+	background-color: #4caf50;
+	color: white;
+}
+
+.save-button:hover {
+	background-color: #45a049;
+}
+
+.save-button:disabled {
+	background-color: #a5d6a7;
+	cursor: not-allowed;
+}
+
+.cancel-button {
+	background-color: #f44336;
+	color: white;
+}
+
+.cancel-button:hover {
+	background-color: #d32f2f;
+}
+
+.cancel-button:disabled {
+	background-color: #ef9a9a;
+	cursor: not-allowed;
+}
+
+.description-display {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: space-between;
+	word-break: break-word;
+	position: relative;
+	min-height: 20px; /* Ensure there's enough height for the icon */
+	width: 100%;
+}
+
+.description-text {
+	flex: 1;
+	padding-right: 24px; /* Make room for the edit icon */
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	hyphens: auto;
+	font-weight: normal;
+	line-height: 1.4;
+	white-space: pre-line; /* Preserve line breaks */
+}
+
+.edit-icon {
+	width: 16px;
+	height: 16px;
+	cursor: pointer;
+	opacity: 0.7;
+	transition: all 0.2s;
+	position: absolute;
+	top: 2px;
+	right: 2px;
+}
+
+.edit-icon:hover {
+	opacity: 1;
+	filter: drop-shadow(0 0 2px rgba(33, 150, 243, 0.5));
+}
+
+.update-error {
+	color: #f44336;
+	font-size: 12px;
+	margin-top: 4px;
+	word-break: break-word;
 }

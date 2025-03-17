@@ -36,6 +36,7 @@
     "db:start": "docker compose -f docker-compose.yml up -d",
     "db:stop": "docker compose -f docker-compose.yml down",
     "test": "jest --config jest.config.json",
+    "test:unit": "jest --config jest.unit.config.json",
     "test:setup": "yarn test:integration:setup",
     "test:teardown": "yarn test:integration:teardown",
     "test:integration": "cross-env NODE_ENV=test jest --config jest.integration.config.json",

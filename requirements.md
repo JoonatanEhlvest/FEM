@@ -41,3 +41,14 @@
 ## Non-functional requirements
 
 -   NFR-1 - Files should be draggable from the users filesystem to the browser for upload.
+
+
+# V2 Requirements
+### Annotations
+
+-  FR-A-1 - As a user, I want to be able to edit the description of nodes, so that I can add context and and give feedback to modeled buisness **processes** and **assets**
+
+### Export
+
+-  FR-E-1 - As a user, I want to be able export the model as XML from FEM-Viewer, so that I can share the annotations that I made with the modelers who use FEM-Toolkit.
+    - The exported file should be compatible with FEM-Toolkit
