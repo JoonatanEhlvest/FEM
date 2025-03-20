@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ModelTree from "../modelTree/ModelTree";
 import Viewer from "../viewer/Viewer";
+import DynamicSVGView from "../dynamicsvg/DynamicSVGView";
 import styles from "./appContainer.module.css";
 import { Resizable, ResizeCallbackData } from "react-resizable";
 import sharedStyles from "../../utlitity/sharedStyles.module.css";
@@ -10,6 +11,9 @@ import DetailsPopup from "../viewer/DetailsPopup";
 
 const AppContainer = () => {
 	const { getError, getCurrentInstance } = useFEM();
+	// For testing generating svg from XML data.
+	// TODO: Remove once the final implementation is done.
+	const [useDynamicSVG, setUseDynamicSVG] = useState(false);
 
 	const [state, setState] = useState(() => {
 		const appWidth = window.innerWidth;
@@ -28,6 +32,12 @@ const AppContainer = () => {
 				width: data.size.width,
 			};
 		});
+	};
+
+	// For testing generating svg from XML data.
+	// TODO: Remove once the final implementation is done.
+	const toggleViewMode = () => {
+		setUseDynamicSVG(!useDynamicSVG);
 	};
 
 	const error = getError();
@@ -59,7 +69,31 @@ const AppContainer = () => {
 					<ModelTree />
 				</div>
 			</Resizable>
-			<Viewer />
+
+
+			{/* For testing generating svg from XML data.
+				TODO: Remove once the final implementation is done. */}
+			<div className={styles["view-container"]}>
+				<div className={styles["view-toggle"]}>
+					<button 
+						className={`${styles["toggle-button"]} ${!useDynamicSVG ? styles["active"] : ""}`} 
+						onClick={toggleViewMode}
+						disabled={!useDynamicSVG}
+					>
+						Standard View
+					</button>
+					<button 
+						className={`${styles["toggle-button"]} ${useDynamicSVG ? styles["active"] : ""}`} 
+						onClick={toggleViewMode}
+						disabled={useDynamicSVG}
+					>
+						Dynamic SVG View
+					</button>
+				</div>
+				
+				{useDynamicSVG ? <DynamicSVGView /> : <Viewer />}
+			</div>
+			
 			{getCurrentInstance() !== undefined && <DetailsPopup />}
 		</div>
 	);

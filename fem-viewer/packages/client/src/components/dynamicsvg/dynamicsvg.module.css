@@ -1,0 +1,288 @@
+.dynamicsvg-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.svg-container {
+  flex-grow: 1;
+  background-color: var(--viewer-bg);
+  overflow: hidden;
+  position: relative;
+  border-left: var(--tree-border-width) solid var(--border-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.svg-element {
+  position: absolute;
+  width: 100% !important;
+  height: 100% !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.no-model {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 1.5rem;
+  color: #888;
+}
+
+.status-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-secondary);
+  padding: 5px 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.zoom-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  background: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.zoom-button {
+  padding: 5px 10px;
+  border: none;
+  background: var(--bg-primary);
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.zoom-button:hover {
+  background: var(--bg-primary-hover);
+}
+
+.zoom-level {
+  color: white;
+  font-size: 0.9rem;
+  min-width: 80px;
+  text-align: right;
+}
+
+.debug-button {
+  margin-left: 10px;
+  padding: 4px 8px;
+  font-size: 12px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #333;
+}
+
+.debug-button.active {
+  background-color: #e2f2ff;
+  border-color: #007bff;
+  color: #007bff;
+}
+
+/* Add styles to ensure connector paths and text are visible */
+:global(.connector-path) {
+  stroke-width: 3px;
+  filter: drop-shadow(0px 0px 2px rgba(0, 0, 0, 0.3));
+}
+
+:global(.connector-label) {
+  pointer-events: none;
+}
+
+:global(.connector-label rect) {
+  opacity: 0.95;
+  stroke-width: 1px;
+  filter: drop-shadow(0px 0px 3px rgba(255, 255, 255, 0.8));
+}
+
+:global(.connector-label text) {
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+}
+
+/* Specific connector types using data attributes for more reliable selection */
+:global(.connector[data-connector-type="Manages"] .connector-path) {
+  stroke: #3498db;
+  stroke-width: 4px;
+}
+
+:global(.connector[data-connector-type="Used In"] .connector-path) {
+  stroke: #2ecc71;
+  stroke-dasharray: 6,4;
+  stroke-width: 4px;
+}
+
+:global(.connector[data-connector-type="Is inside"] .connector-path) {
+  stroke: #9b59b6;
+  stroke-dasharray: 2,2;
+  stroke-width: 3.5px;
+}
+
+:global(.connector[data-connector-type="Drawing/Adding"] .connector-path) {
+  stroke: #e74c3c;
+  stroke-dasharray: 10,5;
+  stroke-width: 4px;
+}
+
+/* Instance styles */
+.instance {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.instance.selected {
+  filter: drop-shadow(0 0 5px var(--bg-primary));
+}
+
+.instance.selected rect,
+.instance.selected ellipse,
+.instance.selected path {
+  stroke-width: 3;
+  stroke: var(--bg-primary);
+}
+
+/* Default instance style */
+.instance rect {
+  stroke: black;
+  stroke-width: 1;
+  fill: var(--bg-secondary);
+}
+
+/* Process style */
+.instance[data-instance-type="Process"] ellipse {
+  stroke: black;
+  stroke-width: 1;
+  fill: var(--bg-secondary);
+}
+
+/* Pool style */
+.instance[data-instance-type="Pool"] path {
+  stroke: black;
+  stroke-width: 1;
+  fill: var(--bg-secondary);
+}
+
+/* Asset style */
+.instance[data-instance-type="Asset"] rect {
+  stroke: black;
+  stroke-width: 1;
+  fill: var(--bg-secondary);
+}
+
+/* Note style */
+.instance[data-instance-type="Note"] path {
+  stroke: black;
+  stroke-width: 1;
+  fill: var(--bg-secondary);
+}
+
+/* Instance text */
+.instance text {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  fill: var(--text-primary);
+  pointer-events: none;
+}
+
+.instance.selected text {
+  font-weight: bold;
+}
+
+/* Connector styles */
+.connector {
+  pointer-events: none;
+}
+
+.connector-path {
+  stroke-width: 2;
+  fill: none;
+}
+
+/* Connector types using data attributes */
+.connector[data-connector-type="Manages"] .connector-path {
+  stroke: #3498db;
+}
+
+.connector[data-connector-type="Used In"] .connector-path {
+  stroke: #2ecc71;
+  stroke-dasharray: 5,5;
+}
+
+.connector[data-connector-type="Is inside"] .connector-path {
+  stroke: #9b59b6;
+  stroke-dasharray: 1,1;
+}
+
+.connector[data-connector-type="Drawing/Adding"] .connector-path {
+  stroke: #e74c3c;
+  stroke-dasharray: 10,5;
+}
+
+/* Connector labels */
+.connector-label {
+  pointer-events: none;
+}
+
+.connector-label rect {
+  fill: white;
+  stroke-width: 1;
+  rx: 5;
+  ry: 5;
+}
+
+.connector-label text {
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  fill: var(--text-primary);
+}
+
+/* Debug info */
+.debug-info text {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  fill: var(--text-secondary);
+  pointer-events: none;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 12px;
+  pointer-events: none;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+} 
