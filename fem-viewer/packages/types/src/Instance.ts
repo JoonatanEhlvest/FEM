@@ -9,6 +9,7 @@ export interface InstancePosition {
 }
 
 export type ColorPicker = "Default" | "Individual" | "Subclass";
+export type BorderColorPicker = "Individual" | "Subclass";
 
 export interface Iref {
 	type: string;
@@ -55,7 +56,7 @@ export interface Instance {
 	colorPicker: ColorPicker;
 
 	borderColor: string;
-	borderColorPicker: ColorPicker;
+	borderColorPicker: BorderColorPicker;
 	Interrefs: Interrefs;
 }
 

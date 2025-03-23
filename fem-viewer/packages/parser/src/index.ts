@@ -1,7 +1,7 @@
 import { XMLParser, XMLBuilder } from "fast-xml-parser";
 import { addXMLAttrPrefix, ATTR_PREFIX } from "./utils";
 import { Connector } from "@fem-viewer/types";
-import { Instance, ColorPicker, INSTANCE_DEFAULTS } from "@fem-viewer/types/Instance";
+import { Instance, ColorPicker, INSTANCE_DEFAULTS, BorderColorPicker } from "@fem-viewer/types/Instance";
 import { InstanceClass } from "@fem-viewer/types";
 import { Model } from "@fem-viewer/types";
 import { ModelAttributes } from "@fem-viewer/types";
@@ -297,7 +297,7 @@ class Parser {
 				borderColorPicker: this.tryGetStrAttr(
 					attributes,
 					"bordercolorpicker"
-				) as ColorPicker,
+				) as BorderColorPicker,
 				Interrefs: interrefs,
 			};
 
