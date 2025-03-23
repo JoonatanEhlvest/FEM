@@ -294,6 +294,10 @@ class Parser {
 					"colorpicker"
 				) as ColorPicker,
 				borderColor: this.tryGetStrAttr(attributes, "bordercolor"),
+				borderColorPicker: this.tryGetStrAttr(
+					attributes,
+					"bordercolorpicker"
+				) as ColorPicker,
 				Interrefs: interrefs,
 			};
 

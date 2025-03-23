@@ -55,6 +55,7 @@ export interface Instance {
 	colorPicker: ColorPicker;
 
 	borderColor: string;
+	borderColorPicker: ColorPicker;
 	Interrefs: Interrefs;
 }
 
