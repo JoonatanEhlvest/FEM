@@ -18,8 +18,14 @@ export const parseXMLToModel = (
 		commentPropName: "#comment",
 		isArray: (name: string) => {
 			// Ensure these elements are always treated as arrays (simplifies parsing)
-			return ['MODEL', 'INSTANCE', 'CONNECTOR', 'ATTRIBUTE'].includes(name);
-		}
+			return [
+				"MODEL",
+				"INSTANCE",
+				"CONNECTOR",
+				"ATTRIBUTE",
+				"INTERREF",
+			].includes(name);
+		},
 	};
 	const parser = new XMLParser(options);
 
@@ -45,9 +51,9 @@ export const buildXMLFromParsed = (
 		preserveOrder: false,
 		commentPropName: "#comment",
 		suppressEmptyNode: false,
-		suppressBooleanAttributes: false
+		suppressBooleanAttributes: false,
 	};
-	
+
 	const builder = new XMLBuilder(options);
 	return builder.build(parsedXML);
-}; 
+};
