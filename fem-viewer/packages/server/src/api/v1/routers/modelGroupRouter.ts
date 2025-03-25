@@ -7,7 +7,9 @@ import ShareService from "../services/modelGroup/share";
 import DeleteService from "../services/modelGroup/delete";
 import ShareDeleteService from "../services/modelGroup/share/delete";
 import ApplicationError from "../../../error/ApplicationError";
-import UpdateInstanceDescriptionService from "../services/modelGroup/instance/update";
+import UpdateInstanceDescriptionService from "../services/modelGroup/instance/updateDescription";
+import UpdateInstanceSubclassService from "../services/modelGroup/instance/updateSubclass";
+import UpdateInstanceBSubclassService from "../services/modelGroup/instance/updateBSubclass";
 
 const router = Router();
 
@@ -18,7 +20,9 @@ router.patch(
 		const { usernameToShareWith } = req.body;
 
 		if (usernameToShareWith === req.user.username) {
-			res.status(422).json({ message: "Can't share a model with yourself" });
+			res.status(422).json({
+				message: "Can't share a model with yourself",
+			});
 			return;
 		}
 
@@ -68,18 +72,15 @@ router.delete(
 	}
 );
 
-router.get(
-	"/modelgroup/:modelGroupId",
-	async (req: Request, res: Response) => {
-		const service = new ShowService(req, db);
-		try {
-			const response = await service.execute();
-			res.json({ data: response });
-		} catch (err) {
-			res.status(422).json({ message: err });
-		}
+router.get("/modelgroup/:modelGroupId", async (req: Request, res: Response) => {
+	const service = new ShowService(req, db);
+	try {
+		const response = await service.execute();
+		res.json({ data: response });
+	} catch (err) {
+		res.status(422).json({ message: err });
 	}
-);
+});
 
 router.delete(
 	"/modelgroup/:modelGroupId",
@@ -123,5 +124,29 @@ router.patch(
 	}
 );
 
+/**
+ * Updates the subclass of an instance (node) in a model group
+ * req: {
+ * 	modelGroupId: string;
+ * 	instanceId: string;
+ * 	subclassInstanceId: string;
+ * }
+ */
+router.patch(
+	"/modelgroup/:modelGroupId/instance/:instanceId/subclass",
+	[checkAuth, authorize(["ADMIN", "DEVELOPER"])],
+	async (req: Request, res: Response) => {
+		try {
+			const service = new UpdateInstanceSubclassService(req, db);
+			const response = await service.execute();
+			res.json(response);
+		} catch (err) {
+			console.log(err);
+			res.status(500).json({
+				message: `Couldn't update instance subclass: ${err}`,
+			});
+		}
+	}
+);
 
 export default router;
