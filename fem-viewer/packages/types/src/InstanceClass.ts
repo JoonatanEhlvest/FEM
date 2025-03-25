@@ -7,7 +7,9 @@ export type BaseInstanceClass =
 export type InstanceSubclass =
 	| "Process_Subclass"
 	| "Asset_Subclass"
-	| "External Actor_Subclass";
+	| "External Actor_Subclass"
+	| "Pool_Subclass"
+	| "Note_Subclass";
 
 export type InstanceClass = BaseInstanceClass | InstanceSubclass;
 

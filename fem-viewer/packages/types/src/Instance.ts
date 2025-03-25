@@ -69,6 +69,8 @@ export const isSubclass = (i: Instance): boolean => {
 		"Asset_Subclass",
 		"Process_Subclass",
 		"External Actor_Subclass",
+		"Pool_Subclass",
+		"Note_Subclass",
 	];
 	return subclasses.includes(i.class);
 };
