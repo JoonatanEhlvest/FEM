@@ -395,7 +395,7 @@ class Parser {
 		return ret;
 	}
 
-	parseModel(model: any) {
+	parseModel(model: any): Model {
 		const attributes = this.getModelAttributes(model.MODELATTRIBUTES);
 		let name = attributes.name;
 		if (!name || name === "") {
@@ -415,7 +415,7 @@ class Parser {
 		return parsedModel;
 	}
 
-	parseModels() {
+	parseModels(): Model[] {
 		return this.getModels().map((model: any) => {
 			return this.parseModel(model);
 		});
