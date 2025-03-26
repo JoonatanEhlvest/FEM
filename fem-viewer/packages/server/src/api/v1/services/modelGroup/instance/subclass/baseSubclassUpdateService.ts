@@ -1,8 +1,13 @@
-import { Instance, Iref } from "@fem-viewer/types/Instance";
+import {
+	Instance,
+	Iref,
+	ColorPicker,
+	BorderColorPicker,
+} from "@fem-viewer/types/Instance";
 import BaseInstanceUpdateService, {
 	UpdateOperation,
-} from "./baseInstanceUpdateService";
-import ApplicationError from "../../../../../error/ApplicationError";
+} from "../baseInstanceUpdateService";
+import ApplicationError from "../../../../../../error/ApplicationError";
 import { XMLEditor, EditResult } from "@fem-viewer/parser/src/editor";
 import createParser from "@fem-viewer/parser";
 import { Model } from "@fem-viewer/types/Model";
@@ -11,6 +16,7 @@ import {
 	BorderSubclass,
 	InstanceSubclass,
 } from "@fem-viewer/types/InstanceClass";
+
 export type SubclassUpdateConfig = {
 	parameterName: string;
 	errorMessage: string;
@@ -20,20 +26,66 @@ export type SubclassUpdateConfig = {
 	createUpdateOperations: (
 		editor: XMLEditor,
 		instanceId: string,
-		iref: Iref,
-		subclassInstance: Instance,
-		instance: Instance
+		iref: Iref | null,
+		subclassInstance: Instance | null,
+		instance: Instance,
+		colorPickerMode: ColorPicker | BorderColorPicker
 	) => UpdateOperation[];
 };
 
 abstract class BaseSubclassUpdateService extends BaseInstanceUpdateService {
 	protected abstract config: SubclassUpdateConfig;
 
+	/**
+	 * Validate the request parameters
+	 */
 	protected validateParams(): void {
-		const subclassId = this.req.body[this.config.parameterName];
+		const { colorPickerMode } = this.req.body;
+		this.validateColorPickerMode(colorPickerMode);
 
-		if (!subclassId) {
-			throw new ApplicationError(this.config.errorMessage, 400);
+		// Only require subclass ID when in Subclass mode
+		if (colorPickerMode === "Subclass") {
+			const subclassId = this.req.body[this.config.parameterName];
+			if (!subclassId) {
+				throw new ApplicationError(this.config.errorMessage, 400);
+			}
+		}
+	}
+
+	/**
+	 * Get the valid color picker modes for this service
+	 * This should be overridden by child classes
+	 */
+	protected abstract getValidColorPickerModes(): string[];
+
+	/**
+	 * Get the error message for invalid color picker mode
+	 */
+	protected getInvalidColorPickerModeMessage(
+		colorPickerMode: string
+	): string {
+		const validModes = this.getValidColorPickerModes().join(", ");
+		return `Invalid colorPickerMode: ${colorPickerMode}. Must be one of: ${validModes}`;
+	}
+
+	/**
+	 * Validate the color picker mode using the template method pattern
+	 */
+	protected validateColorPickerMode(
+		colorPickerMode: ColorPicker | BorderColorPicker | string
+	): void {
+		// Check if provided
+		if (!colorPickerMode) {
+			throw new ApplicationError("colorPickerMode is required", 400);
+		}
+
+		// Check if valid
+		const validModes = this.getValidColorPickerModes();
+		if (!validModes.includes(colorPickerMode)) {
+			throw new ApplicationError(
+				this.getInvalidColorPickerModeMessage(colorPickerMode),
+				400
+			);
 		}
 	}
 
@@ -42,6 +94,7 @@ abstract class BaseSubclassUpdateService extends BaseInstanceUpdateService {
 		instanceId: string,
 		editor: XMLEditor
 	): Promise<EditResult> {
+		const { colorPickerMode } = this.req.body;
 		const subclassInstanceId = this.req.body[this.config.parameterName];
 
 		// Get instance details
@@ -50,6 +103,21 @@ abstract class BaseSubclassUpdateService extends BaseInstanceUpdateService {
 			throw new ApplicationError("Instance not found", 404);
 		}
 
+		// Handle non-Subclass modes (Default or Individual)
+		if (colorPickerMode !== "Subclass") {
+			const updateOperations = this.config.createUpdateOperations(
+				editor,
+				instanceId,
+				null,
+				null,
+				instance,
+				colorPickerMode
+			);
+
+			return this.processUpdateOperations(updateOperations);
+		}
+
+		// For Subclass mode, we need to find the referenced subclass
 		// Determine the appropriate subclass type for the instance
 		const expectedSubclassType = this.config.getExpectedSubclassType(
 			instance.class
@@ -111,7 +179,8 @@ abstract class BaseSubclassUpdateService extends BaseInstanceUpdateService {
 			instanceId,
 			iref,
 			exactSubclassInstance,
-			instance
+			instance,
+			colorPickerMode
 		);
 
 		// Process all operations - all must succeed

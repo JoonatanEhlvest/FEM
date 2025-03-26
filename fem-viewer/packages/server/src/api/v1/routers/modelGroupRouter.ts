@@ -8,8 +8,8 @@ import DeleteService from "../services/modelGroup/delete";
 import ShareDeleteService from "../services/modelGroup/share/delete";
 import ApplicationError from "../../../error/ApplicationError";
 import UpdateInstanceDescriptionService from "../services/modelGroup/instance/updateDescription";
-import UpdateInstanceSubclassService from "../services/modelGroup/instance/updateSubclass";
-import UpdateInstanceBSubclassService from "../services/modelGroup/instance/updateBSubclass";
+import UpdateInstanceSubclassService from "../services/modelGroup/instance/subclass/updateSubclass";
+import UpdateInstanceBSubclassService from "../services/modelGroup/instance/subclass/updateBSubclass";
 
 const router = Router();
 
@@ -125,11 +125,12 @@ router.patch(
 );
 
 /**
- * Updates the subclass of an instance (node) in a model group
+ * Updates the subclass and color picker mode of an instance (node) in a model group
  * req: {
  * 	modelGroupId: string;
  * 	instanceId: string;
- * 	subclassInstanceId: string;
+ * 	colorPickerMode: "Default" | "Individual" | "Subclass"; // The color picker mode to set
+ * 	subclassInstanceId?: string; // Required only when colorPickerMode is "Subclass"
  * }
  */
 router.patch(
@@ -150,11 +151,12 @@ router.patch(
 );
 
 /**
- * Updates the border subclass of an instance (node) in a model group
+ * Updates the border subclass and border color picker mode of an instance (node) in a model group
  * req: {
  * 	modelGroupId: string;
  * 	instanceId: string;
- * 	bsubclassInstanceId: string;
+ * 	colorPickerMode: "Individual" | "Subclass"; // The border color picker mode to set
+ * 	bsubclassInstanceId?: string; // Required only when colorPickerMode is "Subclass"
  * }
  */
 router.patch(
