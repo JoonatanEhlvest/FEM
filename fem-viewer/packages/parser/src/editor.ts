@@ -69,181 +69,6 @@ export class XMLEditor {
 	}
 
 	/**
-	 * Updates an instance attribute in the XML
-	 * @param instanceId The ID of the instance to update
-	 * @param attributeName The name of the attribute to update
-	 * @param attributeValue The new value for the attribute
-	 * @returns The result of the edit operation
-	 */
-	updateInstanceAttribute(
-		instanceId: string,
-		attributeName: string,
-		attributeValue: string
-	): EditResult {
-		return this._updateInstanceProperty(
-			instanceId,
-			"ATTRIBUTE",
-			attributeName,
-			attributeValue
-		);
-	}
-
-	/**
-	 * Updates an instance interref in the XML
-	 * @param instanceId The ID of the instance to update
-	 * @param interrefName The name of the interref to update
-	 * @param iref The new value for the interref
-	 * @returns The result of the edit operation
-	 */
-	updateInstanceInterref(
-		instanceId: string,
-		interrefName: InterrefType,
-		iref: Iref
-	): EditResult {
-		return this._updateInstanceProperty(
-			instanceId,
-			"INTERREF",
-			interrefName,
-			iref
-		);
-	}
-
-	/**
-	 * Updates an instance description in the XML
-	 * @param instanceId The ID of the instance to update
-	 * @param description The new description
-	 * @returns The result of the edit operation
-	 */
-	updateInstanceDescription(
-		instanceId: string,
-		description: string
-	): EditResult {
-		return this.updateInstanceAttribute(
-			instanceId,
-			"Description",
-			description
-		);
-	}
-
-	/**
-	 * Updates an instance color picker in the XML
-	 * @param instanceId The ID of the instance to update
-	 * @param colorPicker The new color picker (Default, Individual or Subclass)
-	 * @returns The result of the edit operation
-	 */
-	updateInstanceColorPicker(
-		instanceId: string,
-		colorPicker: ColorPicker
-	): EditResult {
-		return this.updateInstanceAttribute(
-			instanceId,
-			"Color Picker",
-			colorPicker
-		);
-	}
-
-	/**
-	 * Updates an instance border color picker in the XML
-	 * @param instanceId The ID of the instance to update
-	 * @param borderColorPicker The new border color picker (Individual or Subclass)
-	 * @returns The result of the edit operation
-	 */
-	updateInstanceBorderColorPicker(
-		instanceId: string,
-		borderColorPicker: BorderColorPicker
-	): EditResult {
-		return this.updateInstanceAttribute(
-			instanceId,
-			"Border Color Picker",
-			borderColorPicker
-		);
-	}
-
-	/**
-	 * Updates an instance referenced background color in the XML
-	 * @param instanceId The ID of the instance to update
-	 * @param color The new referenced background color
-	 * @returns The result of the edit operation
-	 */
-	updateInstanceReferencedBGColor(
-		instanceId: string,
-		color: string
-	): EditResult {
-		return this.updateInstanceExpressionAttributeValue(
-			instanceId,
-			"referencedColor",
-			color
-		);
-	}
-
-	/**
-	 * Updates an instance referenced ghost background color in the XML
-	 * @param instanceId The ID of the instance to update
-	 * @param color The new referenced ghost background color
-	 * @returns The result of the edit operation
-	 */
-	updateInstanceReferencedGhostBGColor(
-		instanceId: string,
-		color: string
-	): EditResult {
-		return this.updateInstanceExpressionAttributeValue(
-			instanceId,
-			"referencedGhostColor",
-			color
-		);
-	}
-
-	/**
-	 * Updates an instance attribute of type EXPRESSION in the XML
-	 * to a simple value expression (EXPR val:"attributeValue")
-	 * @param instanceId The ID of the instance to update
-	 * @param attributeName The name of the attribute to update
-	 * @param attributeValue The new value for the attribute
-	 * @returns The result of the edit operation
-	 */
-	updateInstanceExpressionAttributeValue(
-		instanceId: string,
-		attributeName: string,
-		attributeValue: string
-	): EditResult {
-		return this._updateInstanceProperty(
-			instanceId,
-			"ATTRIBUTE",
-			attributeName,
-			attributeValue,
-			(value) => `EXPR val:"${value}"`
-		);
-	}
-
-	/**
-	 * Updates an instance subclass in the XML
-	 * @param instanceId The ID of the instance to update
-	 * @param iref The full Iref object with subclass information
-	 * @returns The result of the edit operation
-	 */
-	updateInstanceSubclass(instanceId: string, iref: Iref): EditResult {
-		return this.updateInstanceInterref(
-			instanceId,
-			"Referenced Subclass" as InterrefType,
-			iref
-		);
-	}
-
-	/**
-	 * Updates an instance referenced BSubclass in the XML
-	 * @param instanceId The ID of the instance to update
-	 * @param iref The full Iref object with BSubclass information
-	 * @returns The result of the edit operation
-	 */
-	updateInstanceBSubclass(instanceId: string, iref: Iref): EditResult {
-		return this.updateInstanceInterref(
-			instanceId,
-			"Referenced Bsubclass" as InterrefType,
-			iref
-		);
-	}
-
-	/**
 	 * Finds an instance by ID
 	 * @param instanceId The ID of the instance to find
 	 * @returns The instance object or null if not found
@@ -438,6 +263,198 @@ export class XMLEditor {
 				}`,
 			};
 		}
+	}
+
+	/**
+	 * Updates an instance attribute in the XML
+	 * @param instanceId The ID of the instance to update
+	 * @param attributeName The name of the attribute to update
+	 * @param attributeValue The new value for the attribute
+	 * @returns The result of the edit operation
+	 */
+	updateInstanceAttribute(
+		instanceId: string,
+		attributeName: string,
+		attributeValue: string
+	): EditResult {
+		return this._updateInstanceProperty(
+			instanceId,
+			"ATTRIBUTE",
+			attributeName,
+			attributeValue
+		);
+	}
+
+	/**
+	 * Updates an instance interref in the XML
+	 * @param instanceId The ID of the instance to update
+	 * @param interrefName The name of the interref to update
+	 * @param iref The new value for the interref
+	 * @returns The result of the edit operation
+	 */
+	updateInstanceInterref(
+		instanceId: string,
+		interrefName: InterrefType,
+		iref: Iref
+	): EditResult {
+		return this._updateInstanceProperty(
+			instanceId,
+			"INTERREF",
+			interrefName,
+			iref
+		);
+	}
+
+	/**
+	 * Updates an instance description in the XML
+	 * @param instanceId The ID of the instance to update
+	 * @param description The new description
+	 * @returns The result of the edit operation
+	 */
+	updateInstanceDescription(
+		instanceId: string,
+		description: string
+	): EditResult {
+		return this.updateInstanceAttribute(
+			instanceId,
+			"Description",
+			description
+		);
+	}
+
+	/**
+	 * Updates an instance color picker in the XML
+	 * @param instanceId The ID of the instance to update
+	 * @param colorPicker The new color picker (Default, Individual or Subclass)
+	 * @returns The result of the edit operation
+	 */
+	updateInstanceColorPicker(
+		instanceId: string,
+		colorPicker: ColorPicker
+	): EditResult {
+		return this.updateInstanceAttribute(
+			instanceId,
+			"Color Picker",
+			colorPicker
+		);
+	}
+
+	/**
+	 * Updates an instance border color picker in the XML
+	 * @param instanceId The ID of the instance to update
+	 * @param borderColorPicker The new border color picker (Individual or Subclass)
+	 * @returns The result of the edit operation
+	 */
+	updateInstanceBorderColorPicker(
+		instanceId: string,
+		borderColorPicker: BorderColorPicker
+	): EditResult {
+		return this.updateInstanceAttribute(
+			instanceId,
+			"Border Color Picker",
+			borderColorPicker
+		);
+	}
+
+	/**
+	 * Updates an instance referenced background color in the XML
+	 * @param instanceId The ID of the instance to update
+	 * @param color The new referenced background color
+	 * @returns The result of the edit operation
+	 */
+	updateInstanceReferencedBGColor(
+		instanceId: string,
+		color: string
+	): EditResult {
+		return this.updateInstanceExpressionAttributeValue(
+			instanceId,
+			"referencedColor",
+			color
+		);
+	}
+
+	/**
+	 * Updates an instance referenced ghost background color in the XML
+	 * @param instanceId The ID of the instance to update
+	 * @param color The new referenced ghost background color
+	 * @returns The result of the edit operation
+	 */
+	updateInstanceReferencedGhostBGColor(
+		instanceId: string,
+		color: string
+	): EditResult {
+		return this.updateInstanceExpressionAttributeValue(
+			instanceId,
+			"referencedGhostColor",
+			color
+		);
+	}
+
+	/**
+	 * Updates an instance attribute of type EXPRESSION in the XML
+	 * to a simple value expression (EXPR val:"attributeValue")
+	 * @param instanceId The ID of the instance to update
+	 * @param attributeName The name of the attribute to update
+	 * @param attributeValue The new value for the attribute
+	 * @returns The result of the edit operation
+	 */
+	updateInstanceExpressionAttributeValue(
+		instanceId: string,
+		attributeName: string,
+		attributeValue: string
+	): EditResult {
+		return this._updateInstanceProperty(
+			instanceId,
+			"ATTRIBUTE",
+			attributeName,
+			attributeValue,
+			(value) => `EXPR val:"${value}"`
+		);
+	}
+
+	/**
+	 * Updates an instance subclass in the XML
+	 * @param instanceId The ID of the instance to update
+	 * @param iref The full Iref object with subclass information
+	 * @returns The result of the edit operation
+	 */
+	updateInstanceSubclass(instanceId: string, iref: Iref): EditResult {
+		return this.updateInstanceInterref(
+			instanceId,
+			"Referenced Subclass" as InterrefType,
+			iref
+		);
+	}
+
+	/**
+	 * Updates an instance referenced BSubclass in the XML
+	 * @param instanceId The ID of the instance to update
+	 * @param iref The full Iref object with BSubclass information
+	 * @returns The result of the edit operation
+	 */
+	updateInstanceBSubclass(instanceId: string, iref: Iref): EditResult {
+		return this.updateInstanceInterref(
+			instanceId,
+			"Referenced Bsubclass" as InterrefType,
+			iref
+		);
+	}
+
+	/**
+	 * Updates an instance referenced Bcolor in the XML
+	 * @param instanceId The ID of the instance to update
+	 * @param color The new referenced Bcolor
+	 * @returns The result of the edit operation
+	 */
+	updateInstanceReferencedBColor(
+		instanceId: string,
+		color: string
+	): EditResult {
+		return this.updateInstanceExpressionAttributeValue(
+			instanceId,
+			"referencedBcolor",
+			color
+		);
 	}
 }
 

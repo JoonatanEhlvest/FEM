@@ -149,4 +149,29 @@ router.patch(
 	}
 );
 
+/**
+ * Updates the border subclass of an instance (node) in a model group
+ * req: {
+ * 	modelGroupId: string;
+ * 	instanceId: string;
+ * 	bsubclassInstanceId: string;
+ * }
+ */
+router.patch(
+	"/modelgroup/:modelGroupId/instance/:instanceId/bsubclass",
+	[checkAuth, authorize(["ADMIN", "DEVELOPER"])],
+	async (req: Request, res: Response) => {
+		try {
+			const service = new UpdateInstanceBSubclassService(req, db);
+			const response = await service.execute();
+			res.json(response);
+		} catch (err) {
+			console.log(err);
+			res.status(500).json({
+				message: `Couldn't update instance border subclass: ${err}`,
+			});
+		}
+	}
+);
+
 export default router;

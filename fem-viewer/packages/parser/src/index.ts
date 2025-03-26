@@ -296,6 +296,9 @@ class Parser {
 					"colorpicker"
 				) as ColorPicker,
 				borderColor: this.tryGetStrAttr(attributes, "bordercolor"),
+				referencedBorderColor: this.extractHexColor(
+					this.tryGetStrAttr(attributes, "referencedbcolor")
+				),
 				borderColorPicker: this.tryGetStrAttr(
 					attributes,
 					"bordercolorpicker"

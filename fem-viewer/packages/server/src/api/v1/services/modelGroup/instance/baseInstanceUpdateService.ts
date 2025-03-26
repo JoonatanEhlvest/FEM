@@ -9,6 +9,14 @@ import { EditResult } from "@fem-viewer/parser/src/editor";
 import { UPLOAD_DIR } from "../../../../../../applicationPaths";
 
 /**
+ * Represents an operation to be performed on an instance
+ */
+export type UpdateOperation = {
+	operation: () => EditResult;
+	description: string;
+};
+
+/**
  * Base class for instance update services that handles common operations
  * like loading the model group, checking authorization, file I/O, and XML update process.
  */
@@ -98,6 +106,37 @@ abstract class BaseInstanceUpdateService extends BaseService {
 		} = { models: updatedModels };
 
 		return response;
+	}
+
+	/**
+	 * Process a series of update operations where all must succeed
+	 * @param operations Array of update operations to process
+	 * @returns The result of the last operation
+	 */
+	protected processUpdateOperations(
+		operations: UpdateOperation[]
+	): EditResult {
+		if (!operations.length) {
+			throw new ApplicationError("No operations to execute", 400);
+		}
+
+		let result: EditResult;
+
+		// Execute each operation - all must succeed
+		for (const op of operations) {
+			// Execute the operation
+			result = op.operation();
+
+			// Check for success
+			if (!result.success) {
+				throw new ApplicationError(
+					result.error || `Failed during ${op.description}`,
+					400
+				);
+			}
+		}
+
+		return result;
 	}
 
 	/**
