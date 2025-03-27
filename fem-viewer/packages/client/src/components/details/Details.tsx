@@ -255,17 +255,19 @@ const Details = () => {
 	}, [instance, dropdowns.interrefsOpen]);
 
 	const renderInstanceSpecificReference = () => {
-		if (!instance) return;
-		if (!instance.Interrefs) return;
-		return (
-			<div className={styles["ref-container"]}>
-				{/* <div
-					className={styles["ref-header"]}
-					onClick={() => toggleDropdown("singlerefsOpen")}
-				>
-					Single Ref
-				</div> */}
-				{[
+		if (!instance) return null;
+		if (!instance.Interrefs) return null;
+
+		// Define reference type and create a properly typed array
+		interface RefItem {
+			ref: NonNullable<any>;
+			refName: string;
+		}
+
+		// Filter out undefined/null refs
+		const validRefs: RefItem[] = [];
+
+		const allRefs = [
 					{
 						ref: instance.Interrefs.referencedAsset,
 						refName: "Referenced Asset",
@@ -294,10 +296,21 @@ const Details = () => {
 						ref: instance.Interrefs["Referenced Subclass"],
 						refName: "Referenced Subclass",
 					},
-				].map(({ ref, refName }) => {
-					if (ref) {
+		];
+
+		// Manually filter to avoid TypeScript confusion
+		for (const item of allRefs) {
+			if (item.ref) {
+				validRefs.push(item as RefItem);
+			}
+		}
+
+		if (validRefs.length === 0) return null;
+
 						return (
-							<div>
+			<div className={styles["ref-container"]}>
+				{validRefs.map(({ ref, refName }) => (
+					<div key={refName}>
 								<div
 									className={styles["ref-header"]}
 									onClick={() => {
@@ -315,38 +328,8 @@ const Details = () => {
 								>
 									{refName}
 								</div>
-								{/* {dropdowns.singlerefsOpen && (
-									<div className={styles["ref-item"]}>
-										<img
-											className={
-												styles["ref-item-model-img"]
-											}
-											src={model}
-											alt=""
-										/>
-										<div
-											className={styles["ref-item-model"]}
-										>
-											{ref.tmodelname}
 										</div>
-										<div
-											className={
-												styles["ref-item-instance"]
-											}
-										>
-											{ref.tobjname}
-										</div>
-										<img
-											className={styles["ref-link"]}
-											src={arrowRight}
-											alt="follow Reference"
-										/>{" "}
-									</div>
-								)} */}
-							</div>
-						);
-					}
-				})}
+				))}
 			</div>
 		);
 	};
