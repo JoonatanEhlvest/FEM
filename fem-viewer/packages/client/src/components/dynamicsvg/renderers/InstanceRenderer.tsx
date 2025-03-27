@@ -181,13 +181,27 @@ const InstanceRenderer: React.FC<InstanceRendererProps> = ({
 
 	// Function to get custom border color for the instance
 	function getCustomBorderColor(instance: Instance): string | undefined {
-		// For both ghost and non-ghost instances, use the borderColor if available
-		if (instance.borderColor) {
-			const color = instance.borderColor.replace("$", "#");
-			return color;
+		// Apply subclass border color if the instance has a subclass reference
+		if (
+			instance.Interrefs &&
+			instance.Interrefs["Referenced Bsubclass"] &&
+			instance.borderColorPicker === "Subclass"
+		) {
+			if (instance.referencedBorderColor) {
+				const color = instance.referencedBorderColor.replace("$", "#");
+				return color;
+			}
 		}
 
-		// If no custom border color is defined, return undefined to use the default
+		// Check for individual border color
+		if (instance.borderColorPicker === "Individual") {
+			if (instance.borderColor) {
+				const color = instance.borderColor.replace("$", "#");
+				return color;
+			}
+		}
+
+		// Return undefined to use the default border color
 		return undefined;
 	}
 
