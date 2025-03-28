@@ -7,7 +7,12 @@ import { Model } from "@fem-viewer/types";
 import { svgXML } from "../components/svgrenderer/svgrenderer";
 import { Reference } from "@fem-viewer/types";
 import http from "../http";
-import { Instance, InterrefType } from "@fem-viewer/types/Instance";
+import {
+	ColorPicker,
+	BorderColorPicker,
+	Instance,
+	InterrefType,
+} from "@fem-viewer/types/Instance";
 import { InstanceClass } from "@fem-viewer/types";
 import { UserRole } from "../components/dashboard/Dashboard";
 
@@ -470,24 +475,28 @@ const useFEM = () => {
 		});
 	};
 
-	const updateInstanceDescription = async (
+	const handleInstanceUpdate = async (
 		modelGroupId: string,
 		instanceId: string,
-		description: string
+		endpoint: string,
+		requestData: any
 	) => {
 		try {
 			const response = await http.patch(
-				`/api/v1/modelgroup/${modelGroupId}/instance/${instanceId}/description`,
-				{ description }
+				`/api/v1/modelgroup/${modelGroupId}/instance/${instanceId}/${endpoint}`,
+				requestData
 			);
-			
+
 			if (response.data && response.data.models) {
 				setState((prevState: FEMState) => {
 					const updatedModels = response.data.models;
-					
+
 					// Find the updated instance
 					let updatedCurrentInstance = prevState.currentInstance;
-					if (prevState.currentInstance && prevState.currentInstance.id === instanceId) {
+					if (
+						prevState.currentInstance &&
+						prevState.currentInstance.id === instanceId
+					) {
 						for (const model of updatedModels) {
 							const instance = model.instances.find(
 								(inst: Instance) => inst.id === instanceId
@@ -498,7 +507,7 @@ const useFEM = () => {
 							}
 						}
 					}
-					
+
 					// Find the updated current model
 					let updatedCurrentModel = prevState.currentModel;
 					if (prevState.currentModel) {
@@ -509,26 +518,66 @@ const useFEM = () => {
 							updatedCurrentModel = updatedModel;
 						}
 					}
-					
+
 					return {
 						...prevState,
 						models: updatedModels,
 						currentInstance: updatedCurrentInstance,
-						currentModel: updatedCurrentModel
+						currentModel: updatedCurrentModel,
+						references: initialState.references,
 					};
 				});
-				
+
+				// After updating state, rebuild references
+				getReferences(response.data.models);
+
 				return { success: true };
 			}
-			
+
 			return { success: false, error: "No models returned from server" };
 		} catch (error: any) {
-			console.error("Error updating instance description:", error);
-			return { 
-				success: false, 
-				error: error.response?.data?.message || "Failed to update description" 
+			console.error(`Error updating instance ${endpoint}:`, error);
+			return {
+				success: false,
+				error:
+					error.response?.data?.message ||
+					`Failed to update ${endpoint}`,
 			};
 		}
+	};
+
+	const updateInstanceDescription = async (
+		modelGroupId: string,
+		instanceId: string,
+		description: string
+	) => {
+		return handleInstanceUpdate(modelGroupId, instanceId, "description", {
+			description,
+		});
+	};
+
+	const updateInstanceSubclass = async (
+		modelGroupId: string,
+		instanceId: string,
+		subclassInstanceId: string | null,
+		colorPickerMode: ColorPicker | BorderColorPicker = "Subclass"
+	) => {
+		return handleInstanceUpdate(modelGroupId, instanceId, "subclass", {
+			subclassInstanceId,
+			colorPickerMode,
+		});
+	};
+
+	const updateInstanceBSubclass = async (
+		modelGroupId: string,
+		instanceId: string,
+		bsubclassInstanceId: string | null,
+		colorPickerMode: "Individual" | "Subclass" = "Subclass"
+	) => {
+		return handleInstanceUpdate(modelGroupId, instanceId, "bsubclass", {
+			bsubclassInstanceId,
+			colorPickerMode,
+		});
 	};
 
 	return {
@@ -568,6 +617,8 @@ const useFEM = () => {
 		addShare,
 		removeSharesToUser,
 		updateInstanceDescription,
+		updateInstanceSubclass,
+		updateInstanceBSubclass,
 		state,
 	};
 };

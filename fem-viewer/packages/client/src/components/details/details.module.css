@@ -196,7 +196,8 @@ table {
 	flex-wrap: wrap;
 }
 
-.save-button, .cancel-button {
+.save-button,
+.cancel-button {
 	padding: 6px 12px;
 	border-radius: 4px;
 	font-size: 12px;
@@ -263,8 +264,8 @@ table {
 	opacity: 0.7;
 	transition: all 0.2s;
 	position: absolute;
-	top: 2px;
-	right: 2px;
+	top: 4px;
+	right: 4px;
 }
 
 .edit-icon:hover {
@@ -274,7 +275,124 @@ table {
 
 .update-error {
 	color: #f44336;
+	margin-top: 5px;
 	font-size: 12px;
+	font-weight: normal;
+}
+
+/* Subclass dropdown styles */
+.subclass-dropdown,
+.select {
+	width: 100%;
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	background-color: white;
+	font-family: inherit;
+	font-size: 14px;
+	margin-bottom: 8px;
+	box-sizing: border-box;
+	cursor: pointer;
+	font-weight: normal;
+}
+
+.subclass-dropdown:focus,
+.select:focus {
+	outline: none;
+	border-color: var(--bg-primary);
+	box-shadow: 0 0 0 2px rgba(95, 172, 208, 0.25);
+}
+
+/* Style for dropdown options */
+.subclass-dropdown option,
+.select option {
+	padding: 8px;
+	font-weight: normal;
+}
+
+.picker-mode-selector {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-bottom: 12px;
+}
+
+.picker-mode-selector label {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	cursor: pointer;
+}
+
+.picker-mode-selector input[type="radio"] {
+	margin: 0;
+}
+
+.select-container {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.buttons-container {
+	display: flex;
+	gap: 8px;
 	margin-top: 4px;
-	word-break: break-word;
+}
+
+.show-value {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	position: relative;
+	min-height: 20px;
+}
+
+.value {
+	font-weight: normal;
+	padding-right: 24px; /* Make room for the edit icon */
+}
+
+.edit-button {
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 12px;
+	background-color: var(--bg-primary);
+	color: white;
+	border: none;
+	cursor: pointer;
+}
+
+.edit-button:hover {
+	background-color: var(--selected-bg);
+}
+
+.update-button {
+	padding: 6px 12px;
+	border-radius: 4px;
+	font-size: 12px;
+	cursor: pointer;
+	border: none;
+	transition: background-color 0.2s;
+	flex-shrink: 0;
+	background-color: #4caf50;
+	color: white;
+}
+
+.update-button:hover {
+	background-color: #45a049;
+}
+
+.update-button:disabled {
+	background-color: #a5d6a7;
+	cursor: not-allowed;
+}
+
+.error {
+	color: #f44336;
+	margin-top: 5px;
+	font-size: 12px;
+	font-weight: normal;
 }

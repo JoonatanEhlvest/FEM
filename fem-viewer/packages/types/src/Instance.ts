@@ -75,3 +75,14 @@ export const isSubclass = (i: Instance): boolean => {
 	];
 	return subclasses.includes(i.class);
 };
+
+export const isBorderSubclass = (i: Instance): boolean => {
+	const borderSubclasses: InstanceClass[] = [
+		"Asset_Border_Subclass",
+		"Process_Border_Subclass",
+		"External Actor_Border_Subclass",
+		"Pool_Border_Subclass",
+		"Note_Border_Subclass",
+	];
+	return borderSubclasses.includes(i.class);
+};
