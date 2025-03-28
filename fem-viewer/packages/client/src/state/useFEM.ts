@@ -215,7 +215,6 @@ const useFEM = () => {
 		const models = state.models;
 		const referencedModel = models.find((m) => m.name === refModelName);
 		if (referencedModel) {
-			const referencedInstances = [];
 			referencedModel.instances.forEach((instance) => {
 				references.forEach((ref) => {
 					if (ref.referencedByInstance === instance.name) {

@@ -470,12 +470,12 @@ const Details = () => {
 		setReferenceBackNavigation(null);
 	};
 
-	const toggleDropdown = (dropdown: keyof typeof dropdowns) => {
+	const toggleDropdown = useCallback((dropdown: keyof typeof dropdowns) => {
 		setDropdowns((prev) => ({
 			...prev,
 			[dropdown]: !prev[dropdown],
 		}));
-	};
+	}, []);
 
 	// Handle starting description edit
 	const handleEditDescription = () => {
