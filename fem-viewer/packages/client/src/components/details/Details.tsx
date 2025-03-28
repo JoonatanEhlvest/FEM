@@ -147,9 +147,78 @@ const Details = () => {
 	};
 
 	const renderAllOccurrences = useCallback(() => {
-		if (!instance || instance.isGhost) return;
+		if (!instance || instance.isGhost) return null;
+
+		const allRefs = Object.entries(state.references);
 		let refsFound = 0;
-		const numRefs = Object.keys(state.references).length;
+
+		const renderContent = () => {
+			if (!dropdowns.interrefsOpen) return null;
+
+			const content: ReactNode[] = allRefs.map(([refName, iref], i) => {
+				const referencingInstances = getInstancesThatReference(
+					instance,
+					refName as InterrefType
+				);
+
+				// Skip if no references found, unless it's the last iteration and we haven't found any refs yet
+				if (referencingInstances.length === 0) {
+					if (i === allRefs.length - 1 && refsFound === 0) {
+						return (
+							<div key={`empty-${refName}`}>Nothing found</div>
+						);
+					}
+					return null;
+				}
+
+				// Increment counter for found refs
+				refsFound++;
+
+				// Group references by model name
+				const refsByModelName: Record<string, Reference[]> = {};
+
+				referencingInstances.forEach((ref) => {
+					if (!refsByModelName[ref.referencedByModel]) {
+						refsByModelName[ref.referencedByModel] = [];
+					}
+					refsByModelName[ref.referencedByModel].push(ref);
+				});
+
+				return (
+					<div key={refName} className={styles["interref-container"]}>
+						<div className={styles["interref-title"]}>Models</div>
+						{Object.entries(refsByModelName).map(
+							([modelName, modelRefs]) => (
+								<div
+									key={modelName}
+									className={styles["ref-item"]}
+									onClick={() =>
+										goToAllOccurrences(modelName, modelRefs)
+									}
+								>
+									<img
+										className={styles["ref-item-model-img"]}
+										src={model}
+										alt=""
+									/>
+									<div className={styles["ref-item-model"]}>
+										{modelName}{" "}
+									</div>
+									<img
+										className={styles["ref-link"]}
+										src={arrowRight}
+										alt="follow Reference"
+									/>
+								</div>
+							)
+						)}
+					</div>
+				);
+			});
+
+			return content;
+		};
+
 		return (
 			<div className={styles["ref-container"]}>
 				<div
@@ -158,101 +227,17 @@ const Details = () => {
 				>
 					All Occurrences
 				</div>
-				{dropdowns.interrefsOpen &&
-					// Find instances that reference the current instance
-					Object.entries(state.references).map(
-						([refName, iref], i) => {
-							const refs = getInstancesThatReference(
-								instance,
-								refName as InterrefType
-							);
-
-							if (
-								i === numRefs - 1 && // If last iteration
-								refsFound === 0 && // And still no refs found
-								refs.length === 0 // And this iteration found none as well
-							) {
-								return <div>Nothing found</div>;
-							}
-
-							if (refs.length === 0) {
-								return;
-							} else {
-								refsFound += 1;
-							}
-
-							// Group references by model name
-							const refsByModelName: {
-								[key: string]: Array<Reference>;
-							} = {};
-
-							refs.forEach((ref) => {
-								if (refsByModelName[ref.referencedByModel]) {
-									refsByModelName[ref.referencedByModel].push(
-										ref
-									);
-								} else {
-									refsByModelName[ref.referencedByModel] = [
-										ref,
-									];
-								}
-							});
-
-							return (
-								<div className={styles["interref-container"]}>
-									<div className={styles["interref-title"]}>
-										Models
-									</div>
-									{Object.entries(refsByModelName).map(
-										([refModelName, refs]) => {
-											return (
-												<div
-													className={
-														styles["ref-item"]
-													}
-													onClick={() =>
-														goToAllOccurrences(
-															refModelName,
-															refs
-														)
-													}
-												>
-													<img
-														className={
-															styles[
-																"ref-item-model-img"
-															]
-														}
-														src={model}
-														alt=""
-													/>
-													<div
-														className={
-															styles[
-																"ref-item-model"
-															]
-														}
-													>
-														{refModelName}{" "}
-													</div>
-													<img
-														className={
-															styles["ref-link"]
-														}
-														src={arrowRight}
-														alt="follow Reference"
-													/>
-												</div>
-											);
-										}
-									)}
-								</div>
-							);
-						}
-					)}
+				{renderContent()}
 			</div>
 		);
-	}, [instance, dropdowns.interrefsOpen]);
+	}, [
+		instance,
+		dropdowns.interrefsOpen,
+		state.references,
+		getInstancesThatReference,
+		goToAllOccurrences,
+		toggleDropdown,
+	]);
 
 	const renderInstanceSpecificReference = () => {
 		if (!instance) return null;
