@@ -15,7 +15,9 @@
 		"referencedBGColor": { "display": false, "alias": "" },
 		"referencedGhostBGColor": { "display": false, "alias": "" },
 		"referencedDenomination": { "display": false, "alias": "" },
-		"borderColor": { "display": false, "alias": "" }
+		"borderColor": { "display": false, "alias": "" },
+		"colorPicker": { "display": true, "alias": "" },
+		"borderColorPicker": { "display": true, "alias": "" }
 	},
 	"Process": {
 		"class": { "display": true, "alias": "" },
@@ -33,7 +35,9 @@
 		"referencedBGColor": { "display": false, "alias": "" },
 		"referencedGhostBGColor": { "display": false, "alias": "" },
 		"referencedDenomination": { "display": false, "alias": "" },
-		"borderColor": { "display": false, "alias": "" }
+		"borderColor": { "display": false, "alias": "" },
+		"colorPicker": { "display": true, "alias": "" },
+		"borderColorPicker": { "display": true, "alias": "" }
 	},
 	"Pool": {
 		"class": { "display": true, "alias": "" },
@@ -51,7 +55,9 @@
 		"referencedBGColor": { "display": false, "alias": "" },
 		"referencedGhostBGColor": { "display": false, "alias": "" },
 		"referencedDenomination": { "display": false, "alias": "" },
-		"borderColor": { "display": false, "alias": "" }
+		"borderColor": { "display": false, "alias": "" },
+		"colorPicker": { "display": true, "alias": "" },
+		"borderColorPicker": { "display": true, "alias": "" }
 	},
 	"External Actor": {
 		"class": { "display": true, "alias": "" },
@@ -69,7 +75,9 @@
 		"referencedBGColor": { "display": false, "alias": "" },
 		"referencedGhostBGColor": { "display": false, "alias": "" },
 		"referencedDenomination": { "display": false, "alias": "" },
-		"borderColor": { "display": false, "alias": "" }
+		"borderColor": { "display": false, "alias": "" },
+		"colorPicker": { "display": true, "alias": "" },
+		"borderColorPicker": { "display": true, "alias": "" }
 	},
 	"Process_Subclass": {
 		"class": { "display": true, "alias": "" },
@@ -87,7 +95,9 @@
 		"referencedBGColor": { "display": false, "alias": "" },
 		"referencedGhostBGColor": { "display": false, "alias": "" },
 		"referencedDenomination": { "display": false, "alias": "" },
-		"borderColor": { "display": false, "alias": "" }
+		"borderColor": { "display": false, "alias": "" },
+		"colorPicker": { "display": true, "alias": "" },
+		"borderColorPicker": { "display": true, "alias": "" }
 	},
 	"Asset_Subclass": {
 		"class": { "display": true, "alias": "" },
@@ -105,7 +115,9 @@
 		"referencedBGColor": { "display": false, "alias": "" },
 		"referencedGhostBGColor": { "display": false, "alias": "" },
 		"referencedDenomination": { "display": false, "alias": "" },
-		"borderColor": { "display": false, "alias": "" }
+		"borderColor": { "display": false, "alias": "" },
+		"colorPicker": { "display": true, "alias": "" },
+		"borderColorPicker": { "display": true, "alias": "" }
 	},
 	"Pool_Subclass": {
 		"class": { "display": true, "alias": "" },
@@ -123,7 +135,9 @@
 		"referencedBGColor": { "display": false, "alias": "" },
 		"referencedGhostBGColor": { "display": false, "alias": "" },
 		"referencedDenomination": { "display": false, "alias": "" },
-		"borderColor": { "display": false, "alias": "" }
+		"borderColor": { "display": false, "alias": "" },
+		"colorPicker": { "display": true, "alias": "" },
+		"borderColorPicker": { "display": true, "alias": "" }
 	},
 	"External Actor_Subclass": {
 		"class": { "display": true, "alias": "" },
@@ -141,7 +155,9 @@
 		"referencedBGColor": { "display": false, "alias": "" },
 		"referencedGhostBGColor": { "display": false, "alias": "" },
 		"referencedDenomination": { "display": false, "alias": "" },
-		"borderColor": { "display": false, "alias": "" }
+		"borderColor": { "display": false, "alias": "" },
+		"colorPicker": { "display": true, "alias": "" },
+		"borderColorPicker": { "display": true, "alias": "" }
 	},
 	"Note": {
 		"class": { "display": true, "alias": "" },
@@ -158,7 +174,9 @@
 		"referencedBGColor": { "display": false, "alias": "" },
 		"referencedGhostBGColor": { "display": false, "alias": "" },
 		"referencedDenomination": { "display": false, "alias": "" },
-		"borderColor": { "display": false, "alias": "" }
+		"borderColor": { "display": false, "alias": "" },
+		"colorPicker": { "display": true, "alias": "" },
+		"borderColorPicker": { "display": true, "alias": "" }
 	},
 	"Note_Subclass": {
 		"class": { "display": true, "alias": "" },
@@ -175,7 +193,9 @@
 		"referencedBGColor": { "display": false, "alias": "" },
 		"referencedGhostBGColor": { "display": false, "alias": "" },
 		"referencedDenomination": { "display": false, "alias": "" },
-		"borderColor": { "display": false, "alias": "" }
+		"borderColor": { "display": false, "alias": "" },
+		"colorPicker": { "display": true, "alias": "" },
+		"borderColorPicker": { "display": true, "alias": "" }
 	},
 	"Asset_Border_Subclass": {
 		"class": { "display": true, "alias": "" },
@@ -193,7 +213,9 @@
 		"referencedBGColor": { "display": false, "alias": "" },
 		"referencedGhostBGColor": { "display": false, "alias": "" },
 		"referencedDenomination": { "display": false, "alias": "" },
-		"borderColor": { "display": false, "alias": "" }
+		"borderColor": { "display": false, "alias": "" },
+		"colorPicker": { "display": true, "alias": "" },
+		"borderColorPicker": { "display": true, "alias": "" }
 	},
 	"Process_Border_Subclass": {
 		"class": { "display": true, "alias": "" },
@@ -211,7 +233,9 @@
 		"referencedBGColor": { "display": false, "alias": "" },
 		"referencedGhostBGColor": { "display": false, "alias": "" },
 		"referencedDenomination": { "display": false, "alias": "" },
-		"borderColor": { "display": false, "alias": "" }
+		"borderColor": { "display": false, "alias": "" },
+		"colorPicker": { "display": true, "alias": "" },
+		"borderColorPicker": { "display": true, "alias": "" }
 	},
 	"Pool_Border_Subclass": {
 		"class": { "display": true, "alias": "" },
@@ -229,7 +253,9 @@
 		"referencedBGColor": { "display": false, "alias": "" },
 		"referencedGhostBGColor": { "display": false, "alias": "" },
 		"referencedDenomination": { "display": false, "alias": "" },
-		"borderColor": { "display": false, "alias": "" }
+		"borderColor": { "display": false, "alias": "" },
+		"colorPicker": { "display": true, "alias": "" },
+		"borderColorPicker": { "display": true, "alias": "" }
 	},
 	"External Actor_Border_Subclass": {
 		"class": { "display": true, "alias": "" },
@@ -247,7 +273,9 @@
 		"referencedBGColor": { "display": false, "alias": "" },
 		"referencedGhostBGColor": { "display": false, "alias": "" },
 		"referencedDenomination": { "display": false, "alias": "" },
-		"borderColor": { "display": false, "alias": "" }
+		"borderColor": { "display": false, "alias": "" },
+		"colorPicker": { "display": true, "alias": "" },
+		"borderColorPicker": { "display": true, "alias": "" }
 	},
 	"Note_Border_Subclass": {
 		"class": { "display": true, "alias": "" },
@@ -264,6 +292,8 @@
 		"referencedBGColor": { "display": false, "alias": "" },
 		"referencedGhostBGColor": { "display": false, "alias": "" },
 		"referencedDenomination": { "display": false, "alias": "" },
-		"borderColor": { "display": false, "alias": "" }
+		"borderColor": { "display": false, "alias": "" },
+		"colorPicker": { "display": true, "alias": "" },
+		"borderColorPicker": { "display": true, "alias": "" }
 	}
 }

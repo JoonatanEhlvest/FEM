@@ -9,6 +9,7 @@ export interface InstancePosition {
 }
 
 export type ColorPicker = "Default" | "Individual" | "Subclass";
+export type BorderColorPicker = "Individual" | "Subclass";
 
 export interface Iref {
 	type: string;
@@ -55,6 +56,8 @@ export interface Instance {
 	colorPicker: ColorPicker;
 
 	borderColor: string;
+	referencedBorderColor: string;
+	borderColorPicker: BorderColorPicker;
 	Interrefs: Interrefs;
 }
 
@@ -67,6 +70,19 @@ export const isSubclass = (i: Instance): boolean => {
 		"Asset_Subclass",
 		"Process_Subclass",
 		"External Actor_Subclass",
+		"Pool_Subclass",
+		"Note_Subclass",
 	];
 	return subclasses.includes(i.class);
+};
+
+export const isBorderSubclass = (i: Instance): boolean => {
+	const borderSubclasses: InstanceClass[] = [
+		"Asset_Border_Subclass",
+		"Process_Border_Subclass",
+		"External Actor_Border_Subclass",
+		"Pool_Border_Subclass",
+		"Note_Border_Subclass",
+	];
+	return borderSubclasses.includes(i.class);
 };

@@ -1,7 +1,12 @@
 import { XMLParser, XMLBuilder } from "fast-xml-parser";
 import { addXMLAttrPrefix, ATTR_PREFIX } from "./utils";
 import { Connector } from "@fem-viewer/types";
-import { Instance, ColorPicker, INSTANCE_DEFAULTS } from "@fem-viewer/types/Instance";
+import {
+	Instance,
+	ColorPicker,
+	INSTANCE_DEFAULTS,
+	BorderColorPicker,
+} from "@fem-viewer/types/Instance";
 import { InstanceClass } from "@fem-viewer/types";
 import { Model } from "@fem-viewer/types";
 import { ModelAttributes } from "@fem-viewer/types";
@@ -9,13 +14,10 @@ import { XMLObj } from "./types";
 import { Interrefs } from "@fem-viewer/types/Instance";
 
 // Import from baseParser.ts
-import { parseXMLToModel, buildXMLFromParsed } from './baseParser';
-
-// Import from doctypeParser.ts
-import { parseXMLToModelPreserveDoctype, buildXMLFromParsedPreserveDoctype } from './doctypeParser';
+import { parseXMLToModel } from "./baseParser";
 
 // Import from editor.ts
-import { XMLEditor, createXMLEditor } from './editor';
+import { XMLEditor, createXMLEditor } from "./editor";
 
 class Parser {
 	_parsedXML: any;
@@ -294,6 +296,13 @@ class Parser {
 					"colorpicker"
 				) as ColorPicker,
 				borderColor: this.tryGetStrAttr(attributes, "bordercolor"),
+				referencedBorderColor: this.extractHexColor(
+					this.tryGetStrAttr(attributes, "referencedbcolor")
+				),
+				borderColorPicker: this.tryGetStrAttr(
+					attributes,
+					"bordercolorpicker"
+				) as BorderColorPicker,
 				Interrefs: interrefs,
 			};
 
@@ -389,7 +398,7 @@ class Parser {
 		return ret;
 	}
 
-	parseModel(model: any) {
+	parseModel(model: any): Model {
 		const attributes = this.getModelAttributes(model.MODELATTRIBUTES);
 		let name = attributes.name;
 		if (!name || name === "") {
@@ -409,7 +418,7 @@ class Parser {
 		return parsedModel;
 	}
 
-	parseModels() {
+	parseModels(): Model[] {
 		return this.getModels().map((model: any) => {
 			return this.parseModel(model);
 		});
@@ -421,7 +430,6 @@ const createParser = (XMLData: any): Parser => {
 	return new Parser(jObj);
 };
 
-
 export default createParser;
 
 export { Parser };
@@ -430,9 +438,11 @@ export { Parser };
 export { addXMLAttrPrefix, ATTR_PREFIX };
 
 // Re export baseParser and doctypeParser
-export { parseXMLToModel, buildXMLFromParsed } from './baseParser';
-export { parseXMLToModelPreserveDoctype, buildXMLFromParsedPreserveDoctype } from './doctypeParser';
+export { parseXMLToModel, buildXMLFromParsed } from "./baseParser";
+export {
+	parseXMLToModelPreserveDoctype,
+	buildXMLFromParsedPreserveDoctype,
+} from "./doctypeParser";
 
 // Export XMLEditor
 export { XMLEditor, createXMLEditor };
-
