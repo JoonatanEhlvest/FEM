@@ -456,6 +456,23 @@ export class XMLEditor {
 			color
 		);
 	}
+
+	/**
+	 * Updates an instance referenced subclass name in the XML
+	 * @param instanceId The ID of the instance to update
+	 * @param subclassName The new referenced subclass name
+	 * @returns The result of the edit operation
+	 */
+	updateInstanceReferencedSubclassName(
+		instanceId: string,
+		subclassName: string
+	): EditResult {
+		return this.updateInstanceExpressionAttributeValue(
+			instanceId,
+			"Referenced Subclass Name",
+			subclassName
+		);
+	}
 }
 
 /**

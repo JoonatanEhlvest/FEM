@@ -28,7 +28,7 @@ class UpdateInstanceSubclassService extends BaseSubclassUpdateService {
 		) => {
 			// Handle non-Subclass modes
 			if (colorPickerMode !== "Subclass") {
-				return [
+				const operations = [
 					{
 						operation: () =>
 							editor.updateInstanceSubclass(instanceId, null),
@@ -59,6 +59,20 @@ class UpdateInstanceSubclassService extends BaseSubclassUpdateService {
 						description: `Set color picker to ${colorPickerMode}`,
 					},
 				];
+
+				// If it's a Process instance, also clear the Referenced Subclass Name
+				if (instance.class.includes("Process")) {
+					operations.push({
+						operation: () =>
+							editor.updateInstanceReferencedSubclassName(
+								instanceId,
+								""
+							),
+						description: "Clear Referenced Subclass Name attribute",
+					});
+				}
+
+				return operations;
 			}
 
 			// For Subclass mode, set the reference to the provided subclass
@@ -98,9 +112,8 @@ class UpdateInstanceSubclassService extends BaseSubclassUpdateService {
 			if (instance.class.includes("Process")) {
 				updateOperations.push({
 					operation: () =>
-						editor.updateInstanceExpressionAttributeValue(
+						editor.updateInstanceReferencedSubclassName(
 							instanceId,
-							"Referenced Subclass Name",
 							subclassInstance.name
 						),
 					description: "Update Referenced Subclass Name attribute",
