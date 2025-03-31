@@ -188,7 +188,7 @@ class Parser {
 	parseInstancePosition(s: string): Instance["position"] {
 		const match = this.findFloatsFromString(s);
 		if (match === undefined) {
-			return undefined;
+			throw new Error(`Invalid position string: ${s}`);
 		}
 		const ret: Instance["position"] = {
 			x: match[0],

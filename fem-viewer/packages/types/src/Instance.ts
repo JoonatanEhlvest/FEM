@@ -37,7 +37,7 @@ export interface Instance {
 	id: string;
 	name: string;
 	class: InstanceClass;
-	position: InstancePosition | undefined;
+	position: InstancePosition;
 	isGroup: boolean;
 	isGhost: boolean;
 	applyArchetype: string;
