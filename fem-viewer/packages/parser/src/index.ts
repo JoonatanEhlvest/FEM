@@ -1,4 +1,3 @@
-import { XMLParser, XMLBuilder } from "fast-xml-parser";
 import { addXMLAttrPrefix, ATTR_PREFIX } from "./utils";
 import { Connector } from "@fem-viewer/types";
 import {
@@ -11,8 +10,10 @@ import { InstanceClass } from "@fem-viewer/types";
 import { Model } from "@fem-viewer/types";
 import { ModelAttributes } from "@fem-viewer/types";
 import { XMLObj } from "./types";
-import { Interrefs } from "@fem-viewer/types/Instance";
-
+import {
+	ConnectorPositions,
+	ConnectorPoint,
+} from "@fem-viewer/types/Connector";
 // Import from baseParser.ts
 import { parseXMLToModel } from "./baseParser";
 
@@ -238,6 +239,89 @@ class Parser {
 		return res;
 	}
 
+	tryGetCoordinateValue(part: string): number {
+		const value = part.split(":")[1];
+		if (!value) {
+			throw new Error(
+				`Invalid coordinate format: missing value after colon in ${part}`
+			);
+		}
+		if (!value.endsWith("cm")) {
+			throw new Error(`Invalid unit: expected 'cm', got ${value}`);
+		}
+		return parseFloat(value.replace("cm", ""));
+	}
+
+	parseConnectorPositions(s: string): ConnectorPositions {
+		if (!s) {
+			return {
+				pathPoints: [],
+				edgeCount: 0,
+				index: 0,
+			};
+		}
+
+		// Split the string by spaces and filter out empty strings
+		const parts = s.split(" ").filter(Boolean);
+
+		// Extract edge count and index
+		const edgeCount =
+			parts.indexOf("EDGE") >= 0
+				? parseInt(parts[parts.indexOf("EDGE") + 1])
+				: 0;
+		const indexPart = parts.find((p) => p.startsWith("index:"));
+		const index = indexPart ? parseInt(indexPart.split(":")[1]) : 0;
+
+		// Extract middle point if it exists
+		const middleIndex = parts.indexOf("MIDDLE");
+		const middlePoint =
+			middleIndex >= 0 && middleIndex + 2 < parts.length
+				? {
+						x: this.tryGetCoordinateValue(parts[middleIndex + 1]),
+						y: this.tryGetCoordinateValue(parts[middleIndex + 2]),
+				  }
+				: undefined;
+
+		// Extract path points
+		let nextPositionNumber = 1;
+		const pathPoints: ConnectorPoint[] = [];
+		for (let i = 0; i < parts.length - 1; i++) {
+			if (
+				parts[i].startsWith(`x${nextPositionNumber}`) &&
+				parts[i + 1].startsWith(`y${nextPositionNumber}`)
+			) {
+				const x = this.tryGetCoordinateValue(parts[i]);
+				const y = this.tryGetCoordinateValue(parts[i + 1]);
+				pathPoints.push({ x, y });
+				i++;
+				nextPositionNumber++;
+			}
+		}
+
+		if (edgeCount !== pathPoints.length) {
+			throw new Error(
+				`Expected edge count does not match the number of path points found: ${edgeCount} !== ${pathPoints.length}`
+			);
+		}
+
+		return {
+			pathPoints,
+			middlePoint,
+			edgeCount,
+			index,
+		};
+	}
+
+	/**
+	 * Parses a semicolon-separated list of types from an ENUMERATIONLIST attribute.
+	 * @param value - The value of the ENUMERATIONLIST attribute
+	 * @returns Array of type strings, or empty array if no value
+	 */
+	private parseTypeList(value: string | undefined): string[] {
+		if (!value) return [];
+		return value.split(";").map((type) => type.trim());
+	}
+
 	getInstances(
 		instances: Array<XMLObj>,
 		modelName: Model["name"]
@@ -322,9 +406,16 @@ class Parser {
 				class: this.tryGetStrProperty(XMLconnector, "class"),
 				fromId: this.tryGetStrProperty(from, "instance"),
 				toId: this.tryGetStrProperty(to, "instance"),
-				positions: this.tryGetStrAttr(attributes, "positions"),
+				positions: this.parseConnectorPositions(
+					this.tryGetStrAttr(attributes, "positions")
+				),
 				appearance: this.tryGetStrAttr(attributes, "appearance"),
-				processType: this.tryGetStrAttr(attributes, "processtype"),
+				processTypes: this.parseTypeList(
+					this.tryGetStrAttr(attributes, "processtype")
+				),
+				assetTypes: this.parseTypeList(
+					this.tryGetStrAttr(attributes, "assettype")
+				),
 			};
 			return connector;
 		});
