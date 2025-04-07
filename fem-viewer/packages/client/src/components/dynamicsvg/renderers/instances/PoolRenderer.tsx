@@ -1,0 +1,110 @@
+import React from "react";
+import { InstanceDisplayStyle } from "../../types/InstanceDisplayStyle";
+import { BaseInstanceRenderer } from "../base/BaseInstanceRenderer";
+import { InstanceRendererProps } from "../../types/InstanceRendererTypes";
+
+export class PoolRenderer extends BaseInstanceRenderer {
+	private static readonly DEFAULT_STYLE: InstanceDisplayStyle = {
+		fill: "transparent",
+		stroke: "#000000",
+		strokeWidth: 2.5,
+	};
+
+	constructor(props: InstanceRendererProps) {
+		super(props);
+	}
+
+	protected getDefaultStyle(): InstanceDisplayStyle {
+		return { ...PoolRenderer.DEFAULT_STYLE };
+	}
+
+	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
+		// Calculate dimensions and positions for the cloud bubbles
+		const bubbleRadius = Math.min(this.width, this.height) * 0.2;
+		const centerX = this.x + this.width / 2;
+		const centerY = this.y + this.height / 2;
+
+		// Create cloud bubbles positions
+		const bubbles = [
+			{
+				cx: this.x + bubbleRadius,
+				cy: this.y + this.height * 0.3,
+				r: bubbleRadius,
+			},
+			{
+				cx: this.x + this.width * 0.3,
+				cy: this.y + bubbleRadius,
+				r: bubbleRadius * 0.9,
+			},
+			{ cx: centerX, cy: this.y + bubbleRadius, r: bubbleRadius * 1.1 },
+			{
+				cx: this.x + this.width * 0.7,
+				cy: this.y + bubbleRadius,
+				r: bubbleRadius * 0.9,
+			},
+			{
+				cx: this.x + this.width - bubbleRadius,
+				cy: this.y + this.height * 0.3,
+				r: bubbleRadius,
+			},
+			{
+				cx: this.x + this.width - bubbleRadius,
+				cy: centerY,
+				r: bubbleRadius * 1.1,
+			},
+			{
+				cx: this.x + this.width - bubbleRadius,
+				cy: this.y + this.height * 0.7,
+				r: bubbleRadius,
+			},
+			{
+				cx: this.x + this.width * 0.7,
+				cy: this.y + this.height - bubbleRadius,
+				r: bubbleRadius * 0.9,
+			},
+			{
+				cx: centerX,
+				cy: this.y + this.height - bubbleRadius,
+				r: bubbleRadius * 1.1,
+			},
+			{
+				cx: this.x + this.width * 0.3,
+				cy: this.y + this.height - bubbleRadius,
+				r: bubbleRadius * 0.9,
+			},
+			{
+				cx: this.x + bubbleRadius,
+				cy: this.y + this.height * 0.7,
+				r: bubbleRadius,
+			},
+			{ cx: this.x + bubbleRadius, cy: centerY, r: bubbleRadius * 1.1 },
+		];
+
+		// Create SVG path for the cloud
+		let path = `M ${bubbles[0].cx},${bubbles[0].cy}`;
+
+		for (let i = 0; i < bubbles.length; i++) {
+			const current = bubbles[i];
+			const next = bubbles[(i + 1) % bubbles.length];
+
+			// Create a curve between current and next bubble
+			path += ` A ${current.r},${current.r} 0 0,1 ${
+				(current.cx + next.cx) / 2
+			},${(current.cy + next.cy) / 2}`;
+		}
+
+		path += " Z"; // Close the path
+
+		return (
+			<path
+				d={path}
+				fill={style.fill}
+				stroke={style.stroke}
+				strokeWidth={style.strokeWidth / this.zoom}
+				strokeDasharray={style.strokeDasharray}
+				opacity={style.opacity}
+				filter={style.filter}
+			/>
+		);
+	}
+}
