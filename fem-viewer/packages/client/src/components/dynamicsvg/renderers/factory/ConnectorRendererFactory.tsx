@@ -3,6 +3,8 @@ import { ManagesConnectorRenderer } from "../connectors/ManagesConnectorRenderer
 import { UsedInConnectorRenderer } from "../connectors/UsedInConnectorRenderer";
 import { DrawingAddingConnectorRenderer } from "../connectors/DrawingAddingConnectorRenderer";
 import { RelatesToConnectionRenderer } from "../connectors/RelatesToConnectionRenderer";
+import { AssociationRenderer } from "../connectors/AssociationRenderer";
+
 export class ConnectorRendererFactory {
 	static createRenderer(props: ConnectorRendererProps) {
 		switch (props.connector.class) {
@@ -14,6 +16,8 @@ export class ConnectorRendererFactory {
 				return new DrawingAddingConnectorRenderer(props);
 			case "relates-to":
 				return new RelatesToConnectionRenderer(props);
+			case "Association":
+				return new AssociationRenderer(props);
 			default:
 				// Default to Manages renderer for unknown types
 				return new ManagesConnectorRenderer(props);

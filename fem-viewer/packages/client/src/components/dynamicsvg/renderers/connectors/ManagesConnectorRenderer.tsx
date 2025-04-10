@@ -5,8 +5,9 @@ export class ManagesConnectorRenderer extends BaseConnectorRenderer {
 	protected getDisplayProperties(): ConnectorDisplayProperties {
 		return {
 			defaultStyle: {
-				stroke: "#3498db",
+				stroke: "black",
 				strokeWidth: 2,
+				strokeDasharray: "6,4",
 				opacity: 1,
 				fill: "none",
 			},

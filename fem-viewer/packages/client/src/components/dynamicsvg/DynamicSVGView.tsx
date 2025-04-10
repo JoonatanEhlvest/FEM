@@ -148,8 +148,8 @@ const DynamicSVGView: React.FC = () => {
 
 				{/* Zoom controls */}
 				<div className={styles["zoom-controls"]}>
-					<button className={styles["zoom-button"]} onClick={zoomIn}>
-						+
+					<button className={styles["zoom-button"]} onClick={zoomOut}>
+						-
 					</button>
 					<button
 						className={styles["zoom-button"]}
@@ -157,9 +157,10 @@ const DynamicSVGView: React.FC = () => {
 					>
 						Reset
 					</button>
-					<button className={styles["zoom-button"]} onClick={zoomOut}>
-						-
+					<button className={styles["zoom-button"]} onClick={zoomIn}>
+						+
 					</button>
+
 					<div className={styles["zoom-level"]}>
 						{Math.round(zoom * 100)}%
 					</div>
