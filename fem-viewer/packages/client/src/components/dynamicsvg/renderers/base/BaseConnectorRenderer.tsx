@@ -1,0 +1,585 @@
+import React from "react";
+import { Connector, Instance } from "@fem-viewer/types";
+import { CM_TO_PX } from "../../types/constants";
+import {
+	ConnectorDisplayProperties,
+	CanvasPoint,
+	CanvasRect,
+	Segment,
+	Intersection,
+} from "../../types/ConnectorTypes";
+
+export interface ConnectorRendererProps {
+	connector: Connector;
+	fromInstance: Instance;
+	toInstance: Instance;
+	zoom: number;
+}
+
+export abstract class BaseConnectorRenderer {
+	protected props: ConnectorRendererProps;
+	protected displayProperties: ConnectorDisplayProperties;
+
+	constructor(props: ConnectorRendererProps) {
+		this.props = props;
+		this.displayProperties = this.getDisplayProperties();
+	}
+
+	protected abstract getDisplayProperties(): ConnectorDisplayProperties;
+
+	protected getInstanceRect(instance: Instance): CanvasRect {
+		if (!instance.position) {
+			throw new Error("Instance position is required");
+		}
+
+		const isNote =
+			instance.class === "Note" || instance.class === "Note_Subclass";
+
+		// For Notes, the coordinates represent the top-left corner
+		if (isNote) {
+			return {
+				x: instance.position.x * CM_TO_PX,
+				y: instance.position.y * CM_TO_PX,
+				width: instance.position.width * CM_TO_PX,
+				height: instance.position.height * CM_TO_PX,
+			};
+		}
+
+		// For other instances, the coordinates represent the center point
+		// Calculate the top-left corner for the rectangle
+		return {
+			x:
+				instance.position.x * CM_TO_PX -
+				(instance.position.width * CM_TO_PX) / 2,
+			y:
+				instance.position.y * CM_TO_PX -
+				(instance.position.height * CM_TO_PX) / 2,
+			width: instance.position.width * CM_TO_PX,
+			height: instance.position.height * CM_TO_PX,
+		};
+	}
+
+	protected getInstanceCenter(instance: Instance): CanvasPoint {
+		if (!instance.position) {
+			throw new Error("Instance position is required");
+		}
+
+		const isNote =
+			instance.class === "Note" || instance.class === "Note_Subclass";
+
+		// For Notes, compute the center from the top-left position
+		if (isNote) {
+			return {
+				x:
+					instance.position.x * CM_TO_PX +
+					(instance.position.width * CM_TO_PX) / 2,
+				y:
+					instance.position.y * CM_TO_PX +
+					(instance.position.height * CM_TO_PX) / 2,
+			};
+		}
+
+		// For other instances, the position already represents the center point
+		return {
+			x: instance.position.x * CM_TO_PX,
+			y: instance.position.y * CM_TO_PX,
+		};
+	}
+
+	protected isPointInsideRect(point: CanvasPoint, rect: CanvasRect): boolean {
+		return (
+			point.x >= rect.x &&
+			point.x <= rect.x + rect.width &&
+			point.y >= rect.y &&
+			point.y <= rect.y + rect.height
+		);
+	}
+
+	/**
+	 * Calculates intersection with a vertical edge of the rectangle.
+	 *
+	 * The line is defined parametrically as:
+	 * x = p1.x + t * dx
+	 * y = p1.y + t * dy
+	 *
+	 * For a vertical edge at x-coordinate 'x':
+	 * t = (x - p1.x) / dx
+	 *
+	 * Then we check if the corresponding y-coordinate is within the rectangle's height.
+	 *
+	 * @param p1 - Starting point of the line
+	 * @param dx - Change in x from p1 to p2
+	 * @param dy - Change in y from p1 to p2
+	 * @param x - The x-coordinate of the vertical edge to check
+	 * @param rect - The rectangle to check intersection with
+	 * @returns The intersection point and its parameter t, or null if no valid intersection
+	 */
+	protected findVerticalEdgeIntersection(
+		p1: CanvasPoint,
+		dx: number,
+		dy: number,
+		x: number,
+		rect: CanvasRect
+	): Intersection | null {
+		// Calculate t where the line intersects the vertical edge
+		const t = (x - p1.x) / dx;
+
+		// Only consider intersections in the forward direction from p1
+		if (t >= 0) {
+			// Calculate the y-coordinate at this intersection
+			const y = p1.y + t * dy;
+
+			// Check if the y-coordinate is within the rectangle's height
+			if (y >= rect.y && y <= rect.y + rect.height) {
+				return { t, point: { x, y } };
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Calculates intersection with a horizontal edge of the rectangle.
+	 *
+	 * The line is defined parametrically as:
+	 * x = p1.x + t * dx
+	 * y = p1.y + t * dy
+	 *
+	 * For a horizontal edge at y-coordinate 'y':
+	 * t = (y - p1.y) / dy
+	 *
+	 * Then we check if the corresponding x-coordinate is within the rectangle's width.
+	 *
+	 * @param p1 - Starting point of the line
+	 * @param dx - Change in x from p1 to p2
+	 * @param dy - Change in y from p1 to p2
+	 * @param y - The y-coordinate of the horizontal edge to check
+	 * @param rect - The rectangle to check intersection with
+	 * @returns The intersection point and its parameter t, or null if no valid intersection
+	 */
+	protected findHorizontalEdgeIntersection(
+		p1: CanvasPoint,
+		dx: number,
+		dy: number,
+		y: number,
+		rect: CanvasRect
+	): Intersection | null {
+		// Calculate t where the line intersects the horizontal edge
+		const t = (y - p1.y) / dy;
+
+		// Only consider intersections in the forward direction from p1 (moving from p1 to p2)
+		if (t >= 0) {
+			// Calculate the x-coordinate at this intersection
+			const x = p1.x + t * dx;
+
+			// Check if the x-coordinate is within the rectangle's width
+			if (x >= rect.x && x <= rect.x + rect.width) {
+				return { t, point: { x, y } };
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Checks if a value is effectively zero (less than half a pixel)
+	 * Used to determine if a line is effectively vertical or horizontal
+	 */
+	protected isCloseToZero(value: number): boolean {
+		return Math.abs(value) < 0.0001;
+	}
+
+	/**
+	 * Finds the intersection point between a line segment and a rectangle's border.
+	 * The function will find the intersection closest to the outside point.
+	 *
+	 * @param outsidePoint - A point outside the rectangle
+	 * @param insidePoint - A point inside the rectangle
+	 * @param rect - The rectangle to find intersection with
+	 * @returns The intersection point on the rectangle's border
+	 * @throws Error if both points are inside or outside the rectangle
+	 */
+	protected findBorderIntersection(
+		outsidePoint: CanvasPoint,
+		insidePoint: CanvasPoint,
+		rect: CanvasRect
+	): CanvasPoint {
+		const dx = insidePoint.x - outsidePoint.x;
+		const dy = insidePoint.y - outsidePoint.y;
+
+		const outsidePointInside = this.isPointInsideRect(outsidePoint, rect);
+		const insidePointInside = this.isPointInsideRect(insidePoint, rect);
+
+		// If both points are inside, this is an invalid case for finding border intersections
+		if (outsidePointInside && insidePointInside) {
+			throw new Error(
+				"Both points are inside the rectangle. This is not a valid case for finding border intersections."
+			);
+		}
+
+		// If points are in wrong order, swap them
+		if (outsidePointInside && !insidePointInside) {
+			return this.findBorderIntersection(insidePoint, outsidePoint, rect);
+		}
+
+		// If both points are outside, this is an invalid case
+		if (!outsidePointInside && !insidePointInside) {
+			throw new Error(
+				"Both points are outside the rectangle. This is not a valid case for finding border intersections."
+			);
+		}
+
+		// Now we know outsidePoint is outside and insidePoint is inside
+		const intersections: Intersection[] = [];
+
+		// Check vertical edges if line is not vertical
+		if (!this.isCloseToZero(dx)) {
+			const leftIntersection = this.findVerticalEdgeIntersection(
+				outsidePoint,
+				dx,
+				dy,
+				rect.x,
+				rect
+			);
+			const rightIntersection = this.findVerticalEdgeIntersection(
+				outsidePoint,
+				dx,
+				dy,
+				rect.x + rect.width,
+				rect
+			);
+
+			if (leftIntersection) intersections.push(leftIntersection);
+			if (rightIntersection) intersections.push(rightIntersection);
+		}
+
+		// Check horizontal edges if line is not horizontal
+		if (!this.isCloseToZero(dy)) {
+			const topIntersection = this.findHorizontalEdgeIntersection(
+				outsidePoint,
+				dx,
+				dy,
+				rect.y,
+				rect
+			);
+			const bottomIntersection = this.findHorizontalEdgeIntersection(
+				outsidePoint,
+				dx,
+				dy,
+				rect.y + rect.height,
+				rect
+			);
+
+			if (topIntersection) intersections.push(topIntersection);
+			if (bottomIntersection) intersections.push(bottomIntersection);
+		}
+
+		// Sort intersections by distance from outside point (smallest t first)
+		intersections.sort((a, b) => a.t - b.t);
+
+		// Return the closest intersection, or insidePoint if no intersections found
+		return intersections.length > 0 ? intersections[0].point : insidePoint;
+	}
+
+	/**
+	 * Converts path points from CM to pixels
+	 */
+	protected getPathPoints(): CanvasPoint[] {
+		const { connector } = this.props;
+		const pathPoints = connector.positions?.pathPoints || [];
+		return pathPoints.map((point) => ({
+			x: point.x * CM_TO_PX,
+			y: point.y * CM_TO_PX,
+		}));
+	}
+
+	/**
+	 * Calculates the middle point for label placement
+	 */
+	protected getMiddlePoint(): CanvasPoint {
+		const { connector } = this.props;
+		// Use predefined middle point if available
+		if (connector.positions.middlePoint) {
+			return {
+				x: connector.positions.middlePoint.x * CM_TO_PX,
+				y: connector.positions.middlePoint.y * CM_TO_PX,
+			};
+		}
+
+		// Get all segments of the connector
+		const segments = this.getSegments();
+
+		// Calculate total length of all segments
+		let totalLength = 0;
+		const segmentLengths = segments.map((segment) => {
+			const dx = segment.to.x - segment.from.x;
+			const dy = segment.to.y - segment.from.y;
+			const length = Math.sqrt(dx * dx + dy * dy);
+			totalLength += length;
+			return length;
+		});
+
+		// Find the middle point along the path
+		const targetLength = totalLength / 2;
+		let accumulatedLength = 0;
+
+		for (let i = 0; i < segments.length; i++) {
+			const segment = segments[i];
+			const segmentLength = segmentLengths[i];
+
+			if (accumulatedLength + segmentLength >= targetLength) {
+				// We found the segment containing the middle point
+				const remainingLength = targetLength - accumulatedLength;
+				const ratio = remainingLength / segmentLength;
+
+				// Calculate the exact point along this segment
+				return {
+					x: segment.from.x + (segment.to.x - segment.from.x) * ratio,
+					y: segment.from.y + (segment.to.y - segment.from.y) * ratio,
+				};
+			}
+
+			accumulatedLength += segmentLength;
+		}
+
+		// Fallback: if something goes wrong, return the last point
+		return segments[segments.length - 1].to;
+	}
+
+	/**
+	 * Checks if a point is horizontally or vertically aligned with a rectangle
+	 * Returns the aligned edge point if aligned, null otherwise
+	 */
+	protected getAlignedEdgePoint(
+		point: CanvasPoint,
+		rect: CanvasRect
+	): CanvasPoint | null {
+		// Check if point is horizontally aligned with the rectangle
+		if (point.x >= rect.x && point.x <= rect.x + rect.width) {
+			// If aligned horizontally, return the point on the top or bottom edge
+			if (point.y < rect.y) {
+				return { x: point.x, y: rect.y }; // Top edge
+			} else if (point.y > rect.y + rect.height) {
+				return { x: point.x, y: rect.y + rect.height }; // Bottom edge
+			}
+		}
+
+		// Check if point is vertically aligned with the rectangle
+		if (point.y >= rect.y && point.y <= rect.y + rect.height) {
+			// If aligned vertically, return the point on the left or right edge
+			if (point.x < rect.x) {
+				return { x: rect.x, y: point.y }; // Left edge
+			} else if (point.x > rect.x + rect.width) {
+				return { x: rect.x + rect.width, y: point.y }; // Right edge
+			}
+		}
+
+		return null; // Not aligned
+	}
+
+	/**
+	 * Calculates all segments of the connector path
+	 */
+	protected getSegments(): Segment[] {
+		const pathPoints = this.getPathPoints();
+		const fromCenter = this.getInstanceCenter(this.props.fromInstance);
+		const toCenter = this.getInstanceCenter(this.props.toInstance);
+		const fromRect = this.getInstanceRect(this.props.fromInstance);
+		const toRect = this.getInstanceRect(this.props.toInstance);
+
+		// For direct connections with no path points, use standard center-based connection
+		if (pathPoints.length === 0) {
+			const startPoint = this.findBorderIntersection(
+				toCenter,
+				fromCenter,
+				fromRect
+			);
+			const endPoint = this.findBorderIntersection(
+				fromCenter,
+				toCenter,
+				toRect
+			);
+			return [{ from: startPoint, to: endPoint }];
+		}
+
+		// For connections with path points, check alignment with instance boundaries
+		const segments: Segment[] = [];
+
+		// Handle start point connection
+		const firstPathPoint = pathPoints[0];
+		let startPoint: CanvasPoint;
+
+		// Check if first path point aligns with the from instance
+		const startAlignedPoint = this.getAlignedEdgePoint(
+			firstPathPoint,
+			fromRect
+		);
+		if (startAlignedPoint) {
+			// If aligned, connect directly to the aligned edge point
+			startPoint = startAlignedPoint;
+		} else {
+			// Otherwise use the standard center-based intersection
+			startPoint = this.findBorderIntersection(
+				firstPathPoint,
+				fromCenter,
+				fromRect
+			);
+		}
+
+		// Add first segment
+		segments.push({ from: startPoint, to: firstPathPoint });
+
+		// Add segments between path points
+		for (let i = 0; i < pathPoints.length - 1; i++) {
+			segments.push({
+				from: pathPoints[i],
+				to: pathPoints[i + 1],
+			});
+		}
+
+		// Handle end point connection
+		const lastPathPoint = pathPoints[pathPoints.length - 1];
+		let endPoint: CanvasPoint;
+
+		// Check if last path point aligns with the to instance
+		const endAlignedPoint = this.getAlignedEdgePoint(lastPathPoint, toRect);
+		if (endAlignedPoint) {
+			// If aligned, connect directly to the aligned edge point
+			endPoint = endAlignedPoint;
+		} else {
+			// Otherwise use the standard center-based intersection
+			endPoint = this.findBorderIntersection(
+				lastPathPoint,
+				toCenter,
+				toRect
+			);
+		}
+
+		// Add final segment
+		segments.push({
+			from: lastPathPoint,
+			to: endPoint,
+		});
+
+		return segments;
+	}
+
+	protected renderSegment(
+		segment: Segment,
+		index: number
+	): React.ReactElement {
+		return (
+			<path
+				key={`segment-${index}`}
+				d={`M ${segment.from.x} ${segment.from.y} L ${segment.to.x} ${segment.to.y}`}
+				style={this.displayProperties.defaultStyle}
+			/>
+		);
+	}
+
+	protected renderDebugElements(): React.ReactNode {
+		if (process.env.NODE_ENV !== "development") {
+			return null;
+		}
+
+		const pathPoints = this.getPathPoints();
+		const fromCenter = this.getInstanceCenter(this.props.fromInstance);
+		const toCenter = this.getInstanceCenter(this.props.toInstance);
+		const segments = this.getSegments();
+		const startPoint = segments[0].from;
+		const endPoint = segments[segments.length - 1].to;
+
+		return (
+			<>
+				{pathPoints.map((point, index) => (
+					<circle
+						key={`point-${index}`}
+						cx={point.x}
+						cy={point.y}
+						r={2}
+						fill="#0088FF"
+						stroke="white"
+						strokeWidth={1}
+						opacity={0.6}
+					/>
+				))}
+				<circle
+					cx={fromCenter.x}
+					cy={fromCenter.y}
+					r={3}
+					fill="#00FF00"
+					stroke="white"
+					strokeWidth={1}
+					opacity={0.6}
+				/>
+				<circle
+					cx={toCenter.x}
+					cy={toCenter.y}
+					r={3}
+					fill="#00FF00"
+					stroke="white"
+					strokeWidth={1}
+					opacity={0.6}
+				/>
+				<circle
+					cx={startPoint.x}
+					cy={startPoint.y}
+					r={3}
+					fill="#FF0000"
+					stroke="white"
+					strokeWidth={1}
+					opacity={0.6}
+				/>
+				<circle
+					cx={endPoint.x}
+					cy={endPoint.y}
+					r={3}
+					fill="#FF0000"
+					stroke="white"
+					strokeWidth={1}
+					opacity={0.6}
+				/>
+				<circle
+					cx={this.getMiddlePoint().x}
+					cy={this.getMiddlePoint().y}
+					r={3}
+					fill="#FF00FF"
+					stroke="white"
+					strokeWidth={1}
+					opacity={0.6}
+				/>
+			</>
+		);
+	}
+
+	protected renderLabel(): React.ReactNode {
+		const middlePoint = this.getMiddlePoint();
+
+		return (
+			<text
+				x={middlePoint.x}
+				y={middlePoint.y}
+				fontSize={this.displayProperties.labelStyle?.fontSize || 8}
+				textAnchor="middle"
+				fill={this.displayProperties.labelStyle?.fill || "#555555"}
+				opacity={this.displayProperties.labelStyle?.opacity || 0.8}
+			>
+				{this.props.connector.class}
+			</text>
+		);
+	}
+
+	public render(): React.ReactElement {
+		const segments = this.getSegments();
+
+		return (
+			<g
+				className="connector"
+				data-connector-type={this.props.connector.class}
+			>
+				{segments.map((segment, index) =>
+					this.renderSegment(segment, index)
+				)}
+				{this.renderLabel()}
+			</g>
+		);
+	}
+}
