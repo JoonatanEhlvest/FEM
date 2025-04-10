@@ -464,13 +464,23 @@ export abstract class BaseConnectorRenderer {
 
 	protected renderSegment(
 		segment: Segment,
-		index: number
+		index: number,
+		markerId?: string
 	): React.ReactElement {
+		const segments = this.getSegments();
+		const isLastSegment = index === segments.length - 1;
+
 		return (
 			<path
 				key={`segment-${index}`}
 				d={`M ${segment.from.x} ${segment.from.y} L ${segment.to.x} ${segment.to.y}`}
-				style={this.displayProperties.defaultStyle}
+				style={{
+					...this.displayProperties.defaultStyle,
+					markerEnd:
+						isLastSegment && markerId
+							? `url(#${markerId})`
+							: undefined,
+				}}
 			/>
 		);
 	}
@@ -567,16 +577,83 @@ export abstract class BaseConnectorRenderer {
 		);
 	}
 
+	/**
+	 * Gets the arrow style settings with sensible defaults
+	 */
+	protected getArrowStyleSettings() {
+		const arrowStyle = this.displayProperties.arrowStyle || {};
+
+		const visible = arrowStyle.visible ?? true;
+		const width = arrowStyle.width ?? 6;
+		const height = arrowStyle.height ?? 4;
+
+		// For consistent shape across different connectors
+		const viewBoxWidth = 12;
+		const viewBoxHeight = 9;
+
+		// Calculate the midpoint of the arrow height for centering
+		const viewBoxMidY = viewBoxHeight / 2;
+
+		return {
+			visible,
+			width: visible ? width : 0,
+			height: visible ? height : 0,
+			viewBoxWidth,
+			viewBoxHeight,
+			viewBoxMidY,
+		};
+	}
+
 	public render(): React.ReactElement {
 		const segments = this.getSegments();
+		const markerId = `arrowhead-${this.props.connector.id}`;
+
+		const {
+			visible: showArrow,
+			width: arrowWidth,
+			height: arrowHeight,
+			viewBoxWidth,
+			viewBoxHeight,
+			viewBoxMidY,
+		} = this.getArrowStyleSettings();
+
+		// Build the arrow points string
+		const arrowPoints = `0 0, ${viewBoxWidth} ${viewBoxMidY}, 0 ${viewBoxHeight}`;
 
 		return (
 			<g
 				className="connector"
 				data-connector-type={this.props.connector.class}
 			>
+				{showArrow && (
+					<defs>
+						<marker
+							id={markerId}
+							markerWidth={arrowWidth}
+							markerHeight={arrowHeight}
+							refX={viewBoxWidth} // Place reference point at right tip of arrow
+							refY={viewBoxMidY} // Center vertically
+							orient="auto"
+							overflow="hidden"
+							viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
+						>
+							<polyline
+								points={arrowPoints}
+								fill="none"
+								stroke={
+									this.displayProperties.defaultStyle.stroke
+								}
+								strokeWidth="1.5"
+							/>
+						</marker>
+					</defs>
+				)}
 				{segments.map((segment, index) =>
-					this.renderSegment(segment, index)
+					this.renderSegment(
+						segment,
+						index,
+						showArrow ? markerId : undefined
+					)
 				)}
 				{this.renderLabel()}
 			</g>

@@ -6,7 +6,7 @@ export class ManagesConnectorRenderer extends BaseConnectorRenderer {
 		return {
 			defaultStyle: {
 				stroke: "#3498db",
-				strokeWidth: 4,
+				strokeWidth: 2,
 				opacity: 1,
 				fill: "none",
 			},

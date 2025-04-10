@@ -67,4 +67,9 @@ export interface ConnectorDisplayProperties {
 		fill: string;
 		opacity: number;
 	};
+	arrowStyle?: {
+		width?: number; // Controls the arrow size (optional)
+		height?: number; // Controls the arrow height (optional)
+		visible?: boolean; // Whether to show the arrow (defaults to true)
+	};
 }
