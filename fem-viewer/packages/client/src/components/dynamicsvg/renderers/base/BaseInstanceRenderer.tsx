@@ -1,5 +1,6 @@
 import React from "react";
 import { Instance, Model } from "@fem-viewer/types";
+import { isSubclass, isBorderSubclass } from "@fem-viewer/types/Instance";
 import { InstanceDisplayStyle } from "../../types/InstanceDisplayStyle";
 import { InstanceRendererProps } from "../../types/InstanceRendererTypes";
 import { CM_TO_PX } from "../../types/constants";
@@ -321,9 +322,17 @@ export abstract class BaseInstanceRenderer {
 			return <></>;
 		}
 
-		const nameLines = this.formatNameForDisplay(
-			this.instance.name || "Unnamed"
-		);
+		const displayText = (() => {
+			if (this.instance.class === "Note") {
+				return this.instance.description;
+			}
+			if (isSubclass(this.instance) || isBorderSubclass(this.instance)) {
+				return this.instance.name;
+			}
+			return this.instance.denomination;
+		})();
+
+		const nameLines = this.formatNameForDisplay(displayText);
 		const style = this.getInstanceStyle();
 
 		return (
