@@ -1,5 +1,3 @@
-import { Instance } from "./Instance";
-
 /**
  * Represents an absolute position from the top left corner of the model canvas.
  *

@@ -51,6 +51,10 @@ export abstract class BaseInstanceRenderer {
 	protected width: number = 0;
 	protected height: number = 0;
 
+	// Center coordinates in pixels (used for rendering)
+	protected centerX: number = 0;
+	protected centerY: number = 0;
+
 	constructor(props: InstanceRendererProps) {
 		this.instance = props.instance;
 		this.model = props.model;
@@ -58,11 +62,27 @@ export abstract class BaseInstanceRenderer {
 		this.isSelected = props.isSelected;
 		this.zoom = props.zoom;
 
-		// Calculate position and dimensions in pixels
-		this.x = this.instance.position!.x * CM_TO_PX;
-		this.y = this.instance.position!.y * CM_TO_PX;
-		this.width = this.instance.position!.width * CM_TO_PX;
-		this.height = this.instance.position!.height * CM_TO_PX;
+		// Calculate dimensions in pixels
+		this.width = this.instance.position.width * CM_TO_PX;
+		this.height = this.instance.position.height * CM_TO_PX;
+
+		// Calculate center point coordinates
+		this.setupCoordinates();
+	}
+
+	/**
+	 * Setup coordinates based on instance position
+	 * For most instances, x,y in the model represent the center point
+	 * This method can be overridden by specific renderers (like NoteRenderer)
+	 */
+	protected setupCoordinates(): void {
+		// Default behavior: position coordinates represent the center point
+		this.centerX = this.instance.position.x * CM_TO_PX;
+		this.centerY = this.instance.position.y * CM_TO_PX;
+
+		// Calculate top-left corner for rendering
+		this.x = this.centerX - this.width / 2;
+		this.y = this.centerY - this.height / 2;
 	}
 
 	// Abstract methods that must be implemented by specific renderers

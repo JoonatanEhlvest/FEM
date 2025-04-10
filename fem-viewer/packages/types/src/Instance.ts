@@ -1,7 +1,21 @@
 import { InstanceClass } from "./InstanceClass";
 
+/**
+ * Position and dimensions of an instance in the model.
+ * Note on coordinate system:
+ * - For most instances (except Notes), x,y coordinates represent the center point
+ * - For Notes, x,y coordinates represent the top-left corner
+ */
 export interface InstancePosition {
+	/**
+	 * For most instances (except Notes), x represents the center point.
+	 * For Notes, x represents the top-left corner.
+	 */
 	x: number;
+	/**
+	 * For most instances (except Notes), y represents the center point.
+	 * For Notes, y represents the top-left corner.
+	 */
 	y: number;
 	width: number;
 	height: number;

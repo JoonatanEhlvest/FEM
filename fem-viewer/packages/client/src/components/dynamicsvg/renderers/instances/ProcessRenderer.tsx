@@ -37,8 +37,8 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
 		return (
 			<ellipse
-				cx={this.x + this.width / 2}
-				cy={this.y + this.height / 2}
+				cx={this.centerX}
+				cy={this.centerY}
 				rx={this.width / 2}
 				ry={this.height / 2}
 				fill={style.fill}
