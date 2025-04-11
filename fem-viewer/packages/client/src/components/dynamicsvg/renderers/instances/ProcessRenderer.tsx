@@ -34,40 +34,110 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 		return { ...ProcessRenderer.DEFAULT_STYLE };
 	}
 
+	// Render simple arrow tips on the process borders
+	private renderArrowTips(style: InstanceDisplayStyle): React.ReactElement[] {
+		const arrows: React.ReactElement[] = [];
+		const strokeWidth = style.strokeWidth / this.zoom;
+
+		// Top arrow tip (slightly left of center)
+		const topX = this.centerX - this.width * 0.1;
+		const topY = this.y;
+
+		// Bottom arrow tip (slightly right of center)
+		const bottomX = this.centerX + this.width * 0.1;
+		const bottomY = this.y + this.height;
+
+		// Top arrow tip (V shape)
+		arrows.push(
+			<React.Fragment key="top-arrow-tip">
+				<line
+					x1={topX - 12}
+					y1={topY - 5}
+					x2={topX}
+					y2={topY}
+					stroke={style.stroke}
+					strokeWidth={strokeWidth}
+					opacity={style.opacity || 1}
+				/>
+				<line
+					x1={topX - 12}
+					y1={topY + 5}
+					x2={topX}
+					y2={topY}
+					stroke={style.stroke}
+					strokeWidth={strokeWidth}
+					opacity={style.opacity || 1}
+				/>
+			</React.Fragment>
+		);
+
+		// Bottom arrow tip (V shape)
+		arrows.push(
+			<React.Fragment key="bottom-arrow-tip">
+				<line
+					x1={bottomX + 12}
+					y1={bottomY - 5}
+					x2={bottomX}
+					y2={bottomY}
+					stroke={style.stroke}
+					strokeWidth={strokeWidth}
+					opacity={style.opacity || 1}
+				/>
+				<line
+					x1={bottomX + 12}
+					y1={bottomY + 5}
+					x2={bottomX}
+					y2={bottomY}
+					stroke={style.stroke}
+					strokeWidth={strokeWidth}
+					opacity={style.opacity || 1}
+				/>
+			</React.Fragment>
+		);
+
+		return arrows;
+	}
+
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
 		// Use a rounded rectangle for group processes, and ellipse for regular processes
 		if (this.instance.isGroup) {
 			const cornerRadius = 8;
 			return (
-				<rect
-					x={this.x}
-					y={this.y}
-					width={this.width}
-					height={this.height}
-					fill={style.fill}
-					stroke={style.stroke}
-					strokeWidth={style.strokeWidth / this.zoom}
-					strokeDasharray={style.strokeDasharray}
-					opacity={style.opacity}
-					filter={style.filter}
-					rx={cornerRadius}
-					ry={cornerRadius}
-				/>
+				<>
+					<rect
+						x={this.x}
+						y={this.y}
+						width={this.width}
+						height={this.height}
+						fill={style.fill}
+						stroke={style.stroke}
+						strokeWidth={style.strokeWidth / this.zoom}
+						strokeDasharray={style.strokeDasharray}
+						opacity={style.opacity}
+						filter={style.filter}
+						rx={cornerRadius}
+						ry={cornerRadius}
+					/>
+					{this.renderArrowTips(style)}
+				</>
 			);
 		} else {
 			return (
-				<ellipse
-					cx={this.centerX}
-					cy={this.centerY}
-					rx={this.width / 2}
-					ry={this.height / 2}
-					fill={style.fill}
-					stroke={style.stroke}
-					strokeWidth={style.strokeWidth / this.zoom}
-					strokeDasharray={style.strokeDasharray}
-					opacity={style.opacity}
-					filter={style.filter}
-				/>
+				<>
+					<ellipse
+						cx={this.centerX}
+						cy={this.centerY}
+						rx={this.width / 2}
+						ry={this.height / 2}
+						fill={style.fill}
+						stroke={style.stroke}
+						strokeWidth={style.strokeWidth / this.zoom}
+						strokeDasharray={style.strokeDasharray}
+						opacity={style.opacity}
+						filter={style.filter}
+					/>
+					{this.renderArrowTips(style)}
+				</>
 			);
 		}
 	}
