@@ -29,10 +29,7 @@ export abstract class BaseInstanceRenderer {
 		};
 
 	protected static readonly BASE_GHOST_STYLE: Partial<InstanceDisplayStyle> =
-		{
-			opacity: 0.7,
-			stroke: "#9e9e9e",
-		};
+		{};
 
 	protected static readonly BASE_SELECTED_STYLE: Partial<InstanceDisplayStyle> =
 		{
@@ -213,7 +210,6 @@ export abstract class BaseInstanceRenderer {
 						FONT_SETTINGS.INSTANCE_NAME.fontSize
 					)}
 					fontWeight={FONT_SETTINGS.INSTANCE_NAME.fontWeight}
-					opacity={this.instance.isGhost ? 0.7 : 1}
 				>
 					{nameLines[0]}
 				</text>
@@ -232,7 +228,6 @@ export abstract class BaseInstanceRenderer {
 						FONT_SETTINGS.INSTANCE_NAME.fontSize
 					)}
 					fontWeight={FONT_SETTINGS.INSTANCE_NAME.fontWeight}
-					opacity={this.instance.isGhost ? 0.7 : 1}
 				>
 					{nameLines[0]}
 				</text>
@@ -246,7 +241,6 @@ export abstract class BaseInstanceRenderer {
 						FONT_SETTINGS.INSTANCE_NAME.fontSize
 					)}
 					fontWeight={FONT_SETTINGS.INSTANCE_NAME.fontWeight}
-					opacity={this.instance.isGhost ? 0.7 : 1}
 				>
 					{nameLines[1]}
 				</text>
@@ -264,7 +258,7 @@ export abstract class BaseInstanceRenderer {
 			<path
 				d="M -20 -4 L -8 -4 L -8 -8 L 0 0 L -8 8 L -8 4 L -20 4 Z"
 				transform={`translate(${this.x + this.width}, ${this.y + 15})`}
-				stroke="#666"
+				stroke={this.getInstanceStyle().stroke}
 				strokeWidth="1.5"
 				fill="none"
 			/>
