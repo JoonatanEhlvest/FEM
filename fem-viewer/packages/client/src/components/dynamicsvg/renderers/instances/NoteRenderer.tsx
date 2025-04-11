@@ -8,7 +8,7 @@ export class NoteRenderer extends BaseInstanceRenderer {
 	private static readonly DEFAULT_STYLE: InstanceDisplayStyle = {
 		fill: "#FFFCE8", // Light yellow default fill for notes
 		stroke: "#000000",
-		strokeWidth: 2.5,
+		strokeWidth: 1,
 	};
 
 	constructor(props: InstanceRendererProps) {

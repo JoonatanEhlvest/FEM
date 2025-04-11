@@ -7,7 +7,7 @@ export class AssetRenderer extends BaseInstanceRenderer {
 	private static readonly DEFAULT_STYLE: InstanceDisplayStyle = {
 		fill: "transparent",
 		stroke: "#000000",
-		strokeWidth: 2.5,
+		strokeWidth: 1.5,
 	};
 
 	constructor(props: InstanceRendererProps) {

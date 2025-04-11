@@ -6,7 +6,7 @@ export class AssociationRenderer extends BaseConnectorRenderer {
 		return {
 			defaultStyle: {
 				stroke: "blue",
-				strokeWidth: 2,
+				strokeWidth: 1,
 				strokeDasharray: "6,4",
 				opacity: 1,
 				fill: "none",

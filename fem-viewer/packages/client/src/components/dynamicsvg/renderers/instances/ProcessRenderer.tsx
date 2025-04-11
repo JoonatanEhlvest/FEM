@@ -9,22 +9,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 	private static readonly DEFAULT_STYLE: InstanceDisplayStyle = {
 		fill: "transparent",
 		stroke: "#000000",
-		strokeWidth: 2.5,
-	};
-
-	private static readonly GROUP_STYLE: Partial<InstanceDisplayStyle> = {
-		strokeWidth: 2,
-		strokeDasharray: "5,3",
-	};
-
-	private static readonly GHOST_STYLE: Partial<InstanceDisplayStyle> = {
-		opacity: 0.7,
-		stroke: "#9e9e9e",
-	};
-
-	private static readonly SELECTED_STYLE: Partial<InstanceDisplayStyle> = {
-		stroke: "#2196f3",
-		strokeWidth: 5,
+		strokeWidth: 1,
 	};
 
 	constructor(props: InstanceRendererProps) {

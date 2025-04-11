@@ -6,7 +6,7 @@ export class DrawingAddingConnectorRenderer extends BaseConnectorRenderer {
 		return {
 			defaultStyle: {
 				stroke: "blue",
-				strokeWidth: 2,
+				strokeWidth: 1,
 				strokeDasharray: "10,5",
 				opacity: 1,
 				fill: "none",
