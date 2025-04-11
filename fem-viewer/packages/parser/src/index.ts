@@ -5,8 +5,20 @@ import {
 	ColorPicker,
 	INSTANCE_DEFAULTS,
 	BorderColorPicker,
+	ProcessInstance,
+	AssetInstance,
+	ExternalActorInstance,
+	PoolInstance,
+	NoteInstance,
 } from "@fem-viewer/types/Instance";
-import { InstanceClass } from "@fem-viewer/types";
+import {
+	InstanceClass,
+	ProcessClass,
+	AssetClass,
+	ExternalActorClass,
+	PoolClass,
+	NoteClass,
+} from "@fem-viewer/types/InstanceClass";
 import { Model } from "@fem-viewer/types";
 import { ModelAttributes } from "@fem-viewer/types";
 import { XMLObj } from "./types";
@@ -339,12 +351,15 @@ class Parser {
 				XMLInstance.INTERREF as XMLObj[]
 			);
 
-			const instance: Instance = {
+			// Get the class value first to determine instance type
+			const classValue = this.tryGetStrProperty(
+				XMLInstance,
+				"class"
+			) as InstanceClass;
+
+			// Create the base properties common to all instance types
+			const baseProps = {
 				id,
-				class: this.tryGetStrProperty(
-					XMLInstance,
-					"class"
-				) as InstanceClass,
 				name,
 				isGhost: this.tryGetBoolAttr(attributes, "isghost"),
 				isGroup: this.tryGetBoolAttr(attributes, "isgroup"),
@@ -389,6 +404,151 @@ class Parser {
 				) as BorderColorPicker,
 				Interrefs: interrefs,
 			};
+
+			// Create specific instance type based on the class value
+			let instance: Instance;
+
+			if (classValue.startsWith("Process") || classValue === "Process") {
+				instance = {
+					...baseProps,
+					class: classValue as ProcessClass,
+					classBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(attributes, "processbackgroundcolor")
+					),
+					classGhostBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"processghostbackgroundcolor"
+						)
+					),
+					classGroupBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"processgroupbackgroundcolor"
+						)
+					),
+					isPrimaryProcess: this.tryGetBoolAttr(
+						attributes,
+						"isprimaryprocess"
+					),
+					isStakeholderAcquireProcess: this.tryGetBoolAttr(
+						attributes,
+						"isstakeholderacquireprocess"
+					),
+					isSubprocessesGroup: this.tryGetBoolAttr(
+						attributes,
+						"issubprocessesgroup"
+					),
+					icon: this.tryGetStrAttr(attributes, "icon") || "",
+				} as ProcessInstance;
+			} else if (
+				classValue.startsWith("Asset") ||
+				classValue === "Asset"
+			) {
+				instance = {
+					...baseProps,
+					class: classValue as AssetClass,
+					classBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(attributes, "assetbackgroundcolor")
+					),
+					classGhostBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"assetghostbackgroundcolor"
+						)
+					),
+					classGroupBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"assetgroupbackgroundcolor"
+						)
+					),
+					isMeansOfPayment: this.tryGetBoolAttr(
+						attributes,
+						"ismeansofpayment"
+					),
+					isMonetaryFund: this.tryGetBoolAttr(
+						attributes,
+						"ismonetaryfund"
+					),
+					isAttractionOutgoing: this.tryGetBoolAttr(
+						attributes,
+						"isattractionoutgoing"
+					),
+					isTacit: this.tryGetBoolAttr(attributes, "istacit"),
+					numberOfUnits: this.tryGetNumAttr(
+						attributes,
+						"numberofunits"
+					),
+					unitName: this.tryGetStrAttr(attributes, "unitname") || "",
+					icon: this.tryGetStrAttr(attributes, "icon") || "",
+					iconForArtefact:
+						this.tryGetStrAttr(attributes, "iconforartefact") || "",
+				} as AssetInstance;
+			} else if (
+				classValue.startsWith("External Actor") ||
+				classValue === "External Actor"
+			) {
+				instance = {
+					...baseProps,
+					class: classValue as ExternalActorClass,
+					classBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"externalactorbackgroundcolor"
+						)
+					),
+					classGhostBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"externalactorghostbackgroundcolor"
+						)
+					),
+					classGroupBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"externalactorgroupbackgroundcolor"
+						)
+					),
+					isMultiple: this.tryGetBoolAttr(attributes, "ismultiple"),
+				} as ExternalActorInstance;
+			} else if (classValue.startsWith("Pool") || classValue === "Pool") {
+				instance = {
+					...baseProps,
+					class: classValue as PoolClass,
+					classBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(attributes, "poolbackgroundcolor")
+					),
+					classGhostBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"poolghostbackgroundcolor"
+						)
+					),
+					classGroupBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"poolgroupbackgroundcolor"
+						)
+					),
+				} as PoolInstance;
+			} else if (classValue.startsWith("Note") || classValue === "Note") {
+				instance = {
+					...baseProps,
+					class: classValue as NoteClass,
+					classBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(attributes, "notebackgroundcolor")
+					),
+					classGhostBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"noteghostbackgroundcolor"
+						)
+					),
+				} as NoteInstance;
+			} else {
+				throw new Error(`Unknown instance class: ${classValue}`);
+			}
 
 			return instance;
 		});

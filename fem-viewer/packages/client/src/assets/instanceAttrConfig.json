@@ -17,7 +17,21 @@
 		"referencedDenomination": { "display": false, "alias": "" },
 		"borderColor": { "display": false, "alias": "" },
 		"colorPicker": { "display": true, "alias": "" },
-		"borderColorPicker": { "display": true, "alias": "" }
+		"borderColorPicker": { "display": true, "alias": "" },
+		"isMeansOfPayment": {
+			"display": false,
+			"alias": "Is Means of Payment"
+		},
+		"isMonetaryFund": { "display": false, "alias": "Is Monetary Fund" },
+		"isAttractionOutgoing": {
+			"display": false,
+			"alias": "Is Attraction Outgoing"
+		},
+		"isTacit": { "display": false, "alias": "Is Tacit" },
+		"numberOfUnits": { "display": false, "alias": "Number of Units" },
+		"unitName": { "display": false, "alias": "Unit Name" },
+		"icon": { "display": false, "alias": "Icon" },
+		"iconForArtefact": { "display": false, "alias": "Icon for Artefact" }
 	},
 	"Process": {
 		"class": { "display": true, "alias": "" },
@@ -37,7 +51,17 @@
 		"referencedDenomination": { "display": false, "alias": "" },
 		"borderColor": { "display": false, "alias": "" },
 		"colorPicker": { "display": true, "alias": "" },
-		"borderColorPicker": { "display": true, "alias": "" }
+		"borderColorPicker": { "display": true, "alias": "" },
+		"isPrimaryProcess": { "display": false, "alias": "" },
+		"isStakeholderAcquireProcess": {
+			"display": false,
+			"alias": ""
+		},
+		"isSubprocessesGroup": {
+			"display": false,
+			"alias": ""
+		},
+		"icon": { "display": false, "alias": "" }
 	},
 	"Pool": {
 		"class": { "display": true, "alias": "" },
@@ -77,7 +101,8 @@
 		"referencedDenomination": { "display": false, "alias": "" },
 		"borderColor": { "display": false, "alias": "" },
 		"colorPicker": { "display": true, "alias": "" },
-		"borderColorPicker": { "display": true, "alias": "" }
+		"borderColorPicker": { "display": true, "alias": "" },
+		"isMultiple": { "display": false, "alias": "" }
 	},
 	"Process_Subclass": {
 		"class": { "display": true, "alias": "" },
@@ -97,7 +122,17 @@
 		"referencedDenomination": { "display": false, "alias": "" },
 		"borderColor": { "display": false, "alias": "" },
 		"colorPicker": { "display": true, "alias": "" },
-		"borderColorPicker": { "display": true, "alias": "" }
+		"borderColorPicker": { "display": true, "alias": "" },
+		"isPrimaryProcess": { "display": false, "alias": "" },
+		"isStakeholderAcquireProcess": {
+			"display": false,
+			"alias": ""
+		},
+		"isSubprocessesGroup": {
+			"display": false,
+			"alias": ""
+		},
+		"icon": { "display": false, "alias": "" }
 	},
 	"Asset_Subclass": {
 		"class": { "display": true, "alias": "" },
@@ -117,7 +152,18 @@
 		"referencedDenomination": { "display": false, "alias": "" },
 		"borderColor": { "display": false, "alias": "" },
 		"colorPicker": { "display": true, "alias": "" },
-		"borderColorPicker": { "display": true, "alias": "" }
+		"borderColorPicker": { "display": true, "alias": "" },
+		"isMeansOfPayment": { "display": false, "alias": "" },
+		"isMonetaryFund": { "display": false, "alias": "" },
+		"isAttractionOutgoing": {
+			"display": false,
+			"alias": ""
+		},
+		"isTacit": { "display": false, "alias": "" },
+		"numberOfUnits": { "display": false, "alias": "" },
+		"unitName": { "display": false, "alias": "" },
+		"icon": { "display": false, "alias": "" },
+		"iconForArtefact": { "display": false, "alias": "" }
 	},
 	"Pool_Subclass": {
 		"class": { "display": true, "alias": "" },
@@ -157,7 +203,8 @@
 		"referencedDenomination": { "display": false, "alias": "" },
 		"borderColor": { "display": false, "alias": "" },
 		"colorPicker": { "display": true, "alias": "" },
-		"borderColorPicker": { "display": true, "alias": "" }
+		"borderColorPicker": { "display": true, "alias": "" },
+		"isMultiple": { "display": false, "alias": "" }
 	},
 	"Note": {
 		"class": { "display": true, "alias": "" },
@@ -215,7 +262,18 @@
 		"referencedDenomination": { "display": false, "alias": "" },
 		"borderColor": { "display": false, "alias": "" },
 		"colorPicker": { "display": true, "alias": "" },
-		"borderColorPicker": { "display": true, "alias": "" }
+		"borderColorPicker": { "display": true, "alias": "" },
+		"isMeansOfPayment": { "display": false, "alias": "" },
+		"isMonetaryFund": { "display": false, "alias": "" },
+		"isAttractionOutgoing": {
+			"display": false,
+			"alias": ""
+		},
+		"isTacit": { "display": false, "alias": "" },
+		"numberOfUnits": { "display": false, "alias": "" },
+		"unitName": { "display": false, "alias": "" },
+		"icon": { "display": false, "alias": "" },
+		"iconForArtefact": { "display": false, "alias": "" }
 	},
 	"Process_Border_Subclass": {
 		"class": { "display": true, "alias": "" },
@@ -235,7 +293,17 @@
 		"referencedDenomination": { "display": false, "alias": "" },
 		"borderColor": { "display": false, "alias": "" },
 		"colorPicker": { "display": true, "alias": "" },
-		"borderColorPicker": { "display": true, "alias": "" }
+		"borderColorPicker": { "display": true, "alias": "" },
+		"isPrimaryProcess": { "display": false, "alias": "" },
+		"isStakeholderAcquireProcess": {
+			"display": false,
+			"alias": ""
+		},
+		"isSubprocessesGroup": {
+			"display": false,
+			"alias": ""
+		},
+		"icon": { "display": false, "alias": "" }
 	},
 	"Pool_Border_Subclass": {
 		"class": { "display": true, "alias": "" },
@@ -275,7 +343,8 @@
 		"referencedDenomination": { "display": false, "alias": "" },
 		"borderColor": { "display": false, "alias": "" },
 		"colorPicker": { "display": true, "alias": "" },
-		"borderColorPicker": { "display": true, "alias": "" }
+		"borderColorPicker": { "display": true, "alias": "" },
+		"isMultiple": { "display": false, "alias": "" }
 	},
 	"Note_Border_Subclass": {
 		"class": { "display": true, "alias": "" },

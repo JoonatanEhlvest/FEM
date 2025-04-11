@@ -1,4 +1,12 @@
-import { InstanceClass } from "./InstanceClass";
+import {
+	ProcessClass,
+	AssetClass,
+	ExternalActorClass,
+	PoolClass,
+	NoteClass,
+	InstanceSubclass,
+	BorderSubclass,
+} from "./InstanceClass";
 
 /**
  * Position and dimensions of an instance in the model.
@@ -47,10 +55,10 @@ export type Interrefs = {
 	[key in InterrefType]: Iref | undefined;
 };
 
-export interface Instance {
+// Base interface with common properties
+export interface BaseInstance {
 	id: string;
 	name: string;
-	class: InstanceClass;
 	position: InstancePosition;
 	isGroup: boolean;
 	isGhost: boolean;
@@ -59,20 +67,120 @@ export interface Instance {
 	fontSize: number;
 	fontStyle: string;
 
+	// Individual colors
 	individualBGColor: string;
 	individualGhostBGColor: string;
+	borderColor: string;
 
+	// Referenced colors
 	referencedBGColor: string;
 	referencedGhostBGColor: string;
+	referencedBorderColor: string;
 
+	// Class-specific colors
+	classBackgroundColor: string;
+	classGhostBackgroundColor: string;
+	classGroupBackgroundColor?: string;
+
+	// Display properties
 	denomination: string;
 	referencedDenomination: string;
 	colorPicker: ColorPicker;
-
-	borderColor: string;
-	referencedBorderColor: string;
 	borderColorPicker: BorderColorPicker;
+
 	Interrefs: Interrefs;
+}
+
+// Class-specific interfaces
+export interface ProcessInstance extends BaseInstance {
+	class: ProcessClass;
+	isPrimaryProcess: boolean;
+	isStakeholderAcquireProcess: boolean;
+	isSubprocessesGroup: boolean;
+	icon: string;
+}
+
+export interface AssetInstance extends BaseInstance {
+	class: AssetClass;
+	isMeansOfPayment: boolean;
+	isMonetaryFund: boolean;
+	isAttractionOutgoing: boolean;
+	isTacit: boolean;
+	numberOfUnits: number;
+	unitName: string;
+	icon: string;
+	iconForArtefact: string;
+}
+
+export interface ExternalActorInstance extends BaseInstance {
+	class: ExternalActorClass;
+	isMultiple: boolean;
+}
+
+export interface PoolInstance extends BaseInstance {
+	class: PoolClass;
+}
+
+export interface NoteInstance extends BaseInstance {
+	class: NoteClass;
+}
+
+// Union type of all specific instances
+export type Instance =
+	| ProcessInstance
+	| AssetInstance
+	| ExternalActorInstance
+	| PoolInstance
+	| NoteInstance;
+
+// Type guards - simplified to use the imported types
+export function isProcessInstance(
+	instance: Instance
+): instance is ProcessInstance {
+	const processClasses: ProcessClass[] = [
+		"Process",
+		"Process_Subclass",
+		"Process_Border_Subclass",
+	];
+	return processClasses.includes(instance.class as ProcessClass);
+}
+
+export function isAssetInstance(instance: Instance): instance is AssetInstance {
+	const assetClasses: AssetClass[] = [
+		"Asset",
+		"Asset_Subclass",
+		"Asset_Border_Subclass",
+	];
+	return assetClasses.includes(instance.class as AssetClass);
+}
+
+export function isExternalActorInstance(
+	instance: Instance
+): instance is ExternalActorInstance {
+	const externalActorClasses: ExternalActorClass[] = [
+		"External Actor",
+		"External Actor_Subclass",
+		"External Actor_Border_Subclass",
+	];
+	return externalActorClasses.includes(instance.class as ExternalActorClass);
+}
+
+export function isPoolInstance(instance: Instance): instance is PoolInstance {
+	const poolClasses: PoolClass[] = [
+		"Pool",
+		"Pool_Subclass",
+		"Pool_Border_Subclass",
+	];
+	return poolClasses.includes(instance.class as PoolClass);
+}
+
+export function isNoteInstance(instance: Instance): instance is NoteInstance {
+	const noteClasses: NoteClass[] = [
+		"Note",
+		"Note_Subclass",
+		"Note_Border_Subclass",
+	];
+	return noteClasses.includes(instance.class as NoteClass);
 }
 
 export const INSTANCE_DEFAULTS: { [key: string]: number | string } = {
@@ -80,23 +188,23 @@ export const INSTANCE_DEFAULTS: { [key: string]: number | string } = {
 };
 
 export const isSubclass = (i: Instance): boolean => {
-	const subclasses: InstanceClass[] = [
+	const subclasses: InstanceSubclass[] = [
 		"Asset_Subclass",
 		"Process_Subclass",
 		"External Actor_Subclass",
 		"Pool_Subclass",
 		"Note_Subclass",
 	];
-	return subclasses.includes(i.class);
+	return subclasses.includes(i.class as InstanceSubclass);
 };
 
 export const isBorderSubclass = (i: Instance): boolean => {
-	const borderSubclasses: InstanceClass[] = [
+	const borderSubclasses: BorderSubclass[] = [
 		"Asset_Border_Subclass",
 		"Process_Border_Subclass",
 		"External Actor_Border_Subclass",
 		"Pool_Border_Subclass",
 		"Note_Border_Subclass",
 	];
-	return borderSubclasses.includes(i.class);
+	return borderSubclasses.includes(i.class as BorderSubclass);
 };
