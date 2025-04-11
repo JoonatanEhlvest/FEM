@@ -34,13 +34,22 @@ export abstract class BaseInstanceRenderer {
 	protected static readonly BASE_SELECTED_STYLE: Partial<InstanceDisplayStyle> =
 		{
 			stroke: "#2196f3",
-			strokeWidth: 5,
+			strokeWidth: 2.5,
+			filter: "url(#blue-glow)",
+		};
+
+	protected static readonly BASE_HIGHLIGHTED_STYLE: Partial<InstanceDisplayStyle> =
+		{
+			stroke: "#FFDF00",
+			strokeWidth: 2.5,
+			filter: "url(#yellow-glow)",
 		};
 
 	protected instance: Instance;
 	protected model: Model;
 	protected onClick: () => void;
 	protected isSelected: boolean;
+	protected isHighlighted: boolean;
 	protected zoom: number;
 
 	// Position and dimensions in pixels
@@ -58,6 +67,10 @@ export abstract class BaseInstanceRenderer {
 		this.model = props.model;
 		this.onClick = props.onClick;
 		this.isSelected = props.isSelected;
+		this.isHighlighted =
+			props.allOccurrencesHighlightedInstances?.includes(
+				this.instance.id
+			) || false;
 		this.zoom = props.zoom;
 
 		// Calculate dimensions in pixels
@@ -108,6 +121,9 @@ export abstract class BaseInstanceRenderer {
 		}
 		if (this.instance.isGhost) {
 			Object.assign(style, BaseInstanceRenderer.BASE_GHOST_STYLE);
+		}
+		if (this.isHighlighted) {
+			Object.assign(style, BaseInstanceRenderer.BASE_HIGHLIGHTED_STYLE);
 		}
 		if (this.isSelected) {
 			Object.assign(style, BaseInstanceRenderer.BASE_SELECTED_STYLE);
@@ -332,6 +348,7 @@ export abstract class BaseInstanceRenderer {
 				data-instance-class={this.instance.class}
 				data-is-group={this.instance.isGroup ? "true" : "false"}
 				data-is-ghost={this.instance.isGhost ? "true" : "false"}
+				data-is-highlighted={this.isHighlighted ? "true" : "false"}
 			>
 				{this.renderShape(style)}
 				{this.renderName(nameLines)}

@@ -16,6 +16,8 @@ const DynamicSVGView: React.FC = () => {
 		setZoom,
 		getCurrentInstance,
 		setCurrentInstance,
+		state,
+		clearAllOccurrencesHighlighting,
 	} = useFEM();
 
 	const svgRef = useRef<SVGSVGElement>(null);
@@ -63,6 +65,7 @@ const DynamicSVGView: React.FC = () => {
 		if (!model) return;
 		const instance = model.instances.find((i) => i.id === instanceId);
 		if (instance) {
+			clearAllOccurrencesHighlighting();
 			setCurrentInstance(instance);
 		}
 	};
@@ -91,6 +94,60 @@ const DynamicSVGView: React.FC = () => {
 					height="100%"
 					preserveAspectRatio="xMidYMid meet"
 				>
+					{/* Define filters */}
+					<defs>
+						{/* Yellow glow filter for highlighted instances (all occurrences of referenced instance) */}
+						<filter
+							id="yellow-glow"
+							x="-50%"
+							y="-50%"
+							width="200%"
+							height="200%"
+						>
+							<feGaussianBlur stdDeviation="8" result="blur" />
+							<feFlood
+								floodColor="#FFDF00"
+								floodOpacity="0.9"
+								result="glow-color"
+							/>
+							<feComposite
+								in="glow-color"
+								in2="blur"
+								operator="in"
+								result="glow"
+							/>
+							<feMerge>
+								<feMergeNode in="glow" />
+								<feMergeNode in="SourceGraphic" />
+							</feMerge>
+						</filter>
+
+						{/* Blue glow filter for selected instances */}
+						<filter
+							id="blue-glow"
+							x="-50%"
+							y="-50%"
+							width="200%"
+							height="200%"
+						>
+							<feGaussianBlur stdDeviation="8" result="blur" />
+							<feFlood
+								floodColor="#2196f3"
+								floodOpacity="0.9"
+								result="glow-color"
+							/>
+							<feComposite
+								in="glow-color"
+								in2="blur"
+								operator="in"
+								result="glow"
+							/>
+							<feMerge>
+								<feMergeNode in="glow" />
+								<feMergeNode in="SourceGraphic" />
+							</feMerge>
+						</filter>
+					</defs>
 					<g>
 						{/* Render instances */}
 						{model.instances.map((instance) => (
@@ -103,6 +160,9 @@ const DynamicSVGView: React.FC = () => {
 									getCurrentInstance()?.id === instance.id
 								}
 								zoom={zoom}
+								allOccurrencesHighlightedInstances={
+									state.allOccurrencesHighlightedInstances
+								}
 							/>
 						))}
 

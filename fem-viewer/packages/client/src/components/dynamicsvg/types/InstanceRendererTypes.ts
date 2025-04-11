@@ -9,4 +9,5 @@ export interface InstanceRendererProps {
 	onClick: () => void;
 	isSelected: boolean;
 	zoom: number;
+	allOccurrencesHighlightedInstances?: string[]; // Array of instance IDs that are highlighted
 }
