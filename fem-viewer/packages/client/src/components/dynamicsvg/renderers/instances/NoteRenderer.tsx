@@ -34,7 +34,6 @@ export class NoteRenderer extends BaseInstanceRenderer {
 	}
 
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
-		// Notes have more pronounced rounded corners
 		const cornerRadius = 8;
 
 		return (

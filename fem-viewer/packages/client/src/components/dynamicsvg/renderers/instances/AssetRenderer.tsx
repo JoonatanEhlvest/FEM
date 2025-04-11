@@ -19,6 +19,9 @@ export class AssetRenderer extends BaseInstanceRenderer {
 	}
 
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
+		// Use rounded corners (rx=8, ry=8) for group instances, sharp corners (rx=0, ry=0) for regular assets
+		const cornerRadius = this.instance.isGroup ? 8 : 0;
+
 		return (
 			<rect
 				x={this.x}
@@ -31,8 +34,8 @@ export class AssetRenderer extends BaseInstanceRenderer {
 				strokeDasharray={style.strokeDasharray}
 				opacity={style.opacity}
 				filter={style.filter}
-				rx={3}
-				ry={3}
+				rx={cornerRadius}
+				ry={cornerRadius}
 			/>
 		);
 	}

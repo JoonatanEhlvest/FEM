@@ -35,19 +35,40 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 	}
 
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
-		return (
-			<ellipse
-				cx={this.centerX}
-				cy={this.centerY}
-				rx={this.width / 2}
-				ry={this.height / 2}
-				fill={style.fill}
-				stroke={style.stroke}
-				strokeWidth={style.strokeWidth / this.zoom}
-				strokeDasharray={style.strokeDasharray}
-				opacity={style.opacity}
-				filter={style.filter}
-			/>
-		);
+		// Use a rounded rectangle for group processes, and ellipse for regular processes
+		if (this.instance.isGroup) {
+			const cornerRadius = 8;
+			return (
+				<rect
+					x={this.x}
+					y={this.y}
+					width={this.width}
+					height={this.height}
+					fill={style.fill}
+					stroke={style.stroke}
+					strokeWidth={style.strokeWidth / this.zoom}
+					strokeDasharray={style.strokeDasharray}
+					opacity={style.opacity}
+					filter={style.filter}
+					rx={cornerRadius}
+					ry={cornerRadius}
+				/>
+			);
+		} else {
+			return (
+				<ellipse
+					cx={this.centerX}
+					cy={this.centerY}
+					rx={this.width / 2}
+					ry={this.height / 2}
+					fill={style.fill}
+					stroke={style.stroke}
+					strokeWidth={style.strokeWidth / this.zoom}
+					strokeDasharray={style.strokeDasharray}
+					opacity={style.opacity}
+					filter={style.filter}
+				/>
+			);
+		}
 	}
 }
