@@ -255,45 +255,20 @@ export abstract class BaseInstanceRenderer {
 	}
 
 	protected renderIndicators(): React.ReactElement | null {
-		if (!this.instance.isGroup && !this.instance.isGhost) {
+		if (!this.instance.isGhost) {
 			return null;
 		}
 
-		const indicators = [];
-		if (this.instance.isGroup) {
-			indicators.push(
-				<text
-					key="group-indicator"
-					x={this.x + this.width - 10}
-					y={this.y + 15}
-					fontFamily={FONT_SETTINGS.INSTANCE_SUBTEXT.fontFamily}
-					fontSize={this.getAdjustedFontSize("10px")}
-					fill="#333"
-					textAnchor="end"
-				>
-					[Group]
-				</text>
-			);
-		}
-
-		if (this.instance.isGhost) {
-			indicators.push(
-				<text
-					key="ghost-indicator"
-					x={this.x + this.width - 10}
-					y={this.instance.isGroup ? this.y + 30 : this.y + 15}
-					fontFamily={FONT_SETTINGS.INSTANCE_SUBTEXT.fontFamily}
-					fontSize={this.getAdjustedFontSize("10px")}
-					fill="#666"
-					textAnchor="end"
-					fontStyle="italic"
-				>
-					[Ghost]
-				</text>
-			);
-		}
-
-		return <>{indicators}</>;
+		// Draw an arrow for ghost instances with the tip touching the right border
+		return (
+			<path
+				d="M -20 -4 L -8 -4 L -8 -8 L 0 0 L -8 8 L -8 4 L -20 4 Z"
+				transform={`translate(${this.x + this.width}, ${this.y + 15})`}
+				stroke="#666"
+				strokeWidth="1.5"
+				fill="none"
+			/>
+		);
 	}
 
 	protected formatNameForDisplay(name: string): string[] {
