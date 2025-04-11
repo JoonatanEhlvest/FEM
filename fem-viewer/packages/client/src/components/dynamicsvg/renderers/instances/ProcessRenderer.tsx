@@ -2,6 +2,7 @@ import React from "react";
 import { InstanceDisplayStyle } from "../../types/InstanceDisplayStyle";
 import { BaseInstanceRenderer } from "../base/BaseInstanceRenderer";
 import { InstanceRendererProps } from "../../types/InstanceRendererTypes";
+import { isProcessInstance } from "@fem-viewer/types/Instance";
 
 export class ProcessRenderer extends BaseInstanceRenderer {
 	// Default styles for Process
@@ -122,6 +123,10 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 				</>
 			);
 		} else {
+			const isPrimary =
+				isProcessInstance(this.instance) &&
+				this.instance.isPrimaryProcess;
+
 			return (
 				<>
 					<ellipse
@@ -136,6 +141,21 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 						opacity={style.opacity}
 						filter={style.filter}
 					/>
+					{/* Add second ellipse with smaller radius for primary processes */}
+					{isPrimary && (
+						<ellipse
+							cx={this.centerX}
+							cy={this.centerY}
+							rx={this.width / 2 - 4}
+							ry={this.height / 2 - 4}
+							fill="none"
+							stroke={style.stroke}
+							strokeWidth={style.strokeWidth / this.zoom}
+							strokeDasharray={style.strokeDasharray}
+							opacity={style.opacity}
+							filter={style.filter}
+						/>
+					)}
 					{this.renderArrowTips(style)}
 				</>
 			);
