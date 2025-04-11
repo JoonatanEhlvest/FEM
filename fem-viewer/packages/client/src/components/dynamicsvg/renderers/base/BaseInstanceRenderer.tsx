@@ -130,6 +130,26 @@ export abstract class BaseInstanceRenderer {
 		}
 
 		if (this.instance.colorPicker === "Default") {
+			// Use class-specific default colors when colorPicker is set to Default
+			if (
+				this.instance.isGroup &&
+				this.instance.classGroupBackgroundColor
+			) {
+				return this.instance.classGroupBackgroundColor.replace(
+					"$",
+					"#"
+				);
+			} else if (
+				this.instance.isGhost &&
+				this.instance.classGhostBackgroundColor
+			) {
+				return this.instance.classGhostBackgroundColor.replace(
+					"$",
+					"#"
+				);
+			} else if (this.instance.classBackgroundColor) {
+				return this.instance.classBackgroundColor.replace("$", "#");
+			}
 			return undefined;
 		}
 
