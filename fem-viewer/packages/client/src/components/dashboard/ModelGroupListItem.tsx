@@ -16,7 +16,7 @@ type Props = {
 };
 
 const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
-	const { removeShare, addShare } = useFEM();
+	const { removeShare, addShare, downloadModelGroup } = useFEM();
 	const { state, handleChange } = useForm({ usernameToShareWith: "" });
 	const { setError, addModelGroup, resetModels, setPopup } = useFEM();
 	const [loadingModel, setLoadingModel] = useState(false);
@@ -79,6 +79,10 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 			});
 	};
 
+	const handleDownload = () => {
+		downloadModelGroup(modelGroup.modelGroup.id);
+	};
+
 	const formatModelGroupName = (name: string): string => {
 		return name.split("-").join(" (") + ")";
 	};
@@ -115,12 +119,25 @@ const ModelGroupListItem: FC<Props> = ({ modelGroup, removeModelGroup }) => {
 				<div>
 					Name: {formatModelGroupName(modelGroup.modelGroup.name)}
 				</div>
-				<img
-					style={{ pointerEvents: loadingModel ? "none" : "auto" }}
-					onClick={handleView}
-					src={require("./view.svg").default}
-					alt="view model"
-				/>
+				<div className={styles["icons-container"]}>
+					<img
+						className={`${styles["action-icon"]} ${styles["view-icon"]}`}
+						style={{
+							pointerEvents: loadingModel ? "none" : "auto",
+						}}
+						onClick={handleView}
+						src={require("./view.svg").default}
+						alt="view model"
+						title="View model"
+					/>
+					<img
+						className={`${styles["action-icon"]} ${styles["download-icon"]}`}
+						onClick={handleDownload}
+						src={require("./download.svg").default}
+						alt="download model"
+						title="Download model XML"
+					/>
+				</div>
 				{modelGroup.owner && (
 					<button onClick={() => setShowConfirmation(true)}>
 						Delete

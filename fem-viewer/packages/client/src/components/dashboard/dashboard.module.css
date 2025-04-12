@@ -197,6 +197,35 @@
 	transform: scale(1.2);
 }
 
+.icons-container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 10px 0;
+}
+
+.action-icon {
+	cursor: pointer;
+}
+
+.action-icon:hover {
+	transform: scale(1.2);
+}
+
+.action-icon + .action-icon {
+	margin-left: 8px;
+}
+
+.view-icon {
+	width: 50px;
+	height: auto;
+}
+
+.download-icon {
+	width: 32px;
+	height: 32px;
+}
+
 .created-left-item {
 	display: flex;
 	flex-direction: column;
