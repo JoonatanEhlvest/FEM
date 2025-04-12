@@ -43,6 +43,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 					y2={topY}
 					stroke={style.stroke}
 					strokeWidth={strokeWidth}
+					strokeDasharray={style.strokeDasharray}
 					opacity={style.opacity || 1}
 				/>
 				<line
@@ -52,6 +53,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 					y2={topY}
 					stroke={style.stroke}
 					strokeWidth={strokeWidth}
+					strokeDasharray={style.strokeDasharray}
 					opacity={style.opacity || 1}
 				/>
 			</React.Fragment>
@@ -67,6 +69,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 					y2={bottomY}
 					stroke={style.stroke}
 					strokeWidth={strokeWidth}
+					strokeDasharray={style.strokeDasharray}
 					opacity={style.opacity || 1}
 				/>
 				<line
@@ -76,6 +79,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 					y2={bottomY}
 					stroke={style.stroke}
 					strokeWidth={strokeWidth}
+					strokeDasharray={style.strokeDasharray}
 					opacity={style.opacity || 1}
 				/>
 			</React.Fragment>
@@ -115,7 +119,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 						rx={cornerRadius}
 						ry={cornerRadius}
 					/>
-					{this.renderArrowTips(style)}
+					{this.renderArrowTips({ ...style, strokeDasharray })}
 				</>
 			);
 		} else {
