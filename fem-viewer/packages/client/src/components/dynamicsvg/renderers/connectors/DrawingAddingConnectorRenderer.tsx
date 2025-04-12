@@ -1,5 +1,6 @@
 import { BaseConnectorRenderer } from "../base/BaseConnectorRenderer";
 import { ConnectorDisplayProperties } from "../../types/ConnectorTypes";
+import { isDrawingAddingConnector } from "@fem-viewer/types/Connector";
 
 export class DrawingAddingConnectorRenderer extends BaseConnectorRenderer {
 	protected getDisplayProperties(): ConnectorDisplayProperties {
@@ -11,11 +12,20 @@ export class DrawingAddingConnectorRenderer extends BaseConnectorRenderer {
 				opacity: 1,
 				fill: "none",
 			},
-			labelStyle: {
-				fontSize: 8,
-				fill: "#555555",
-				opacity: 0.8,
-			},
 		};
+	}
+
+	/**
+	 * Override to display the note for Drawing/Adding connectors
+	 */
+	protected getLabels(): string[] {
+		const { connector } = this.props;
+		const labels: string[] = [];
+
+		if (isDrawingAddingConnector(connector)) {
+			labels.push(connector.note);
+		}
+
+		return labels;
 	}
 }

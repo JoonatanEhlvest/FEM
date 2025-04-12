@@ -15,4 +15,11 @@ export class RelatesToConnectionRenderer extends BaseConnectorRenderer {
 			},
 		};
 	}
+
+	/**
+	 * Override to not display any labels for relates-to connectors
+	 */
+	protected getLabels(): string[] {
+		return []; // Return empty array to display no labels
+	}
 }

@@ -560,20 +560,44 @@ export abstract class BaseConnectorRenderer {
 		);
 	}
 
+	/**
+	 * Gets the labels to display for this connector.
+	 * Returns an array of strings to display as labels, or empty array for no labels.
+	 */
+	protected getLabels(): string[] {
+		// By default, return empty array (no labels)
+		return [];
+	}
+
 	protected renderLabel(): React.ReactNode {
 		const middlePoint = this.getMiddlePoint();
+		const labels = this.getLabels();
+
+		// If no labels, don't render anything
+		if (labels.length === 0) {
+			return null;
+		}
+
+		const fontSize = this.displayProperties.labelStyle?.fontSize || 8;
+		const fill = this.displayProperties.labelStyle?.fill || "black";
+		const opacity = this.displayProperties.labelStyle?.opacity || 1;
 
 		return (
-			<text
-				x={middlePoint.x}
-				y={middlePoint.y}
-				fontSize={this.displayProperties.labelStyle?.fontSize || 8}
-				textAnchor="middle"
-				fill={this.displayProperties.labelStyle?.fill || "#555555"}
-				opacity={this.displayProperties.labelStyle?.opacity || 0.8}
-			>
-				{this.props.connector.class}
-			</text>
+			<>
+				{labels.map((label, index) => (
+					<text
+						key={`label-${index}`}
+						x={middlePoint.x}
+						y={middlePoint.y + index * fontSize}
+						fontSize={fontSize}
+						textAnchor="middle"
+						fill={fill}
+						opacity={opacity}
+					>
+						{label}
+					</text>
+				))}
+			</>
 		);
 	}
 
