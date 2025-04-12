@@ -169,12 +169,11 @@ const DynamicSVGView: React.FC = () => {
 						{/* Render connectors */}
 						{model.connectors &&
 							model.connectors.map((connector) => {
-								// TODO: Rename to fromId and toId to fromName and toName
 								const fromInstance = model.instances.find(
-									(i) => i.name === connector.fromId
+									(i) => i.name === connector.fromName
 								);
 								const toInstance = model.instances.find(
-									(i) => i.name === connector.toId
+									(i) => i.name === connector.toName
 								);
 
 								if (!fromInstance || !toInstance) {
@@ -185,8 +184,8 @@ const DynamicSVGView: React.FC = () => {
 										console.warn(
 											`Connector ${connector.id} has missing instances:`,
 											{
-												fromId: connector.fromId,
-												toId: connector.toId,
+												fromName: connector.fromName,
+												toName: connector.toName,
 											}
 										);
 									}

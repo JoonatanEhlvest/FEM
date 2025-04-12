@@ -38,8 +38,8 @@ export type ConnectorClass =
  */
 export interface BaseConnector {
 	id: string;
-	fromId: string; // Instance name (not ID)
-	toId: string; // Instance name (not ID)
+	fromName: string; // Instance name
+	toName: string; // Instance name
 	positions: ConnectorPositions;
 	appearance: string;
 	class: ConnectorClass;

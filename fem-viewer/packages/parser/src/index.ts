@@ -578,8 +578,8 @@ class Parser {
 			// Common properties for all connector types
 			const baseProps = {
 				id: this.tryGetStrProperty(XMLconnector, "id"),
-				fromId: this.tryGetStrProperty(from, "instance"),
-				toId: this.tryGetStrProperty(to, "instance"),
+				fromName: this.tryGetStrProperty(from, "instance"),
+				toName: this.tryGetStrProperty(to, "instance"),
 				positions: this.parseConnectorPositions(
 					this.tryGetStrAttr(attributes, "positions")
 				),
