@@ -1,6 +1,10 @@
 import React from "react";
 import { Instance, Model } from "@fem-viewer/types";
-import { isSubclass, isBorderSubclass } from "@fem-viewer/types/Instance";
+import {
+	isSubclass,
+	isBorderSubclass,
+	isNoteInstance,
+} from "@fem-viewer/types/Instance";
 import { InstanceDisplayStyle } from "../../types/InstanceDisplayStyle";
 import { InstanceRendererProps } from "../../types/InstanceRendererTypes";
 import { CM_TO_PX } from "../../types/constants";
@@ -266,6 +270,10 @@ export abstract class BaseInstanceRenderer {
 
 	protected renderIndicators(): React.ReactElement | null {
 		if (!this.instance.isGhost) {
+			return null;
+		}
+
+		if (isNoteInstance(this.instance)) {
 			return null;
 		}
 

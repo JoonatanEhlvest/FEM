@@ -34,23 +34,31 @@ export class NoteRenderer extends BaseInstanceRenderer {
 	}
 
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
-		const cornerRadius = 8;
+		// Create a path for a note shape with sharp corners and a folded top-right corner
+		const foldSize = 15;
+
+		// Define the path for the note shape
+		const path = `
+			M ${this.x},${this.y}
+			H ${this.x + this.width - foldSize}
+			L ${this.x + this.width},${this.y + foldSize}
+			V ${this.y + this.height}
+			H ${this.x}
+			Z
+		`;
 
 		return (
-			<rect
-				x={this.x}
-				y={this.y}
-				width={this.width}
-				height={this.height}
-				fill={style.fill}
-				stroke={style.stroke}
-				strokeWidth={style.strokeWidth / this.zoom}
-				strokeDasharray={style.strokeDasharray}
-				opacity={style.opacity}
-				filter={style.filter}
-				rx={cornerRadius}
-				ry={cornerRadius}
-			/>
+			<>
+				<path
+					d={path}
+					fill={style.fill}
+					stroke={style.stroke}
+					strokeWidth={style.strokeWidth / this.zoom}
+					strokeDasharray={style.strokeDasharray}
+					opacity={style.opacity}
+					filter={style.filter}
+				/>
+			</>
 		);
 	}
 }
