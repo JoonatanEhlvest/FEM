@@ -584,8 +584,8 @@ export abstract class BaseConnectorRenderer {
 		const arrowStyle = this.displayProperties.arrowStyle || {};
 
 		const visible = arrowStyle.visible ?? true;
-		const width = arrowStyle.width ?? 6;
-		const height = arrowStyle.height ?? 4;
+		const width = arrowStyle.width ?? 12;
+		const height = arrowStyle.height ?? 9;
 
 		// For consistent shape across different connectors
 		const viewBoxWidth = 12;
