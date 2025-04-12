@@ -24,25 +24,140 @@ export interface ConnectorPositions {
 	index: number;
 }
 
+// Connector class types
+export type ConnectorClass =
+	| "Used In"
+	| "Manages"
+	| "relates-to"
+	| "Association"
+	| "Inspects/Monitors"
+	| "Drawing/Adding";
+
 /**
- * Represents a connector in the model.
- *
- * @property id - The unique identifier for the connector.
- * @property class - The class of the connector (e.g. "Used In", "Manages").
- * @property fromId - The name of the instance that the connector starts from.
- * @property toId - The name of the instance that the connector ends at.
- * @property positions - The positions that define the connector path.
- * @property appearance - The appearance of the connector.
- * @property processTypes - Array of process types (e.g. "Acquire", "Maintain") when the connector goes from Process to Asset.
- * @property assetTypes - Array of asset types (e.g. "Tech & Info Infrastructure", "Partner") when the connector goes from Asset to Process.
+ * Base interface with common properties for all connectors
  */
-export interface Connector {
+export interface BaseConnector {
 	id: string;
-	class: string;
 	fromId: string; // Instance name (not ID)
 	toId: string; // Instance name (not ID)
 	positions: ConnectorPositions;
 	appearance: string;
-	processTypes: string[];
+	class: ConnectorClass;
+}
+
+/**
+ * Used In connector - represents resource flows
+ */
+export interface UsedInConnector extends BaseConnector {
+	class: "Used In";
 	assetTypes: string[];
+}
+
+/**
+ * Manages connector - represents management relationships
+ */
+export interface ManagesConnector extends BaseConnector {
+	class: "Manages";
+	processTypes: string[];
+	labelType: "Text" | "Symbol";
+}
+
+/**
+ * Relates-to connector - represents relations between objects
+ */
+export interface RelatesToConnector extends BaseConnector {
+	class: "relates-to";
+}
+
+/**
+ * Association connector - represents associations between objects
+ */
+export interface AssociationConnector extends BaseConnector {
+	class: "Association";
+	direction: "Unidirectional" | "Symmetric";
+	orientation: "Horizontal" | "Vertical";
+}
+
+/**
+ * Inspects/Monitors connector - represents inspection relationships
+ */
+export interface InspectsMonitorsConnector extends BaseConnector {
+	class: "Inspects/Monitors";
+}
+
+/**
+ * Drawing/Adding connector - represents visual connectors for drawing
+ */
+export interface DrawingAddingConnector extends BaseConnector {
+	class: "Drawing/Adding";
+	thickness: number;
+	thick: string;
+	note?: string;
+	orientation: "Horizontal" | "Vertical";
+}
+
+export type Connector =
+	| UsedInConnector
+	| ManagesConnector
+	| RelatesToConnector
+	| AssociationConnector
+	| InspectsMonitorsConnector
+	| DrawingAddingConnector;
+
+/**
+ * Type guards for connector types
+ */
+
+/**
+ * Checks if the connector is a Used In connector
+ */
+export function isUsedInConnector(
+	connector: Connector
+): connector is UsedInConnector {
+	return connector.class === "Used In";
+}
+
+/**
+ * Checks if the connector is a Manages connector
+ */
+export function isManagesConnector(
+	connector: Connector
+): connector is ManagesConnector {
+	return connector.class === "Manages";
+}
+
+/**
+ * Checks if the connector is a relates-to connector
+ */
+export function isRelatesToConnector(
+	connector: Connector
+): connector is RelatesToConnector {
+	return connector.class === "relates-to";
+}
+
+/**
+ * Checks if the connector is an Association connector
+ */
+export function isAssociationConnector(
+	connector: Connector
+): connector is AssociationConnector {
+	return connector.class === "Association";
+}
+
+/**
+ * Checks if the connector is an Inspects/Monitors connector
+ */
+export function isInspectsMonitorsConnector(
+	connector: Connector
+): connector is InspectsMonitorsConnector {
+	return connector.class === "Inspects/Monitors";
+}
+
+/**
+ * Checks if the connector is a Drawing/Adding connector
+ */
+export function isDrawingAddingConnector(
+	connector: Connector
+): connector is DrawingAddingConnector {
+	return connector.class === "Drawing/Adding";
 }

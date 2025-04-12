@@ -25,6 +25,13 @@ import { XMLObj } from "./types";
 import {
 	ConnectorPositions,
 	ConnectorPoint,
+	ConnectorClass,
+	UsedInConnector,
+	ManagesConnector,
+	RelatesToConnector,
+	AssociationConnector,
+	InspectsMonitorsConnector,
+	DrawingAddingConnector,
 } from "@fem-viewer/types/Connector";
 // Import from baseParser.ts
 import { parseXMLToModel } from "./baseParser";
@@ -561,22 +568,72 @@ class Parser {
 			const attributes = XMLconnector.ATTRIBUTE as XMLObj;
 			const from = XMLconnector.FROM as XMLObj;
 			const to = XMLconnector.TO as XMLObj;
-			const connector: Connector = {
+
+			// Get the connector class first to determine the connector type
+			const connectorClass = this.tryGetStrProperty(
+				XMLconnector,
+				"class"
+			) as ConnectorClass;
+
+			// Common properties for all connector types
+			const baseProps = {
 				id: this.tryGetStrProperty(XMLconnector, "id"),
-				class: this.tryGetStrProperty(XMLconnector, "class"),
 				fromId: this.tryGetStrProperty(from, "instance"),
 				toId: this.tryGetStrProperty(to, "instance"),
 				positions: this.parseConnectorPositions(
 					this.tryGetStrAttr(attributes, "positions")
 				),
 				appearance: this.tryGetStrAttr(attributes, "appearance"),
-				processTypes: this.parseTypeList(
-					this.tryGetStrAttr(attributes, "processtype")
-				),
-				assetTypes: this.parseTypeList(
-					this.tryGetStrAttr(attributes, "assettype")
-				),
 			};
+
+			// Create specific connector type based on the class
+			let connector: Connector;
+
+			if (connectorClass === "Used In") {
+				connector = {
+					...baseProps,
+					class: "Used In",
+					assetTypes: this.parseTypeList(
+						this.tryGetStrAttr(attributes, "assettype")
+					),
+				} as UsedInConnector;
+			} else if (connectorClass === "Manages") {
+				connector = {
+					...baseProps,
+					class: "Manages",
+					processTypes: this.parseTypeList(
+						this.tryGetStrAttr(attributes, "processtype")
+					),
+					labelType: this.tryGetStrAttr(attributes, "labeltype"),
+				} as ManagesConnector;
+			} else if (connectorClass === "relates-to") {
+				connector = {
+					...baseProps,
+					class: "relates-to",
+				} as RelatesToConnector;
+			} else if (connectorClass === "Association") {
+				connector = {
+					...baseProps,
+					class: "Association",
+				} as AssociationConnector;
+			} else if (connectorClass === "Inspects/Monitors") {
+				connector = {
+					...baseProps,
+					class: "Inspects/Monitors",
+				} as InspectsMonitorsConnector;
+			} else if (connectorClass === "Drawing/Adding") {
+				connector = {
+					...baseProps,
+					class: "Drawing/Adding",
+					thickness: this.tryGetNumAttr(attributes, "thickness"),
+					thick: this.tryGetStrAttr(attributes, "thick"),
+					note: this.tryGetStrAttr(attributes, "note"),
+					orientation: this.tryGetStrAttr(attributes, "orientation"),
+				} as DrawingAddingConnector;
+			} else {
+				throw new Error(`Unknown connector class: ${connectorClass}`);
+			}
+
 			return connector;
 		});
 		return ret;
