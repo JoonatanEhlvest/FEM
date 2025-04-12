@@ -187,7 +187,9 @@ export const INSTANCE_DEFAULTS: { [key: string]: number | string } = {
 	fontsize: 10,
 };
 
-export const isSubclass = (i: Instance): boolean => {
+export function isSubclass(
+	i: Instance
+): i is Instance & { class: InstanceSubclass } {
 	const subclasses: InstanceSubclass[] = [
 		"Asset_Subclass",
 		"Process_Subclass",
@@ -196,9 +198,11 @@ export const isSubclass = (i: Instance): boolean => {
 		"Note_Subclass",
 	];
 	return subclasses.includes(i.class as InstanceSubclass);
-};
+}
 
-export const isBorderSubclass = (i: Instance): boolean => {
+export function isBorderSubclass(
+	i: Instance
+): i is Instance & { class: BorderSubclass } {
 	const borderSubclasses: BorderSubclass[] = [
 		"Asset_Border_Subclass",
 		"Process_Border_Subclass",
@@ -207,4 +211,4 @@ export const isBorderSubclass = (i: Instance): boolean => {
 		"Note_Border_Subclass",
 	];
 	return borderSubclasses.includes(i.class as BorderSubclass);
-};
+}
