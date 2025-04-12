@@ -2,6 +2,7 @@ import React from "react";
 import { InstanceDisplayStyle } from "../../types/InstanceDisplayStyle";
 import { BaseInstanceRenderer } from "../base/BaseInstanceRenderer";
 import { InstanceRendererProps } from "../../types/InstanceRendererTypes";
+import { isAssetInstance } from "@fem-viewer/types/Instance";
 
 export class AssetRenderer extends BaseInstanceRenderer {
 	private static readonly DEFAULT_STYLE: InstanceDisplayStyle = {
@@ -22,6 +23,13 @@ export class AssetRenderer extends BaseInstanceRenderer {
 		// Use rounded corners (rx=8, ry=8) for group instances, sharp corners (rx=0, ry=0) for regular assets
 		const cornerRadius = this.instance.isGroup ? 8 : 0;
 
+		// Apply special dash pattern for tacit assets
+		let strokeDasharray = style.strokeDasharray;
+		if (isAssetInstance(this.instance) && this.instance.isTacit) {
+			// Alternating pattern with shorter and longer segments (e.g., "2,5,7,5")
+			strokeDasharray = "2,5,7,5";
+		}
+
 		return (
 			<rect
 				x={this.x}
@@ -31,7 +39,7 @@ export class AssetRenderer extends BaseInstanceRenderer {
 				fill={style.fill}
 				stroke={style.stroke}
 				strokeWidth={style.strokeWidth / this.zoom}
-				strokeDasharray={style.strokeDasharray}
+				strokeDasharray={strokeDasharray}
 				opacity={style.opacity}
 				filter={style.filter}
 				rx={cornerRadius}
