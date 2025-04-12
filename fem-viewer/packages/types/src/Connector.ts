@@ -41,7 +41,7 @@ export interface BaseConnector {
 	fromName: string; // Instance name
 	toName: string; // Instance name
 	positions: ConnectorPositions;
-	appearance: string;
+	appearance: "Default" | "Highlighted" | "Transitive";
 	class: ConnectorClass;
 }
 
@@ -76,6 +76,7 @@ export interface AssociationConnector extends BaseConnector {
 	class: "Association";
 	direction: "Unidirectional" | "Symmetric";
 	orientation: "Horizontal" | "Vertical";
+	note: string;
 }
 
 /**
@@ -83,6 +84,8 @@ export interface AssociationConnector extends BaseConnector {
  */
 export interface InspectsMonitorsConnector extends BaseConnector {
 	class: "Inspects/Monitors";
+	orientation: "Horizontal" | "Vertical";
+	note: string;
 }
 
 /**
@@ -92,7 +95,7 @@ export interface DrawingAddingConnector extends BaseConnector {
 	class: "Drawing/Adding";
 	thickness: number;
 	thick: string;
-	note?: string;
+	note: string;
 	orientation: "Horizontal" | "Vertical";
 }
 

@@ -615,20 +615,25 @@ class Parser {
 				connector = {
 					...baseProps,
 					class: "Association",
+					orientation: this.tryGetStrAttr(attributes, "orientation"),
+					note: this.tryGetStrAttr(attributes, "note"),
+					direction: this.tryGetStrAttr(attributes, "direction"),
 				} as AssociationConnector;
 			} else if (connectorClass === "Inspects/Monitors") {
 				connector = {
 					...baseProps,
 					class: "Inspects/Monitors",
+					orientation: this.tryGetStrAttr(attributes, "orientation"),
+					note: this.tryGetStrAttr(attributes, "note"),
 				} as InspectsMonitorsConnector;
 			} else if (connectorClass === "Drawing/Adding") {
 				connector = {
 					...baseProps,
 					class: "Drawing/Adding",
+					orientation: this.tryGetStrAttr(attributes, "orientation"),
+					note: this.tryGetStrAttr(attributes, "note"),
 					thickness: this.tryGetNumAttr(attributes, "thickness"),
 					thick: this.tryGetStrAttr(attributes, "thick"),
-					note: this.tryGetStrAttr(attributes, "note"),
-					orientation: this.tryGetStrAttr(attributes, "orientation"),
 				} as DrawingAddingConnector;
 			} else {
 				throw new Error(`Unknown connector class: ${connectorClass}`);
