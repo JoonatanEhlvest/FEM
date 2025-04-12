@@ -8,6 +8,11 @@ import {
 	Segment,
 	Intersection,
 } from "../../types/ConnectorTypes";
+import {
+	isAssociationConnector,
+	isInspectsMonitorsConnector,
+} from "@fem-viewer/types/Connector";
+import { isDrawingAddingConnector } from "@fem-viewer/types/Connector";
 
 export interface ConnectorRendererProps {
 	connector: Connector;
@@ -582,6 +587,45 @@ export abstract class BaseConnectorRenderer {
 		const fill = this.displayProperties.labelStyle?.fill || "black";
 		const opacity = this.displayProperties.labelStyle?.opacity || 1;
 
+		// Check if connector has orientation property and it's set to Vertical
+		const { connector } = this.props;
+		let isVertical = false;
+		if (
+			isAssociationConnector(connector) ||
+			isInspectsMonitorsConnector(connector) ||
+			isDrawingAddingConnector(connector)
+		) {
+			isVertical = connector.orientation === "Vertical";
+		}
+
+		// Apply different label placement based on orientation
+		if (isVertical) {
+			// For vertical orientation, calculate offset to center the labels
+			const totalLabelsWidth = labels.length * fontSize;
+			const startX = middlePoint.x + totalLabelsWidth / 2 - fontSize / 2;
+
+			return (
+				<>
+					{labels.map((label, index) => (
+						<text
+							key={`label-${index}`}
+							// Position each label with horizontal spacing (becomes vertical after rotation)
+							x={startX - index * fontSize}
+							y={middlePoint.y}
+							fontSize={fontSize}
+							textAnchor="middle"
+							fill={fill}
+							opacity={opacity}
+							transform={`rotate(-90 ${middlePoint.x} ${middlePoint.y})`}
+						>
+							{label}
+						</text>
+					))}
+				</>
+			);
+		}
+
+		// For horizontal orientation (default)
 		return (
 			<>
 				{labels.map((label, index) => (
