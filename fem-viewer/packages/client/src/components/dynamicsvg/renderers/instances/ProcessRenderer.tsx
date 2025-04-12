@@ -88,6 +88,17 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 		// Use a rounded rectangle for group processes, and ellipse for regular processes
 		if (this.instance.isGroup) {
 			const cornerRadius = 8;
+
+			// Apply special dash pattern for group subprocess
+			let strokeDasharray = style.strokeDasharray;
+			if (
+				isProcessInstance(this.instance) &&
+				this.instance.isGroup &&
+				this.instance.isSubprocessesGroup
+			) {
+				strokeDasharray = "2,2";
+			}
+
 			return (
 				<>
 					<rect
@@ -98,7 +109,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 						fill={style.fill}
 						stroke={style.stroke}
 						strokeWidth={style.strokeWidth / this.zoom}
-						strokeDasharray={style.strokeDasharray}
+						strokeDasharray={strokeDasharray}
 						opacity={style.opacity}
 						filter={style.filter}
 						rx={cornerRadius}
