@@ -137,6 +137,11 @@ export abstract class BaseInstanceRenderer {
 	}
 
 	protected getCustomFillColor(): string | undefined {
+		// For border subclass instances, always return transparent fill
+		if (isBorderSubclass(this.instance)) {
+			return "none";
+		}
+
 		const isInstanceSubclass = this.instance.class.includes("_Subclass");
 		if (isInstanceSubclass) {
 			if (this.instance.isGhost && this.instance.individualGhostBGColor) {
