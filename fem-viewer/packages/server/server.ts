@@ -1,5 +1,5 @@
 import express, { Express } from "express";
-import { Server } from 'http';
+import { Server } from "http";
 import path from "path";
 import dotenv from "dotenv";
 import startup from "./src/startup";
@@ -25,21 +25,23 @@ class ServerInstance {
 
 	private constructor() {
 		// Load environment variables based on NODE_ENV
-		if (process.env.NODE_ENV === 'test') {
-			dotenv.config({ path: '.env.test' });
+		if (process.env.NODE_ENV === "test") {
+			dotenv.config({ path: ".env.test" });
 		} else {
 			dotenv.config();
 		}
 
 		const PRODUCTION = process.env.NODE_ENV === "production";
+		const ALLOW_HTTP = process.env.ALLOW_HTTP === "true";
+
 		startup();
-		
+
 		this.app = express();
-		
+
 		// Setup middleware
 		this.app.use(express.static(path.join(CLIENT_PATH, "build")));
 		this.app.use(express.static(path.join(CLIENT_PATH, "public")));
-		
+
 		this.app.use((_, res, next) => {
 			res.header(
 				"Access-Control-Allow-Headers",
@@ -50,7 +52,10 @@ class ServerInstance {
 				"Access-Control-Allow-Headers",
 				"Content-Type, Accept, Access-Control-Allow-Credentials, Cross-Origin"
 			);
-			res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+			res.header(
+				"Access-Control-Allow-Methods",
+				"GET, POST, PATCH, DELETE"
+			);
 			next();
 		});
 
@@ -67,7 +72,7 @@ class ServerInstance {
 					httpOnly: true,
 					maxAge: 1000 * 60 * 60 * 24 * 7,
 					sameSite: true,
-					secure: PRODUCTION, // Recuires HTTPS for cookies, will cause issues in local development
+					secure: PRODUCTION && !ALLOW_HTTP, // Secure cookies by default in production, only allow non-secure if explicitly configured
 				},
 			})
 		);
@@ -106,8 +111,7 @@ class ServerInstance {
 				}
 				console.log(`Server started on ${port}`);
 			});
-		}
-		else {
+		} else {
 			console.log(`Server already running on ${port}`);
 		}
 		return this.server;
@@ -119,7 +123,7 @@ class ServerInstance {
 }
 
 // Only start server if not in test environment
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== "test") {
 	ServerInstance.getInstance().start();
 }
 
