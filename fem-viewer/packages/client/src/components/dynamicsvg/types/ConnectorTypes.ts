@@ -73,3 +73,28 @@ export interface ConnectorDisplayProperties {
 		visible?: boolean; // Whether to show the arrow (defaults to true)
 	};
 }
+
+/**
+ * Holds calculated direction information for a connector segment.
+ *
+ * @property startPoint - The starting point of the segment
+ * @property nextPoint - The ending point of the segment
+ * @property dx - Change in x from start to end point
+ * @property dy - Change in y from start to end point
+ * @property angleRad - Angle of the segment in radians
+ * @property angleDeg - Angle of the segment in degrees
+ * @property length - Length of the segment
+ * @property unitX - Normalized x component of the direction vector (dx/length)
+ * @property unitY - Normalized y component of the direction vector (dy/length)
+ */
+export interface ConnectorDirectionInfo {
+	startPoint: CanvasPoint;
+	nextPoint: CanvasPoint;
+	dx: number;
+	dy: number;
+	angleRad: number;
+	angleDeg: number;
+	length: number;
+	unitX: number;
+	unitY: number;
+}

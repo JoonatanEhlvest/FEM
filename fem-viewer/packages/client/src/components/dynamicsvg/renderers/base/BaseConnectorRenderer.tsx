@@ -7,6 +7,7 @@ import {
 	CanvasRect,
 	Segment,
 	Intersection,
+	ConnectorDirectionInfo,
 } from "../../types/ConnectorTypes";
 import {
 	isAssociationConnector,
@@ -467,6 +468,71 @@ export abstract class BaseConnectorRenderer {
 		return segments;
 	}
 
+	/**
+	 * Calculates direction information for a given segment.
+	 */
+	protected getSegmentDirectionInfo(
+		segment: Segment
+	): ConnectorDirectionInfo {
+		const dx = segment.to.x - segment.from.x;
+		const dy = segment.to.y - segment.from.y;
+		const angleRad = Math.atan2(dy, dx);
+		const angleDeg = (angleRad * 180) / Math.PI;
+		const length = Math.sqrt(dx * dx + dy * dy);
+
+		// Handle zero length case to avoid division by zero
+		const unitX = length === 0 ? 0 : dx / length;
+		const unitY = length === 0 ? 0 : dy / length;
+
+		return {
+			startPoint: segment.from,
+			nextPoint: segment.to,
+			dx,
+			dy,
+			angleRad,
+			angleDeg,
+			length,
+			unitX,
+			unitY,
+		};
+	}
+
+	/**
+	 * Calculates a point offset along a segment's direction from its start point.
+	 */
+	protected getOffsetPositionAlongSegment(
+		segment: Segment,
+		distance: number
+	): CanvasPoint {
+		const directionInfo = this.getSegmentDirectionInfo(segment);
+		return {
+			x: directionInfo.startPoint.x + directionInfo.unitX * distance,
+			y: directionInfo.startPoint.y + directionInfo.unitY * distance,
+		};
+	}
+
+	/**
+	 * Convenience method to get direction info for the first segment.
+	 * Returns null if there are no segments.
+	 */
+	protected getFirstSegmentDirectionInfo(): ConnectorDirectionInfo | null {
+		const segments = this.getSegments();
+		if (segments.length === 0) return null;
+		return this.getSegmentDirectionInfo(segments[0]);
+	}
+
+	/**
+	 * Convenience method to get offset position along the first segment.
+	 * Returns the start point of first segment if there are no segments.
+	 */
+	protected getFirstSegmentOffsetPosition(distance: number): CanvasPoint {
+		const segments = this.getSegments();
+		if (segments.length === 0) {
+			return { x: 0, y: 0 }; // Should not happen if called correctly
+		}
+		return this.getOffsetPositionAlongSegment(segments[0], distance);
+	}
+
 	protected renderSegment(
 		segment: Segment,
 		index: number,
@@ -724,6 +790,7 @@ export abstract class BaseConnectorRenderer {
 					)
 				)}
 				{this.renderLabel()}
+				{/* Base decoration should be rendered by subclasses if needed */}
 			</g>
 		);
 	}

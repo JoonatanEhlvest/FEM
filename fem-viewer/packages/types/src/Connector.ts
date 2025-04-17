@@ -45,20 +45,32 @@ export interface BaseConnector {
 	class: ConnectorClass;
 }
 
+export type AssetConnectorType =
+	| "Beneficiary"
+	| "Workforce"
+	| "Partner"
+	| "EXT"
+	| "Tech & Info Infrastructure"
+	| "Stock"
+	| "Org. Infrastructure"
+	| "Means of Payment"
+	| "Attraction";
 /**
  * Used In connector - represents resource flows
  */
 export interface UsedInConnector extends BaseConnector {
 	class: "Used In";
-	assetTypes: string[];
+	assetTypes: AssetConnectorType[];
 }
+
+export type ProcessConnectorType = "Acquire" | "Maintain" | "Retire";
 
 /**
  * Manages connector - represents management relationships
  */
 export interface ManagesConnector extends BaseConnector {
 	class: "Manages";
-	processTypes: string[];
+	processTypes: ProcessConnectorType[];
 	labelType: "Text" | "Symbol";
 }
 
