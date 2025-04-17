@@ -4,10 +4,15 @@ import { isManagesConnector } from "@fem-viewer/types/Connector";
 
 export class ManagesConnectorRenderer extends BaseConnectorRenderer {
 	protected getDisplayProperties(): ConnectorDisplayProperties {
+		const { connector } = this.props;
+		const isHighlighted =
+			isManagesConnector(connector) &&
+			connector.appearance === "Highlighted";
+
 		return {
 			defaultStyle: {
 				stroke: "black",
-				strokeWidth: 1,
+				strokeWidth: isHighlighted ? 2 : 1,
 				strokeDasharray: "6,4",
 				opacity: 1,
 				fill: "none",

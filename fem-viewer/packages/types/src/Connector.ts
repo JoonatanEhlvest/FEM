@@ -41,7 +41,6 @@ export interface BaseConnector {
 	fromName: string; // Instance name
 	toName: string; // Instance name
 	positions: ConnectorPositions;
-	appearance: "Default" | "Highlighted" | "Transitive";
 	class: ConnectorClass;
 }
 
@@ -60,6 +59,7 @@ export type AssetConnectorType =
  */
 export interface UsedInConnector extends BaseConnector {
 	class: "Used In";
+	appearance: "Default" | "Highlighted" | "Transitive";
 	assetTypes: AssetConnectorType[];
 }
 
@@ -71,6 +71,7 @@ export type ProcessConnectorType = "Acquire" | "Maintain" | "Retire";
 export interface ManagesConnector extends BaseConnector {
 	class: "Manages";
 	processTypes: ProcessConnectorType[];
+	appearance: "Default" | "Highlighted" | "Transitive";
 	labelType: "Text" | "Symbol";
 }
 

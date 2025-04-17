@@ -14,6 +14,10 @@ import {
 	isInspectsMonitorsConnector,
 } from "@fem-viewer/types/Connector";
 import { isDrawingAddingConnector } from "@fem-viewer/types/Connector";
+import {
+	isManagesConnector,
+	isUsedInConnector,
+} from "@fem-viewer/types/Connector";
 
 export interface ConnectorRendererProps {
 	connector: Connector;
@@ -540,19 +544,68 @@ export abstract class BaseConnectorRenderer {
 	): React.ReactElement {
 		const segments = this.getSegments();
 		const isLastSegment = index === segments.length - 1;
+		const { connector } = this.props;
+		const isTransitive =
+			(isManagesConnector(connector) || isUsedInConnector(connector)) &&
+			connector.appearance === "Transitive";
+
+		if (!isTransitive) {
+			return (
+				<path
+					key={`segment-${index}`}
+					d={`M ${segment.from.x} ${segment.from.y} L ${segment.to.x} ${segment.to.y}`}
+					style={{
+						...this.displayProperties.defaultStyle,
+						markerEnd:
+							isLastSegment && markerId
+								? `url(#${markerId})`
+								: undefined,
+					}}
+				/>
+			);
+		}
+
+		// For transitive connectors, render two parallel lines
+		const dx = segment.to.x - segment.from.x;
+		const dy = segment.to.y - segment.from.y;
+		const length = Math.sqrt(dx * dx + dy * dy);
+		const offset = 1; // Half distance between the parallel lines
+
+		// Calculate perpendicular offset
+		const perpX = (-dy / length) * offset;
+		const perpY = (dx / length) * offset;
 
 		return (
-			<path
-				key={`segment-${index}`}
-				d={`M ${segment.from.x} ${segment.from.y} L ${segment.to.x} ${segment.to.y}`}
-				style={{
-					...this.displayProperties.defaultStyle,
-					markerEnd:
-						isLastSegment && markerId
-							? `url(#${markerId})`
-							: undefined,
-				}}
-			/>
+			<g key={`segment-${index}`}>
+				<path
+					d={`M ${segment.from.x + perpX} ${
+						segment.from.y + perpY
+					} L ${segment.to.x + perpX} ${segment.to.y + perpY}`}
+					style={{
+						...this.displayProperties.defaultStyle,
+						markerEnd: undefined,
+					}}
+				/>
+				<path
+					d={`M ${segment.from.x - perpX} ${
+						segment.from.y - perpY
+					} L ${segment.to.x - perpX} ${segment.to.y - perpY}`}
+					style={{
+						...this.displayProperties.defaultStyle,
+						markerEnd: undefined,
+					}}
+				/>
+				{isLastSegment && markerId && (
+					<path
+						d={`M ${segment.from.x} ${segment.from.y} L ${segment.to.x} ${segment.to.y}`}
+						style={{
+							...this.displayProperties.defaultStyle,
+							markerEnd: `url(#${markerId})`,
+							strokeWidth: 0,
+						}}
+					/>
+				)}
+			</g>
 		);
 	}
 
@@ -770,6 +823,7 @@ export abstract class BaseConnectorRenderer {
 							orient="auto"
 							overflow="hidden"
 							viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
+							markerUnits="userSpaceOnUse"
 						>
 							<polyline
 								points={arrowPoints}
@@ -777,7 +831,10 @@ export abstract class BaseConnectorRenderer {
 								stroke={
 									this.displayProperties.defaultStyle.stroke
 								}
-								strokeWidth="1.5"
+								strokeWidth={
+									this.displayProperties.defaultStyle
+										.strokeWidth
+								}
 							/>
 						</marker>
 					</defs>

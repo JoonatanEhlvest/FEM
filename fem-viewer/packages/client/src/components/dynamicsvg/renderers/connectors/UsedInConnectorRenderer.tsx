@@ -1,14 +1,22 @@
 import { BaseConnectorRenderer } from "../base/BaseConnectorRenderer";
-import { ConnectorDisplayProperties } from "../../types/ConnectorTypes";
+import {
+	ConnectorDisplayProperties,
+	Segment,
+} from "../../types/ConnectorTypes";
 import { isUsedInConnector } from "@fem-viewer/types/Connector";
 import React from "react";
 
 export class UsedInConnectorRenderer extends BaseConnectorRenderer {
 	protected getDisplayProperties(): ConnectorDisplayProperties {
+		const { connector } = this.props;
+		const isHighlighted =
+			isUsedInConnector(connector) &&
+			connector.appearance === "Highlighted";
+
 		return {
 			defaultStyle: {
 				stroke: "black",
-				strokeWidth: 1,
+				strokeWidth: isHighlighted ? 2 : 1,
 				opacity: 1,
 				fill: "none",
 			},
@@ -21,8 +29,6 @@ export class UsedInConnectorRenderer extends BaseConnectorRenderer {
 	protected getLabels(): string[] {
 		const { connector } = this.props;
 		const labels: string[] = [];
-
-		// Check if connector has a note
 
 		// Check if connector has assetTypes (for Used In connectors)
 		if (isUsedInConnector(connector)) {

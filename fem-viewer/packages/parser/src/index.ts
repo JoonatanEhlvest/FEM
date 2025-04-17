@@ -583,7 +583,6 @@ class Parser {
 				positions: this.parseConnectorPositions(
 					this.tryGetStrAttr(attributes, "positions")
 				),
-				appearance: this.tryGetStrAttr(attributes, "appearance"),
 			};
 
 			// Create specific connector type based on the class
@@ -596,6 +595,7 @@ class Parser {
 					assetTypes: this.parseTypeList(
 						this.tryGetStrAttr(attributes, "assettype")
 					),
+					appearance: this.tryGetStrAttr(attributes, "appearance"),
 				} as UsedInConnector;
 			} else if (connectorClass === "Manages") {
 				connector = {
@@ -605,6 +605,7 @@ class Parser {
 						this.tryGetStrAttr(attributes, "processtype")
 					),
 					labelType: this.tryGetStrAttr(attributes, "labeltype"),
+					appearance: this.tryGetStrAttr(attributes, "appearance"),
 				} as ManagesConnector;
 			} else if (connectorClass === "relates-to") {
 				connector = {
