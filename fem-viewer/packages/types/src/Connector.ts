@@ -80,6 +80,7 @@ export interface ManagesConnector extends BaseConnector {
  */
 export interface RelatesToConnector extends BaseConnector {
 	class: "relates-to";
+	appearance: "Default" | "Important" | "Very Important";
 }
 
 /**

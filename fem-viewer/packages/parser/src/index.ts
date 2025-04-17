@@ -611,6 +611,7 @@ class Parser {
 				connector = {
 					...baseProps,
 					class: "relates-to",
+					appearance: this.tryGetStrAttr(attributes, "appearance"),
 				} as RelatesToConnector;
 			} else if (connectorClass === "Association") {
 				connector = {
