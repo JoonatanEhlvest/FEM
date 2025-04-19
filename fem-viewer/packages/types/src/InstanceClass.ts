@@ -17,6 +17,19 @@ export type BorderSubclass =
 	| "Pool_Border_Subclass"
 	| "Note_Border_Subclass";
 
+// Specific class types
+export type ProcessClass =
+	| "Process"
+	| "Process_Subclass"
+	| "Process_Border_Subclass";
+export type AssetClass = "Asset" | "Asset_Subclass" | "Asset_Border_Subclass";
+export type ExternalActorClass =
+	| "External Actor"
+	| "External Actor_Subclass"
+	| "External Actor_Border_Subclass";
+export type PoolClass = "Pool" | "Pool_Subclass" | "Pool_Border_Subclass";
+export type NoteClass = "Note" | "Note_Subclass" | "Note_Border_Subclass";
+
 export type InstanceClass =
 	| BaseInstanceClass
 	| InstanceSubclass

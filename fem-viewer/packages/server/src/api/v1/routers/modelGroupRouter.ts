@@ -10,6 +10,7 @@ import ApplicationError from "../../../error/ApplicationError";
 import UpdateInstanceDescriptionService from "../services/modelGroup/instance/updateDescription";
 import UpdateInstanceSubclassService from "../services/modelGroup/instance/subclass/updateSubclass";
 import UpdateInstanceBSubclassService from "../services/modelGroup/instance/subclass/updateBSubclass";
+import DownloadService from "../services/modelGroup/download";
 
 const router = Router();
 
@@ -171,6 +172,36 @@ router.patch(
 			console.log(err);
 			res.status(500).json({
 				message: `Couldn't update instance border subclass: ${err}`,
+			});
+		}
+	}
+);
+
+/**
+ * Download the XML file of a model group
+ * GET /modelgroup/:modelGroupId/download
+ */
+router.get(
+	"/modelgroup/:modelGroupId/download",
+	[checkAuth],
+	async (req: Request, res: Response) => {
+		try {
+			const service = new DownloadService(req, db);
+			const { filePath, fileName } = await service.execute();
+
+			// Add custom header with filename
+			res.setHeader("X-Filename", fileName);
+			res.download(filePath, fileName);
+		} catch (err) {
+			console.log(err);
+			if (err instanceof ApplicationError) {
+				res.status(err.code).json({
+					message: err.message,
+				});
+				return;
+			}
+			res.status(500).json({
+				message: "Couldn't download model group. Please try again",
 			});
 		}
 	}

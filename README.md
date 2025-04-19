@@ -13,9 +13,9 @@ This project uses a monorepo structure with the following packages:
 
 ## Hardware requirements
 
--   At least 1 GB of RAM
--   At least 1 vCPU
--   At least 25 GB of storage
+- At least 1 GB of RAM
+- At least 1 vCPU
+- At least 25 GB of storage
 
 ## Installation
 
@@ -23,8 +23,8 @@ Before installing the application, Node.js version >=22.0.0 should be installed 
 
 Steps to setup the application:
 
--   Create a **.env** file in the **fem-viewer/packages/server** folder. (Required fields are in **.env.example**)
--   Install node packages in the **fem-viewer** directory:
+- Create a **.env** file in the **fem-viewer/packages/server** folder. (Required fields are in **.env.example**)
+- Install node packages in the **fem-viewer** directory:
 
 ```console
 $ yarn install
@@ -32,13 +32,13 @@ $ yarn install
 
 The following steps should be done in the **fem-viewer/packages/server** directory.
 
--   Generate a database client
+- Generate a database client
 
 ```console
 $ yarn prisma generate
 ```
 
--   Run migrations
+- Run migrations
 
 ```console
 $ yarn prisma migrate reset
@@ -49,10 +49,13 @@ $ yarn prisma migrate reset
 To start a **production build** run:
 
 ```console
+$ yarn build
 $ yarn start
 ```
 
 in the **fem-viewer** directory.
+
+**Warning**: The production build requires HTTPS for cookies. For running the production build without requiring HTTPS, set ALLOW_HTTP to true in the server .env file.
 
 To start a **development build** run:
 

@@ -13,7 +13,7 @@ const AppContainer = () => {
 	const { getError, getCurrentInstance } = useFEM();
 	// For testing generating svg from XML data.
 	// TODO: Remove once the final implementation is done.
-	const [useDynamicSVG, setUseDynamicSVG] = useState(false);
+	const [useDynamicSVG, setUseDynamicSVG] = useState(true);
 
 	const [state, setState] = useState(() => {
 		const appWidth = window.innerWidth;
@@ -70,30 +70,33 @@ const AppContainer = () => {
 				</div>
 			</Resizable>
 
-
 			{/* For testing generating svg from XML data.
 				TODO: Remove once the final implementation is done. */}
 			<div className={styles["view-container"]}>
 				<div className={styles["view-toggle"]}>
-					<button 
-						className={`${styles["toggle-button"]} ${!useDynamicSVG ? styles["active"] : ""}`} 
-						onClick={toggleViewMode}
-						disabled={!useDynamicSVG}
-					>
-						Standard View
-					</button>
-					<button 
-						className={`${styles["toggle-button"]} ${useDynamicSVG ? styles["active"] : ""}`} 
+					<button
+						className={`${styles["toggle-button"]} ${
+							useDynamicSVG ? styles["active"] : ""
+						}`}
 						onClick={toggleViewMode}
 						disabled={useDynamicSVG}
 					>
 						Dynamic SVG View
 					</button>
+					<button
+						className={`${styles["toggle-button"]} ${
+							!useDynamicSVG ? styles["active"] : ""
+						}`}
+						onClick={toggleViewMode}
+						disabled={!useDynamicSVG}
+					>
+						Legacy View
+					</button>
 				</div>
-				
+
 				{useDynamicSVG ? <DynamicSVGView /> : <Viewer />}
 			</div>
-			
+
 			{getCurrentInstance() !== undefined && <DetailsPopup />}
 		</div>
 	);

@@ -430,6 +430,38 @@ const useFEM = () => {
 		});
 	};
 
+	const downloadModelGroup = async (modelGroupId: string) => {
+		try {
+			const response = await fetch(
+				`/api/v1/modelgroup/${modelGroupId}/download`,
+				{
+					method: "GET",
+					credentials: "include",
+				}
+			);
+
+			const filename =
+				response.headers.get("X-Filename") ||
+				`modelgroup-${modelGroupId}.xml`;
+			const blob = await response.blob();
+
+			const url = window.URL.createObjectURL(blob);
+			const link = document.createElement("a");
+			link.href = url;
+			link.download = filename;
+			document.body.appendChild(link);
+			link.click();
+
+			window.URL.revokeObjectURL(url);
+			document.body.removeChild(link);
+		} catch (err) {
+			setError({
+				status: 500,
+				message: "Failed to download model group file",
+			});
+		}
+	};
+
 	const addShare = (share: ModelGroup["modelGroup"]["shares"][0]) => {
 		setState((prevState: FEMState) => {
 			if (!prevState.user) return prevState;
@@ -618,6 +650,7 @@ const useFEM = () => {
 		updateInstanceDescription,
 		updateInstanceSubclass,
 		updateInstanceBSubclass,
+		downloadModelGroup,
 		state,
 	};
 };

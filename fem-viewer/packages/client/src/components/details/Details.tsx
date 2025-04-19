@@ -910,7 +910,16 @@ const Details = () => {
 						? attr.charAt(0).toUpperCase() + attr.slice(1)
 						: props.alias
 				);
-				values.push(instance[attr as keyof Instance] as string);
+
+				// Handle the value based on its type
+				const value = instance[attr as keyof Instance];
+				if (typeof value === "boolean") {
+					// Convert boolean values to "Yes" or "No"
+					values.push(value ? "Yes" : "No");
+				} else {
+					// Use value as-is for non-boolean types
+					values.push(value as string);
+				}
 			}
 		});
 	}

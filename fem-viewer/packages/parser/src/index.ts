@@ -1,4 +1,3 @@
-import { XMLParser, XMLBuilder } from "fast-xml-parser";
 import { addXMLAttrPrefix, ATTR_PREFIX } from "./utils";
 import { Connector } from "@fem-viewer/types";
 import {
@@ -6,13 +5,34 @@ import {
 	ColorPicker,
 	INSTANCE_DEFAULTS,
 	BorderColorPicker,
+	ProcessInstance,
+	AssetInstance,
+	ExternalActorInstance,
+	PoolInstance,
+	NoteInstance,
 } from "@fem-viewer/types/Instance";
-import { InstanceClass } from "@fem-viewer/types";
+import {
+	InstanceClass,
+	ProcessClass,
+	AssetClass,
+	ExternalActorClass,
+	PoolClass,
+	NoteClass,
+} from "@fem-viewer/types/InstanceClass";
 import { Model } from "@fem-viewer/types";
 import { ModelAttributes } from "@fem-viewer/types";
 import { XMLObj } from "./types";
-import { Interrefs } from "@fem-viewer/types/Instance";
-
+import {
+	ConnectorPositions,
+	ConnectorPoint,
+	ConnectorClass,
+	UsedInConnector,
+	ManagesConnector,
+	RelatesToConnector,
+	AssociationConnector,
+	InspectsMonitorsConnector,
+	DrawingAddingConnector,
+} from "@fem-viewer/types/Connector";
 // Import from baseParser.ts
 import { parseXMLToModel } from "./baseParser";
 
@@ -188,7 +208,7 @@ class Parser {
 	parseInstancePosition(s: string): Instance["position"] {
 		const match = this.findFloatsFromString(s);
 		if (match === undefined) {
-			return undefined;
+			throw new Error(`Invalid position string: ${s}`);
 		}
 		const ret: Instance["position"] = {
 			x: match[0],
@@ -238,6 +258,89 @@ class Parser {
 		return res;
 	}
 
+	tryGetCoordinateValue(part: string): number {
+		const value = part.split(":")[1];
+		if (!value) {
+			throw new Error(
+				`Invalid coordinate format: missing value after colon in ${part}`
+			);
+		}
+		if (!value.endsWith("cm")) {
+			throw new Error(`Invalid unit: expected 'cm', got ${value}`);
+		}
+		return parseFloat(value.replace("cm", ""));
+	}
+
+	parseConnectorPositions(s: string): ConnectorPositions {
+		if (!s) {
+			return {
+				pathPoints: [],
+				edgeCount: 0,
+				index: 0,
+			};
+		}
+
+		// Split the string by spaces and filter out empty strings
+		const parts = s.split(" ").filter(Boolean);
+
+		// Extract edge count and index
+		const edgeCount =
+			parts.indexOf("EDGE") >= 0
+				? parseInt(parts[parts.indexOf("EDGE") + 1])
+				: 0;
+		const indexPart = parts.find((p) => p.startsWith("index:"));
+		const index = indexPart ? parseInt(indexPart.split(":")[1]) : 0;
+
+		// Extract middle point if it exists
+		const middleIndex = parts.indexOf("MIDDLE");
+		const middlePoint =
+			middleIndex >= 0 && middleIndex + 2 < parts.length
+				? {
+						x: this.tryGetCoordinateValue(parts[middleIndex + 1]),
+						y: this.tryGetCoordinateValue(parts[middleIndex + 2]),
+				  }
+				: undefined;
+
+		// Extract path points
+		let nextPositionNumber = 1;
+		const pathPoints: ConnectorPoint[] = [];
+		for (let i = 0; i < parts.length - 1; i++) {
+			if (
+				parts[i].startsWith(`x${nextPositionNumber}`) &&
+				parts[i + 1].startsWith(`y${nextPositionNumber}`)
+			) {
+				const x = this.tryGetCoordinateValue(parts[i]);
+				const y = this.tryGetCoordinateValue(parts[i + 1]);
+				pathPoints.push({ x, y });
+				i++;
+				nextPositionNumber++;
+			}
+		}
+
+		if (edgeCount !== pathPoints.length) {
+			throw new Error(
+				`Expected edge count does not match the number of path points found: ${edgeCount} !== ${pathPoints.length}`
+			);
+		}
+
+		return {
+			pathPoints,
+			middlePoint,
+			edgeCount,
+			index,
+		};
+	}
+
+	/**
+	 * Parses a semicolon-separated list of types from an ENUMERATIONLIST attribute.
+	 * @param value - The value of the ENUMERATIONLIST attribute
+	 * @returns Array of type strings, or empty array if no value
+	 */
+	private parseTypeList(value: string | undefined): string[] {
+		if (!value) return [];
+		return value.split(";").map((type) => type.trim());
+	}
+
 	getInstances(
 		instances: Array<XMLObj>,
 		modelName: Model["name"]
@@ -255,12 +358,15 @@ class Parser {
 				XMLInstance.INTERREF as XMLObj[]
 			);
 
-			const instance: Instance = {
+			// Get the class value first to determine instance type
+			const classValue = this.tryGetStrProperty(
+				XMLInstance,
+				"class"
+			) as InstanceClass;
+
+			// Create the base properties common to all instance types
+			const baseProps = {
 				id,
-				class: this.tryGetStrProperty(
-					XMLInstance,
-					"class"
-				) as InstanceClass,
 				name,
 				isGhost: this.tryGetBoolAttr(attributes, "isghost"),
 				isGroup: this.tryGetBoolAttr(attributes, "isgroup"),
@@ -306,6 +412,151 @@ class Parser {
 				Interrefs: interrefs,
 			};
 
+			// Create specific instance type based on the class value
+			let instance: Instance;
+
+			if (classValue.startsWith("Process") || classValue === "Process") {
+				instance = {
+					...baseProps,
+					class: classValue as ProcessClass,
+					classBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(attributes, "processbackgroundcolor")
+					),
+					classGhostBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"processghostbackgroundcolor"
+						)
+					),
+					classGroupBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"processgroupbackgroundcolor"
+						)
+					),
+					isPrimaryProcess: this.tryGetBoolAttr(
+						attributes,
+						"isprimaryprocess"
+					),
+					isStakeholderAcquireProcess: this.tryGetBoolAttr(
+						attributes,
+						"isstakeholderacquireprocess"
+					),
+					isSubprocessesGroup: this.tryGetBoolAttr(
+						attributes,
+						"issubprocessesgroup"
+					),
+					icon: this.tryGetStrAttr(attributes, "icon") || "",
+				} as ProcessInstance;
+			} else if (
+				classValue.startsWith("Asset") ||
+				classValue === "Asset"
+			) {
+				instance = {
+					...baseProps,
+					class: classValue as AssetClass,
+					classBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(attributes, "assetbackgroundcolor")
+					),
+					classGhostBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"assetghostbackgroundcolor"
+						)
+					),
+					classGroupBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"assetgroupbackgroundcolor"
+						)
+					),
+					isMeansOfPayment: this.tryGetBoolAttr(
+						attributes,
+						"ismeansofpayment"
+					),
+					isMonetaryFund: this.tryGetBoolAttr(
+						attributes,
+						"ismonetaryfund"
+					),
+					isAttractionOutgoing: this.tryGetBoolAttr(
+						attributes,
+						"isattractionoutgoing"
+					),
+					isTacit: this.tryGetBoolAttr(attributes, "istacit"),
+					numberOfUnits: this.tryGetNumAttr(
+						attributes,
+						"numberofunits"
+					),
+					unitName: this.tryGetStrAttr(attributes, "unitname") || "",
+					icon: this.tryGetStrAttr(attributes, "icon") || "",
+					iconForArtefact:
+						this.tryGetStrAttr(attributes, "iconforartefact") || "",
+				} as AssetInstance;
+			} else if (
+				classValue.startsWith("External Actor") ||
+				classValue === "External Actor"
+			) {
+				instance = {
+					...baseProps,
+					class: classValue as ExternalActorClass,
+					classBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"externalactorbackgroundcolor"
+						)
+					),
+					classGhostBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"externalactorghostbackgroundcolor"
+						)
+					),
+					classGroupBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"externalactorgroupbackgroundcolor"
+						)
+					),
+					isMultiple: this.tryGetBoolAttr(attributes, "ismultiple"),
+				} as ExternalActorInstance;
+			} else if (classValue.startsWith("Pool") || classValue === "Pool") {
+				instance = {
+					...baseProps,
+					class: classValue as PoolClass,
+					classBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(attributes, "poolbackgroundcolor")
+					),
+					classGhostBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"poolghostbackgroundcolor"
+						)
+					),
+					classGroupBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"poolgroupbackgroundcolor"
+						)
+					),
+				} as PoolInstance;
+			} else if (classValue.startsWith("Note") || classValue === "Note") {
+				instance = {
+					...baseProps,
+					class: classValue as NoteClass,
+					classBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(attributes, "notebackgroundcolor")
+					),
+					classGhostBackgroundColor: this.extractHexColor(
+						this.tryGetStrAttr(
+							attributes,
+							"noteghostbackgroundcolor"
+						)
+					),
+				} as NoteInstance;
+			} else {
+				throw new Error(`Unknown instance class: ${classValue}`);
+			}
+
 			return instance;
 		});
 
@@ -317,15 +568,79 @@ class Parser {
 			const attributes = XMLconnector.ATTRIBUTE as XMLObj;
 			const from = XMLconnector.FROM as XMLObj;
 			const to = XMLconnector.TO as XMLObj;
-			const connector: Connector = {
+
+			// Get the connector class first to determine the connector type
+			const connectorClass = this.tryGetStrProperty(
+				XMLconnector,
+				"class"
+			) as ConnectorClass;
+
+			// Common properties for all connector types
+			const baseProps = {
 				id: this.tryGetStrProperty(XMLconnector, "id"),
-				class: this.tryGetStrProperty(XMLconnector, "class"),
-				fromId: this.tryGetStrProperty(from, "instance"),
-				toId: this.tryGetStrProperty(to, "instance"),
-				positions: this.tryGetStrAttr(attributes, "positions"),
-				appearance: this.tryGetStrAttr(attributes, "appearance"),
-				processType: this.tryGetStrAttr(attributes, "processtype"),
+				fromName: this.tryGetStrProperty(from, "instance"),
+				toName: this.tryGetStrProperty(to, "instance"),
+				positions: this.parseConnectorPositions(
+					this.tryGetStrAttr(attributes, "positions")
+				),
 			};
+
+			// Create specific connector type based on the class
+			let connector: Connector;
+
+			if (connectorClass === "Used In") {
+				connector = {
+					...baseProps,
+					class: "Used In",
+					assetTypes: this.parseTypeList(
+						this.tryGetStrAttr(attributes, "assettype")
+					),
+					appearance: this.tryGetStrAttr(attributes, "appearance"),
+				} as UsedInConnector;
+			} else if (connectorClass === "Manages") {
+				connector = {
+					...baseProps,
+					class: "Manages",
+					processTypes: this.parseTypeList(
+						this.tryGetStrAttr(attributes, "processtype")
+					),
+					labelType: this.tryGetStrAttr(attributes, "labeltype"),
+					appearance: this.tryGetStrAttr(attributes, "appearance"),
+				} as ManagesConnector;
+			} else if (connectorClass === "relates-to") {
+				connector = {
+					...baseProps,
+					class: "relates-to",
+					appearance: this.tryGetStrAttr(attributes, "appearance"),
+				} as RelatesToConnector;
+			} else if (connectorClass === "Association") {
+				connector = {
+					...baseProps,
+					class: "Association",
+					orientation: this.tryGetStrAttr(attributes, "orientation"),
+					note: this.tryGetStrAttr(attributes, "note"),
+					direction: this.tryGetStrAttr(attributes, "direction"),
+				} as AssociationConnector;
+			} else if (connectorClass === "Inspects/Monitors") {
+				connector = {
+					...baseProps,
+					class: "Inspects/Monitors",
+					orientation: this.tryGetStrAttr(attributes, "orientation"),
+					note: this.tryGetStrAttr(attributes, "note"),
+				} as InspectsMonitorsConnector;
+			} else if (connectorClass === "Drawing/Adding") {
+				connector = {
+					...baseProps,
+					class: "Drawing/Adding",
+					orientation: this.tryGetStrAttr(attributes, "orientation"),
+					note: this.tryGetStrAttr(attributes, "note"),
+					thickness: this.tryGetNumAttr(attributes, "thickness"),
+					thick: this.tryGetStrAttr(attributes, "thick"),
+				} as DrawingAddingConnector;
+			} else {
+				throw new Error(`Unknown connector class: ${connectorClass}`);
+			}
+
 			return connector;
 		});
 		return ret;
