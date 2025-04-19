@@ -537,6 +537,70 @@ export abstract class BaseConnectorRenderer {
 		return this.getOffsetPositionAlongSegment(segments[0], distance);
 	}
 
+	protected renderMarker(
+		markerId: string,
+		refX: number,
+		rotate: number = 0
+	): React.ReactElement {
+		const {
+			width: arrowWidth,
+			height: arrowHeight,
+			viewBoxWidth,
+			viewBoxHeight,
+			viewBoxMidY,
+		} = this.getArrowStyleSettings();
+
+		// Build the arrow points string
+		const arrowPoints = `0 0, ${viewBoxWidth} ${viewBoxMidY}, 0 ${viewBoxHeight}`;
+
+		return (
+			<marker
+				id={markerId}
+				markerWidth={arrowWidth}
+				markerHeight={arrowHeight}
+				refX={refX}
+				refY={viewBoxMidY}
+				orient="auto"
+				overflow="visible"
+				viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
+				markerUnits="userSpaceOnUse"
+			>
+				<polyline
+					points={arrowPoints}
+					fill="none"
+					stroke={this.displayProperties.defaultStyle.stroke}
+					strokeWidth={
+						this.displayProperties.defaultStyle.strokeWidth
+					}
+					transform={
+						rotate
+							? `rotate(${rotate} ${viewBoxWidth} ${viewBoxMidY})`
+							: undefined
+					}
+				/>
+			</marker>
+		);
+	}
+
+	/**
+	 * Override this method to add additional defs to the connector
+	 */
+	protected renderAdditionalDefs(): React.ReactNode {
+		return null;
+	}
+
+	/**
+	 * Override this method to add additional attributes to a segment
+	 */
+	protected getAdditionalSegmentAttributes(
+		segment: Segment,
+		index: number,
+		isFirstSegment: boolean,
+		isLastSegment: boolean
+	): React.SVGProps<SVGPathElement> {
+		return {};
+	}
+
 	protected renderSegment(
 		segment: Segment,
 		index: number,
@@ -544,10 +608,19 @@ export abstract class BaseConnectorRenderer {
 	): React.ReactElement {
 		const segments = this.getSegments();
 		const isLastSegment = index === segments.length - 1;
+		const isFirstSegment = index === 0;
 		const { connector } = this.props;
 		const isTransitive =
 			(isManagesConnector(connector) || isUsedInConnector(connector)) &&
 			connector.appearance === "Transitive";
+
+		// Get additional attributes from subclass
+		const additionalAttributes = this.getAdditionalSegmentAttributes(
+			segment,
+			index,
+			isFirstSegment,
+			isLastSegment
+		);
 
 		if (!isTransitive) {
 			return (
@@ -561,6 +634,7 @@ export abstract class BaseConnectorRenderer {
 								? `url(#${markerId})`
 								: undefined,
 					}}
+					{...additionalAttributes}
 				/>
 			);
 		}
@@ -585,6 +659,7 @@ export abstract class BaseConnectorRenderer {
 						...this.displayProperties.defaultStyle,
 						markerEnd: undefined,
 					}}
+					{...additionalAttributes}
 				/>
 				<path
 					d={`M ${segment.from.x - perpX} ${
@@ -594,6 +669,7 @@ export abstract class BaseConnectorRenderer {
 						...this.displayProperties.defaultStyle,
 						markerEnd: undefined,
 					}}
+					{...additionalAttributes}
 				/>
 				{isLastSegment && markerId && (
 					<path
@@ -603,6 +679,7 @@ export abstract class BaseConnectorRenderer {
 							markerEnd: `url(#${markerId})`,
 							strokeWidth: 0,
 						}}
+						{...additionalAttributes}
 					/>
 				)}
 			</g>
@@ -795,17 +872,8 @@ export abstract class BaseConnectorRenderer {
 		const segments = this.getSegments();
 		const markerId = `arrowhead-${this.props.connector.id}`;
 
-		const {
-			visible: showArrow,
-			width: arrowWidth,
-			height: arrowHeight,
-			viewBoxWidth,
-			viewBoxHeight,
-			viewBoxMidY,
-		} = this.getArrowStyleSettings();
-
-		// Build the arrow points string
-		const arrowPoints = `0 0, ${viewBoxWidth} ${viewBoxMidY}, 0 ${viewBoxHeight}`;
+		const { visible: showArrow, viewBoxWidth } =
+			this.getArrowStyleSettings();
 
 		return (
 			<g
@@ -814,29 +882,10 @@ export abstract class BaseConnectorRenderer {
 			>
 				{showArrow && (
 					<defs>
-						<marker
-							id={markerId}
-							markerWidth={arrowWidth}
-							markerHeight={arrowHeight}
-							refX={viewBoxWidth} // Place reference point at right tip of arrow
-							refY={viewBoxMidY} // Center vertically
-							orient="auto"
-							overflow="hidden"
-							viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
-							markerUnits="userSpaceOnUse"
-						>
-							<polyline
-								points={arrowPoints}
-								fill="none"
-								stroke={
-									this.displayProperties.defaultStyle.stroke
-								}
-								strokeWidth={
-									this.displayProperties.defaultStyle
-										.strokeWidth
-								}
-							/>
-						</marker>
+						{/* Default forward arrow marker */}
+						{this.renderMarker(markerId, viewBoxWidth)}
+						{/* Additional defs from subclass */}
+						{this.renderAdditionalDefs()}
 					</defs>
 				)}
 				{segments.map((segment, index) =>
@@ -847,7 +896,6 @@ export abstract class BaseConnectorRenderer {
 					)
 				)}
 				{this.renderLabel()}
-				{/* Base decoration should be rendered by subclasses if needed */}
 			</g>
 		);
 	}
