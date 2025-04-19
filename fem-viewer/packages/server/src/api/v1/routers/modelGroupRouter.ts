@@ -68,7 +68,11 @@ router.delete(
 			const response = await service.execute();
 			res.json(response);
 		} catch (err) {
-			res.status(422).json({ message: err });
+			if (err instanceof Error) {
+				res.status(422).json({ message: err.message });
+			} else {
+				res.status(422).json({ message: err });
+			}
 		}
 	}
 );
@@ -79,7 +83,11 @@ router.get("/modelgroup/:modelGroupId", async (req: Request, res: Response) => {
 		const response = await service.execute();
 		res.json({ data: response });
 	} catch (err) {
-		res.status(422).json({ message: err });
+		if (err instanceof Error) {
+			res.status(422).json({ message: err.message });
+		} else {
+			res.status(422).json({ message: err });
+		}
 	}
 });
 
