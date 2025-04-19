@@ -1,6 +1,6 @@
 import React from "react";
 import { Connector, Instance } from "@fem-viewer/types";
-import { ConnectorRendererFactory } from "../factory/ConnectorRendererFactory";
+import { ConnectorRendererFactory } from "./factory/ConnectorRendererFactory";
 
 interface ConnectorRendererProps {
 	connector: Connector;

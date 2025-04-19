@@ -6,7 +6,7 @@ import styles from "./dynamicsvg.module.css";
 import Header from "../header/Header";
 import InstanceRenderer from "./renderers/InstanceRenderer";
 import { CM_TO_PX } from "./types/constants";
-import ConnectorRenderer from "./renderers/connectors/ConnectorRenderer";
+import ConnectorRenderer from "./renderers/ConnectorRenderer";
 import { useSVGZoom } from "./hooks/useSVGZoom";
 
 const DynamicSVGView: React.FC = () => {
