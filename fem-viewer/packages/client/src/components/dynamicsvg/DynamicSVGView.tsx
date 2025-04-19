@@ -3,11 +3,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import useFEM from "../../state/useFEM";
 import styles from "./dynamicsvg.module.css";
-import Header from "../header/Header";
 import InstanceRenderer from "./renderers/InstanceRenderer";
 import { CM_TO_PX } from "./types/constants";
 import ConnectorRenderer from "./renderers/ConnectorRenderer";
 import { useSVGZoom } from "./hooks/useSVGZoom";
+import SVGViewHeader from "./header/SVGViewHeader";
 
 const DynamicSVGView: React.FC = () => {
 	const {
@@ -73,18 +73,29 @@ const DynamicSVGView: React.FC = () => {
 	if (!model) {
 		return (
 			<div className={styles["dynamicsvg-container"]}>
-				<div className={styles["no-model"]}>No model selected</div>
+				<SVGViewHeader
+					model={undefined}
+					zoom={zoom}
+					onZoomIn={zoomIn}
+					onZoomOut={zoomOut}
+					onResetZoom={resetZoom}
+				/>
+				<div className={styles["svg-container"]} ref={containerRef}>
+					<div className={styles["no-model"]}>No model selected</div>
+				</div>
 			</div>
 		);
 	}
 
 	return (
 		<div className={styles["dynamicsvg-container"]}>
-			<Header>
-				<div className={styles["header-content"]}>
-					<div>Dynamic SVG Viewer - {model.name}</div>
-				</div>
-			</Header>
+			<SVGViewHeader
+				model={model}
+				zoom={zoom}
+				onZoomIn={zoomIn}
+				onZoomOut={zoomOut}
+				onResetZoom={resetZoom}
+			/>
 			<div className={styles["svg-container"]} ref={containerRef}>
 				<svg
 					ref={svgRef}
@@ -204,26 +215,6 @@ const DynamicSVGView: React.FC = () => {
 							})}
 					</g>
 				</svg>
-
-				{/* Zoom controls */}
-				<div className={styles["zoom-controls"]}>
-					<button className={styles["zoom-button"]} onClick={zoomOut}>
-						-
-					</button>
-					<button
-						className={styles["zoom-button"]}
-						onClick={resetZoom}
-					>
-						Reset
-					</button>
-					<button className={styles["zoom-button"]} onClick={zoomIn}>
-						+
-					</button>
-
-					<div className={styles["zoom-level"]}>
-						{Math.round(zoom * 100)}%
-					</div>
-				</div>
 			</div>
 		</div>
 	);
