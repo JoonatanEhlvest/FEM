@@ -5,6 +5,8 @@ import { DrawingAddingConnectorRenderer } from "../connectors/DrawingAddingConne
 import { RelatesToConnectionRenderer } from "../connectors/RelatesToConnectionRenderer";
 import { AssociationRenderer } from "../connectors/AssociationRenderer";
 import { InspectsMonitorsRenderer } from "../connectors/InspectsMonitorsRenderer";
+import { IsInsideConnectorRenderer } from "../connectors/IsInsideConnectorRenderer";
+
 export class ConnectorRendererFactory {
 	static createRenderer(props: ConnectorRendererProps) {
 		switch (props.connector.class) {
@@ -20,6 +22,8 @@ export class ConnectorRendererFactory {
 				return new AssociationRenderer(props);
 			case "Inspects/Monitors":
 				return new InspectsMonitorsRenderer(props);
+			case "Is inside":
+				return new IsInsideConnectorRenderer(props);
 			default:
 				// Default to Manages renderer for unknown types
 				return new ManagesConnectorRenderer(props);

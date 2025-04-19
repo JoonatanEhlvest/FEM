@@ -32,6 +32,7 @@ import {
 	AssociationConnector,
 	InspectsMonitorsConnector,
 	DrawingAddingConnector,
+	IsInsideConnector,
 } from "@fem-viewer/types/Connector";
 // Import from baseParser.ts
 import { parseXMLToModel } from "./baseParser";
@@ -575,7 +576,7 @@ class Parser {
 				"class"
 			) as ConnectorClass;
 
-			// Common properties for all connector types
+			// Common properties for connector types
 			const baseProps = {
 				id: this.tryGetStrProperty(XMLconnector, "id"),
 				fromName: this.tryGetStrProperty(from, "instance"),
@@ -637,6 +638,11 @@ class Parser {
 					thickness: this.tryGetNumAttr(attributes, "thickness"),
 					thick: this.tryGetStrAttr(attributes, "thick"),
 				} as DrawingAddingConnector;
+			} else if (connectorClass === "Is inside") {
+				connector = {
+					...baseProps,
+					class: "Is inside",
+				} as IsInsideConnector;
 			} else {
 				throw new Error(`Unknown connector class: ${connectorClass}`);
 			}

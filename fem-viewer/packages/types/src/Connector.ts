@@ -31,7 +31,8 @@ export type ConnectorClass =
 	| "relates-to"
 	| "Association"
 	| "Inspects/Monitors"
-	| "Drawing/Adding";
+	| "Drawing/Adding"
+	| "Is inside";
 
 /**
  * Base interface with common properties for all connectors
@@ -113,13 +114,21 @@ export interface DrawingAddingConnector extends BaseConnector {
 	orientation: "Horizontal" | "Vertical";
 }
 
+/**
+ * Is inside connector - represents a containment relationship
+ */
+export interface IsInsideConnector extends BaseConnector {
+	class: "Is inside";
+}
+
 export type Connector =
 	| UsedInConnector
 	| ManagesConnector
 	| RelatesToConnector
 	| AssociationConnector
 	| InspectsMonitorsConnector
-	| DrawingAddingConnector;
+	| DrawingAddingConnector
+	| IsInsideConnector;
 
 /**
  * Type guards for connector types
@@ -177,4 +186,13 @@ export function isDrawingAddingConnector(
 	connector: Connector
 ): connector is DrawingAddingConnector {
 	return connector.class === "Drawing/Adding";
+}
+
+/**
+ * Checks if the connector is an Is inside connector
+ */
+export function isIsInsideConnector(
+	connector: Connector
+): connector is IsInsideConnector {
+	return connector.class === "Is inside";
 }
