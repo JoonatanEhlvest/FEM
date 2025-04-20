@@ -9,6 +9,13 @@ import ConnectorRenderer from "./renderers/ConnectorRenderer";
 import { useSVGZoom } from "./hooks/useSVGZoom";
 import SVGViewHeader from "./header/SVGViewHeader";
 
+// Interface for combined elements with their indices for proper layering
+interface LayerElement {
+	type: "instance" | "connector";
+	index: number;
+	element: React.ReactElement;
+}
+
 const DynamicSVGView: React.FC = () => {
 	const {
 		getCurrentModel,
@@ -68,6 +75,89 @@ const DynamicSVGView: React.FC = () => {
 			clearAllOccurrencesHighlighting();
 			setCurrentInstance(instance);
 		}
+	};
+
+	// Render layered elements based on indices
+	const renderLayeredElements = () => {
+		if (!model) return null;
+
+		// Array to hold all renderable elements with their z-index (position.index)
+		const layerElements: LayerElement[] = [];
+
+		// Add instances to the layer elements array
+		model.instances.forEach((instance) => {
+			const index = instance.position?.index || 0;
+			layerElements.push({
+				type: "instance",
+				index,
+				element: (
+					<InstanceRenderer
+						key={instance.id}
+						instance={instance}
+						model={model}
+						onClick={() => handleInstanceClick(instance.id)}
+						isSelected={getCurrentInstance()?.id === instance.id}
+						zoom={zoom}
+						allOccurrencesHighlightedInstances={
+							state.allOccurrencesHighlightedInstances
+						}
+					/>
+				),
+			});
+		});
+
+		// Add connectors to the layer elements array
+		if (model.connectors) {
+			model.connectors.forEach((connector) => {
+				const fromInstance = model.instances.find(
+					(i) => i.name === connector.fromName
+				);
+				const toInstance = model.instances.find(
+					(i) => i.name === connector.toName
+				);
+
+				if (!fromInstance || !toInstance) {
+					// Log missing instances in development
+					if (process.env.NODE_ENV === "development") {
+						console.warn(
+							`Connector ${connector.id} has missing instances:`,
+							{
+								fromName: connector.fromName,
+								toName: connector.toName,
+							}
+						);
+					}
+					return;
+				}
+
+				// Use connector's positions.index as z-index, defaulting to 0 if missing
+				const connectorIndex =
+					connector.positions?.index !== undefined
+						? connector.positions.index
+						: 0;
+
+				layerElements.push({
+					type: "connector",
+					index: connectorIndex,
+					element: (
+						<ConnectorRenderer
+							key={connector.id}
+							connector={connector}
+							fromInstance={fromInstance}
+							toInstance={toInstance}
+							zoom={zoom}
+						/>
+					),
+				});
+			});
+		}
+
+		// Sort all elements by their index for proper layering
+		// Elements with lower indices will be rendered first (behind)
+		layerElements.sort((a, b) => a.index - b.index);
+
+		// Return the sorted elements
+		return layerElements.map((item) => item.element);
 	};
 
 	if (!model) {
@@ -160,59 +250,8 @@ const DynamicSVGView: React.FC = () => {
 						</filter>
 					</defs>
 					<g>
-						{/* Render instances */}
-						{model.instances.map((instance) => (
-							<InstanceRenderer
-								key={instance.id}
-								instance={instance}
-								model={model}
-								onClick={() => handleInstanceClick(instance.id)}
-								isSelected={
-									getCurrentInstance()?.id === instance.id
-								}
-								zoom={zoom}
-								allOccurrencesHighlightedInstances={
-									state.allOccurrencesHighlightedInstances
-								}
-							/>
-						))}
-
-						{/* Render connectors */}
-						{model.connectors &&
-							model.connectors.map((connector) => {
-								const fromInstance = model.instances.find(
-									(i) => i.name === connector.fromName
-								);
-								const toInstance = model.instances.find(
-									(i) => i.name === connector.toName
-								);
-
-								if (!fromInstance || !toInstance) {
-									// Log missing instances in development
-									if (
-										process.env.NODE_ENV === "development"
-									) {
-										console.warn(
-											`Connector ${connector.id} has missing instances:`,
-											{
-												fromName: connector.fromName,
-												toName: connector.toName,
-											}
-										);
-									}
-									return null;
-								}
-
-								return (
-									<ConnectorRenderer
-										key={connector.id}
-										connector={connector}
-										fromInstance={fromInstance}
-										toInstance={toInstance}
-										zoom={zoom}
-									/>
-								);
-							})}
+						{/* Render all elements sorted by their indices */}
+						{renderLayeredElements()}
 					</g>
 				</svg>
 			</div>
