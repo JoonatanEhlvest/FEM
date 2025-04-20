@@ -16,22 +16,14 @@
 			"@fem-viewer/types": ["../types/src"],
 			"@fem-viewer/parser": ["../parser/src"]
 		},
-		"types": [
-			"jest",
-			"node"
-		],
+		"types": ["node"],
 		"typeRoots": [
-			"./node_modules/@types", 
+			"./node_modules/@types",
 			"./@types",
 			"../../node_modules/@types"
 		]
 	},
 	"files": ["@types/index.d.ts"],
-	"include": [
-		"src",
-		"server.ts",
-		"types",
-		"**/*.test.ts"
-	],
+	"include": ["src", "server.ts", "types", "**/*.test.ts"],
 	"exclude": ["node_modules", "build"]
 }

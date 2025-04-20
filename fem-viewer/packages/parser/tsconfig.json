@@ -1,33 +1,25 @@
 {
-  "compilerOptions": {
-    "target": "es2022",
-    "module": "node16",
-    "declaration": true,
-    "outDir": "./dist",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node16",
-    "sourceMap": true,
-    "baseUrl": ".",
-    "paths": {
-      "@fem-viewer/types": ["../types/src"],
-      "@fem-viewer/types/*": ["../types/src/*"],
-      "*": ["node_modules/*"]
-    },
-    "typeRoots": [
-      "./node_modules/@types",
-      "../../node_modules/@types"
-    ],
-    "types": [
-      "node",
-      "jest"
-    ]
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts"],
-  "references": [
-    { "path": "../types" }
-  ]
-} 
+	"compilerOptions": {
+		"target": "es2022",
+		"module": "node16",
+		"declaration": true,
+		"outDir": "./dist",
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"moduleResolution": "node16",
+		"sourceMap": true,
+		"baseUrl": ".",
+		"paths": {
+			"@fem-viewer/types": ["../types/src"],
+			"@fem-viewer/types/*": ["../types/src/*"],
+			"*": ["node_modules/*"]
+		},
+		"typeRoots": ["./node_modules/@types", "../../node_modules/@types"],
+		"types": ["node"]
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist", "**/*.test.ts"],
+	"references": [{ "path": "../types" }]
+}
