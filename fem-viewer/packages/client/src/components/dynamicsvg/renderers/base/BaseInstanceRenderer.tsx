@@ -8,21 +8,23 @@ import {
 import { InstanceDisplayStyle } from "../../types/InstanceDisplayStyle";
 import { InstanceRendererProps } from "../../types/InstanceRendererTypes";
 import { CM_TO_PX } from "../../types/constants";
+import { wrapText, calculateMaxCharsPerWidth } from "../../utils/textWrapUtils";
 
 // Font settings for instance text elements
-// TODO: get font size from model
 const FONT_SETTINGS = {
 	INSTANCE_NAME: {
 		fontFamily: "Arial, sans-serif",
-		fontSize: "12px",
-		fontWeight: "bold",
+		fontWeight: "normal",
 	},
 	INSTANCE_SUBTEXT: {
 		fontFamily: "Arial, sans-serif",
-		fontSize: "10px",
 		fontWeight: "normal",
 	},
 };
+
+// Default font size if not specified in the instance
+const DEFAULT_FONT_SIZE = 10;
+const DEFAULT_LINE_HEIGHT_SPACING = 1.2;
 
 export abstract class BaseInstanceRenderer {
 	// Common style modifiers for all instance types
@@ -223,52 +225,55 @@ export abstract class BaseInstanceRenderer {
 	}
 
 	protected renderName(nameLines: string[]): React.ReactElement {
-		if (nameLines.length === 1) {
-			return (
-				<text
-					x={this.x + this.width / 2}
-					y={this.y + this.height / 2}
-					textAnchor="middle"
-					dominantBaseline="central"
-					fontFamily={FONT_SETTINGS.INSTANCE_NAME.fontFamily}
-					fontSize={this.getAdjustedFontSize(
-						FONT_SETTINGS.INSTANCE_NAME.fontSize
-					)}
-					fontWeight={FONT_SETTINGS.INSTANCE_NAME.fontWeight}
-				>
-					{nameLines[0]}
-				</text>
-			);
-		}
+		// Get font size from instance or use default
+		const fontSize = this.instance.fontSize || DEFAULT_FONT_SIZE;
+		const lineHeightSpacing = DEFAULT_LINE_HEIGHT_SPACING;
+
+		// Padding from instance edge in px
+		const padX = 1;
+		const padY = 1;
+
+		// For group instances, position text at the top, but account for padding
+		const baseY = this.instance.isGroup
+			? this.y + padY + fontSize // Position at top with proper padding
+			: this.y +
+			  this.height / 2 -
+			  ((nameLines.length - 1) * fontSize) / 2; // Center vertically accounting for multiple lines
+
+		// Create a unique clip path ID for this instance
+		const clipId = `text-clip-${this.instance.id}`;
 
 		return (
 			<>
-				<text
-					x={this.x + this.width / 2}
-					y={this.y + this.height / 2 - 8}
-					textAnchor="middle"
-					dominantBaseline="central"
-					fontFamily={FONT_SETTINGS.INSTANCE_NAME.fontFamily}
-					fontSize={this.getAdjustedFontSize(
-						FONT_SETTINGS.INSTANCE_NAME.fontSize
-					)}
-					fontWeight={FONT_SETTINGS.INSTANCE_NAME.fontWeight}
-				>
-					{nameLines[0]}
-				</text>
-				<text
-					x={this.x + this.width / 2}
-					y={this.y + this.height / 2 + 8}
-					textAnchor="middle"
-					dominantBaseline="central"
-					fontFamily={FONT_SETTINGS.INSTANCE_NAME.fontFamily}
-					fontSize={this.getAdjustedFontSize(
-						FONT_SETTINGS.INSTANCE_NAME.fontSize
-					)}
-					fontWeight={FONT_SETTINGS.INSTANCE_NAME.fontWeight}
-				>
-					{nameLines[1]}
-				</text>
+				{/* Define clip path with padding */}
+				<defs>
+					<clipPath id={clipId}>
+						<rect
+							x={this.x + padX}
+							y={this.y + padY}
+							width={this.width - 2 * padX}
+							height={this.height - 2 * padY}
+						/>
+					</clipPath>
+				</defs>
+
+				{/* Text container with clip path applied */}
+				<g clipPath={`url(#${clipId})`}>
+					{nameLines.map((line, index) => (
+						<text
+							key={`line-${index}`}
+							x={this.x + this.width / 2}
+							y={baseY + index * fontSize * lineHeightSpacing}
+							textAnchor="middle"
+							dominantBaseline="central"
+							fontFamily={FONT_SETTINGS.INSTANCE_NAME.fontFamily}
+							fontSize={`${fontSize}px`}
+							fontWeight={FONT_SETTINGS.INSTANCE_NAME.fontWeight}
+						>
+							{line}
+						</text>
+					))}
+				</g>
 			</>
 		);
 	}
@@ -295,44 +300,18 @@ export abstract class BaseInstanceRenderer {
 	}
 
 	protected formatNameForDisplay(name: string): string[] {
-		const threshold = 15;
-		if (name.length <= threshold) {
-			return [name];
-		}
+		// Calculate approximate character capacity based on instance width and font size
+		const fontSize = this.instance.fontSize || DEFAULT_FONT_SIZE;
 
-		const splitChars = [" ", "-", "_", "."];
-		let bestSplitIndex = Math.floor(name.length / 2);
-		let minDiff = name.length;
+		// Calculate max chars that can fit per line using the utility function
+		const maxCharsPerLine = calculateMaxCharsPerWidth(
+			this.width,
+			fontSize,
+			10
+		);
 
-		for (
-			let i = Math.floor(name.length / 3);
-			i <= Math.floor((name.length * 2) / 3);
-			i++
-		) {
-			if (splitChars.includes(name[i])) {
-				const diff = Math.abs(i - name.length / 2);
-				if (diff < minDiff) {
-					bestSplitIndex = i;
-					minDiff = diff;
-				}
-			}
-		}
-
-		if (minDiff < name.length / 2) {
-			const firstLine = name.substring(0, bestSplitIndex).trim();
-			const secondLine = name.substring(bestSplitIndex).trim();
-			return [firstLine, secondLine];
-		}
-
-		return [
-			name.substring(0, Math.ceil(name.length / 2)),
-			name.substring(Math.ceil(name.length / 2)),
-		];
-	}
-
-	protected getAdjustedFontSize(size: string): string {
-		const numericSize = parseFloat(size);
-		return `${Math.max(numericSize, numericSize / this.zoom)}px`;
+		// Use the text wrapping utility function
+		return wrapText(name, maxCharsPerLine);
 	}
 
 	render(): React.ReactElement {
