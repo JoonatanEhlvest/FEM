@@ -15,7 +15,7 @@
 		"start:dev": "concurrently \"yarn start:dev:server\" \"yarn start:dev:client\"",
 		"db:start": "yarn workspace @fem-viewer/server db:start",
 		"db:stop": "yarn workspace @fem-viewer/server db:stop",
-		"prebuild": "yarn clean",
+		"clean": "rimraf node_modules && yarn workspaces run clean",
 		"build": "yarn build:types && yarn build:parser && yarn build:client && yarn build:server",
 		"build:watch": "concurrently \"yarn workspace @fem-viewer/types build --watch\" \"yarn workspace @fem-viewer/parser build --watch\" \"yarn workspace @fem-viewer/client build --watch\" \"yarn workspace @fem-viewer/server build --watch\"",
 		"build:types": "yarn workspace @fem-viewer/types build",
@@ -25,12 +25,13 @@
 		"test": "yarn workspaces run test",
 		"test:setup": "yarn workspace @fem-viewer/server test:setup",
 		"test:teardown": "yarn workspace @fem-viewer/server test:teardown",
-		"clean": "rm -rf node_modules && yarn workspaces run clean",
 		"dependency-graph": "madge --image dependency-graph.svg --extensions ts,tsx packages/client/src/ packages/server/src/ packages/types/src/ packages/parser/src/",
 		"prisma:generate": "yarn workspace @fem-viewer/server prisma generate"
 	},
 	"devDependencies": {
 		"concurrently": "^9.1.2",
-		"madge": "^8.0.0"
+		"madge": "^8.0.0",
+		"rimraf": "^5.0.5",
+		"typescript": "5.7.3"
 	}
 }
