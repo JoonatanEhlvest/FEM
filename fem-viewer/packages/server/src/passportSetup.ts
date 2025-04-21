@@ -74,7 +74,7 @@ const setupPassport = (passport: PassportStatic) => {
 			id: user.id,
 			role: user.role,
 			username: user.username,
-			createdById: user.createdById
+			createdById: user.createdById,
 		};
 		done(null, sessionUser);
 	});

@@ -1,25 +1,25 @@
 {
-  "name": "@fem-viewer/packages",
-  "version": "0.1.0",
-  "private": true,
-  "workspaces": [
-    "types",
-    "parser",
-    "client",
-    "server"
-  ],
-  "scripts": {
-    "build": "yarn workspaces run build",
-    "clean": "yarn workspaces run clean",
-    "dev": "yarn workspaces run dev",
-    "lint": "yarn workspaces run lint",
-    "test": "yarn workspaces run test",
-    "build:types": "yarn workspace @fem-viewer/types build",
-    "build:parser": "yarn workspace @fem-viewer/parser build",
-    "build:client": "yarn workspace @fem-viewer/client build",
-    "build:server": "yarn workspace @fem-viewer/server build"
-  },
-  "engines": {
-    "node": ">=22.0.0"
-  }
-} 
+	"name": "@fem-viewer/packages",
+	"version": "0.1.0",
+	"private": true,
+	"workspaces": [
+		"types",
+		"parser",
+		"client",
+		"server"
+	],
+	"scripts": {
+		"build": "yarn workspaces run build",
+		"clean": "yarn workspaces run clean",
+		"dev": "yarn workspaces run dev",
+		"lint": "yarn workspaces run lint",
+		"test": "yarn workspaces run test",
+		"build:types": "yarn workspace @fem-viewer/types build",
+		"build:parser": "yarn workspace @fem-viewer/parser build",
+		"build:client": "yarn workspace @fem-viewer/client build",
+		"build:server": "yarn workspace @fem-viewer/server build"
+	},
+	"engines": {
+		"node": ">=22.0.0"
+	}
+}
