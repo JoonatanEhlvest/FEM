@@ -53,7 +53,7 @@ router.get("/user/:id", [checkAuth], async (req: Request, res: Response) => {
 
 router.patch(
 	"/user/changepassword/",
-	[checkAuth],
+	[checkAuth, authorize(["ADMIN", "DEVELOPER"])],
 	async (req: Request, res: Response) => {
 		try {
 			const service = new ChangePasswordService(req, db);

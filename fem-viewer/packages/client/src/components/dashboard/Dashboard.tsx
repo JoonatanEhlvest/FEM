@@ -62,17 +62,21 @@ const Dashboard = () => {
 							to="/register"
 						/>
 					</AuthComponent>
-					<NavLink
-						children={
-							<button
-								className={styles["upload-btn"]}
-								style={{ fontSize: "10px" }}
-							>
-								Change Password
-							</button>
-						}
-						to="/changepassword"
-					/>
+					<AuthComponent
+						rolesAllowed={[UserRole.ADMIN, UserRole.DEVELOPER]}
+					>
+						<NavLink
+							children={
+								<button
+									className={styles["upload-btn"]}
+									style={{ fontSize: "10px" }}
+								>
+									Change Password
+								</button>
+							}
+							to="/changepassword"
+						/>
+					</AuthComponent>
 					<button
 						className={styles["logout-btn"]}
 						onClick={handleLogout}

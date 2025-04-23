@@ -81,9 +81,12 @@ const AppRouter = () => {
 				<Route
 					path="/changepassword"
 					element={
-						<RequireAuth>
+						<AuthorizedRoute
+							user={user}
+							rolesAllowed={[UserRole.DEVELOPER, UserRole.ADMIN]}
+						>
 							<ChangePassword />
-						</RequireAuth>
+						</AuthorizedRoute>
 					}
 				/>
 				<Route
