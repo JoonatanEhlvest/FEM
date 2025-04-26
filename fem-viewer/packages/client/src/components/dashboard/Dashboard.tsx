@@ -10,6 +10,7 @@ import DashboardCreatedUsersList from "./DashboardCreatedUsersList";
 export enum UserRole {
 	ADMIN = "ADMIN",
 	DEVELOPER = "DEVELOPER",
+	EXPERT = "EXPERT",
 	VIEWER = "VIEWER",
 }
 const Dashboard = () => {

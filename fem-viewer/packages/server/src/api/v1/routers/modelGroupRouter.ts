@@ -118,7 +118,7 @@ router.delete(
  */
 router.patch(
 	"/modelgroup/:modelGroupId/instance/:instanceId/description",
-	[checkAuth, authorize(["ADMIN", "DEVELOPER"])],
+	[checkAuth, authorize(["ADMIN", "DEVELOPER", "EXPERT"])],
 	async (req: Request, res: Response) => {
 		try {
 			const service = new UpdateInstanceDescriptionService(req, db);
@@ -144,7 +144,7 @@ router.patch(
  */
 router.patch(
 	"/modelgroup/:modelGroupId/instance/:instanceId/subclass",
-	[checkAuth, authorize(["ADMIN", "DEVELOPER"])],
+	[checkAuth, authorize(["ADMIN", "DEVELOPER", "EXPERT"])],
 	async (req: Request, res: Response) => {
 		try {
 			const service = new UpdateInstanceSubclassService(req, db);
@@ -170,7 +170,7 @@ router.patch(
  */
 router.patch(
 	"/modelgroup/:modelGroupId/instance/:instanceId/bsubclass",
-	[checkAuth, authorize(["ADMIN", "DEVELOPER"])],
+	[checkAuth, authorize(["ADMIN", "DEVELOPER", "EXPERT"])],
 	async (req: Request, res: Response) => {
 		try {
 			const service = new UpdateInstanceBSubclassService(req, db);

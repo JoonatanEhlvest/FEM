@@ -91,6 +91,16 @@ const Register = () => {
 							/>
 						</div>
 					)}
+					{user?.role === UserRole.ADMIN && (
+						<div className={styles["form-checkbox"]}>
+							<label>Expert</label>
+							<input
+								type="radio"
+								name="role"
+								value={UserRole.EXPERT}
+							/>
+						</div>
+					)}
 					<div className={styles["form-checkbox"]}>
 						<label>Viewer</label>
 						<input

@@ -364,10 +364,12 @@ const Details = () => {
 	const currentModelGroup = getCurrentModelGroup();
 	const user = getUser();
 
-	// Check if user has edit permissions (admin or developer)
+	// Check if user has edit permissions (admin, developer, or expert)
 	const hasEditPermission = Boolean(
 		user &&
-			(user.role === UserRole.ADMIN || user.role === UserRole.DEVELOPER)
+			(user.role === UserRole.ADMIN ||
+				user.role === UserRole.DEVELOPER ||
+				user.role === UserRole.EXPERT)
 	);
 
 	const [dropdowns, setDropdowns] = useState({
