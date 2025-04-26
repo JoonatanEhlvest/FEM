@@ -6,6 +6,7 @@ import ListService from "../services/user/created/list";
 import DeleteService from "../services/user/created/delete";
 import UnauthorizedError from "../../../error/UnauthorizedError";
 import ChangePasswordService from "../services/user/changePassword";
+import ChangeCreatedUserPasswordService from "../services/user/created/changePassword";
 
 const router = Router();
 
@@ -61,6 +62,26 @@ router.patch(
 			res.status(200).json({ message: "successfully changed password" });
 		} catch (err) {
 			res.status(500).json({ message: err.message });
+		}
+	}
+);
+
+router.patch(
+	"/users/:userId/password",
+	[checkAuth, authorize(["ADMIN", "DEVELOPER"])],
+	async (req: Request, res: Response) => {
+		try {
+			const service = new ChangeCreatedUserPasswordService(req, db);
+			await service.execute();
+			res.status(200).json({
+				message: "Successfully changed user password",
+			});
+		} catch (err) {
+			if (err instanceof UnauthorizedError) {
+				res.status(err.code).json({ message: err.message });
+			} else {
+				res.status(500).json({ message: err.message });
+			}
 		}
 	}
 );

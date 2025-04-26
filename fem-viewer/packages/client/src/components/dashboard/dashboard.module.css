@@ -253,3 +253,7 @@
 	border: 1px solid white;
 	background-color: red;
 }
+
+.change-password-btn {
+	margin-right: 10px !important;
+}
