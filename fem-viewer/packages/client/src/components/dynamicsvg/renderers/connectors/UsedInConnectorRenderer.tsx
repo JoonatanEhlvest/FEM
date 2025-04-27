@@ -20,6 +20,10 @@ export class UsedInConnectorRenderer extends BaseConnectorRenderer {
 				opacity: 1,
 				fill: "none",
 			},
+			labelStyle: {
+				...this.getDefaultLabelStyle(),
+				fontStyle: "italic",
+			},
 		};
 	}
 

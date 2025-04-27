@@ -14,6 +14,10 @@ export class AssociationRenderer extends BaseConnectorRenderer {
 				opacity: 1,
 				fill: "none",
 			},
+			labelStyle: {
+				...this.getDefaultLabelStyle(),
+				maxWidthCm: 2.5,
+			},
 		};
 	}
 

@@ -66,6 +66,10 @@ export interface ConnectorDisplayProperties {
 		fontSize: number;
 		fill: string;
 		opacity: number;
+		fontFamily?: string;
+		fontStyle?: string;
+		fontWeight?: string;
+		maxWidthCm?: number; // Maximum width for text wrapping in cm
 	};
 	arrowStyle?: {
 		width?: number; // Controls the arrow size (optional)

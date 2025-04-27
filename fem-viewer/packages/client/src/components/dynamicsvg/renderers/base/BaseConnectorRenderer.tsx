@@ -18,6 +18,7 @@ import {
 	isManagesConnector,
 	isUsedInConnector,
 } from "@fem-viewer/types/Connector";
+import { wrapText, calculateMaxCharsPerWidth } from "../../utils/textWrapUtils";
 
 export interface ConnectorRendererProps {
 	connector: Connector;
@@ -687,6 +688,22 @@ export abstract class BaseConnectorRenderer {
 	}
 
 	/**
+	 * Gets default labelStyle properties with sensible defaults.
+	 * Can be extended/overridden in getDisplayProperties.
+	 */
+	protected getDefaultLabelStyle() {
+		return {
+			fontSize: 8,
+			fill: "black",
+			opacity: 1,
+			fontFamily: "Arial",
+			fontStyle: "normal",
+			fontWeight: "normal",
+			maxWidthCm: 2.0,
+		};
+	}
+
+	/**
 	 * Gets the labels to display for this connector.
 	 * Returns an array of strings to display as labels, or empty array for no labels.
 	 */
@@ -704,9 +721,20 @@ export abstract class BaseConnectorRenderer {
 			return null;
 		}
 
-		const fontSize = this.displayProperties.labelStyle?.fontSize || 8;
-		const fill = this.displayProperties.labelStyle?.fill || "black";
-		const opacity = this.displayProperties.labelStyle?.opacity || 1;
+		// Get label style from display properties, with defaults
+		const defaultStyle = this.getDefaultLabelStyle();
+		const labelStyle = {
+			...defaultStyle,
+			...this.displayProperties.labelStyle,
+		};
+
+		// Calculate max width for text wrapping
+		const maxWidthPx = labelStyle.maxWidthCm * CM_TO_PX;
+		// Calculate max chars that can fit in the width
+		const maxCharsPerLine = calculateMaxCharsPerWidth(
+			maxWidthPx,
+			labelStyle.fontSize
+		);
 
 		// Check if connector has orientation property and it's set to Vertical
 		const { connector } = this.props;
@@ -719,51 +747,79 @@ export abstract class BaseConnectorRenderer {
 			isVertical = connector.orientation === "Vertical";
 		}
 
+		// Wrap each label and calculate total height
+		const wrappedLabels = labels.map((label) =>
+			wrapText(label, maxCharsPerLine)
+		);
+		const lineHeight = labelStyle.fontSize * 1.2;
+
+		// Render elements
+		const labelElements: React.ReactElement[] = [];
+
 		// Apply different label placement based on orientation
 		if (isVertical) {
-			// For vertical orientation, calculate offset to center the labels
-			const totalLabelsWidth = labels.length * fontSize;
-			const startX = middlePoint.x + totalLabelsWidth / 2 - fontSize / 2;
+			// For vertical labels
+			let currentY = middlePoint.y;
 
-			return (
-				<>
-					{labels.map((label, index) => (
+			wrappedLabels.forEach((labelLines, labelIndex) => {
+				const labelWidth = labelLines.length * lineHeight;
+				const startX = middlePoint.x + labelWidth / 2 - lineHeight / 2;
+
+				labelLines.forEach((line, lineIndex) => {
+					labelElements.push(
 						<text
-							key={`label-${index}`}
-							// Position each label with horizontal spacing (becomes vertical after rotation)
-							x={startX - index * fontSize}
-							y={middlePoint.y}
-							fontSize={fontSize}
+							key={`label-${labelIndex}-line-${lineIndex}`}
+							x={startX - lineIndex * lineHeight}
+							y={currentY}
+							fontSize={labelStyle.fontSize}
+							fontFamily={labelStyle.fontFamily}
+							fontStyle={labelStyle.fontStyle}
+							fontWeight={labelStyle.fontWeight}
 							textAnchor="middle"
-							fill={fill}
-							opacity={opacity}
+							fill={labelStyle.fill}
+							opacity={labelStyle.opacity}
 							transform={`rotate(-90 ${middlePoint.x} ${middlePoint.y})`}
 						>
-							{label}
+							{line}
 						</text>
-					))}
-				</>
-			);
+					);
+				});
+
+				// Add spacing between different labels
+				currentY += labelStyle.fontSize * 1.5;
+			});
+		} else {
+			// For horizontal orientation (default)
+			let currentY =
+				middlePoint.y - (wrappedLabels.flat().length * lineHeight) / 2;
+
+			wrappedLabels.forEach((labelLines, labelIndex) => {
+				labelLines.forEach((line, lineIndex) => {
+					labelElements.push(
+						<text
+							key={`label-${labelIndex}-line-${lineIndex}`}
+							x={middlePoint.x}
+							y={currentY + lineIndex * lineHeight}
+							fontSize={labelStyle.fontSize}
+							fontFamily={labelStyle.fontFamily}
+							fontStyle={labelStyle.fontStyle}
+							fontWeight={labelStyle.fontWeight}
+							textAnchor="middle"
+							fill={labelStyle.fill}
+							opacity={labelStyle.opacity}
+						>
+							{line}
+						</text>
+					);
+				});
+
+				// Move to next label position with spacing
+				currentY +=
+					labelLines.length * lineHeight + labelStyle.fontSize * 0.5;
+			});
 		}
 
-		// For horizontal orientation (default)
-		return (
-			<>
-				{labels.map((label, index) => (
-					<text
-						key={`label-${index}`}
-						x={middlePoint.x}
-						y={middlePoint.y + index * fontSize}
-						fontSize={fontSize}
-						textAnchor="middle"
-						fill={fill}
-						opacity={opacity}
-					>
-						{label}
-					</text>
-				))}
-			</>
-		);
+		return <>{labelElements}</>;
 	}
 
 	/**

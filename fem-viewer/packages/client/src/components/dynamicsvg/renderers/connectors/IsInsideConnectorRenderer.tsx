@@ -21,6 +21,10 @@ export class IsInsideConnectorRenderer extends BaseConnectorRenderer {
 			arrowStyle: {
 				visible: false,
 			},
+			labelStyle: {
+				...this.getDefaultLabelStyle(),
+				maxWidthCm: 2.5,
+			},
 		};
 	}
 
