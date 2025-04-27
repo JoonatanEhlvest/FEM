@@ -613,7 +613,7 @@ export abstract class BaseConnectorRenderer {
 		const { connector } = this.props;
 		const isTransitive =
 			(isManagesConnector(connector) || isUsedInConnector(connector)) &&
-			connector.appearance === "Transitive";
+			connector.isTransitive;
 
 		// Get additional attributes from subclass
 		const additionalAttributes = this.getAdditionalSegmentAttributes(

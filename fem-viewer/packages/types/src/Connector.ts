@@ -60,7 +60,8 @@ export type AssetConnectorType =
  */
 export interface UsedInConnector extends BaseConnector {
 	class: "Used In";
-	appearance: "Default" | "Highlighted" | "Transitive";
+	isTransitive: boolean;
+	appearance: "Default" | "Highlighted";
 	assetTypes: AssetConnectorType[];
 }
 
@@ -72,7 +73,8 @@ export type ProcessConnectorType = "Acquire" | "Maintain" | "Retire";
 export interface ManagesConnector extends BaseConnector {
 	class: "Manages";
 	processTypes: ProcessConnectorType[];
-	appearance: "Default" | "Highlighted" | "Transitive";
+	isTransitive: boolean;
+	appearance: "Default" | "Highlighted";
 	labelType: "Text" | "Symbol";
 }
 

@@ -614,6 +614,10 @@ class Parser {
 						this.tryGetStrAttr(attributes, "assettype")
 					),
 					appearance: this.tryGetStrAttr(attributes, "appearance"),
+					isTransitive: this.tryGetBoolAttr(
+						attributes,
+						"istransitive"
+					),
 				} as UsedInConnector;
 			} else if (connectorClass === "Manages") {
 				connector = {
@@ -624,6 +628,10 @@ class Parser {
 					),
 					labelType: this.tryGetStrAttr(attributes, "labeltype"),
 					appearance: this.tryGetStrAttr(attributes, "appearance"),
+					isTransitive: this.tryGetBoolAttr(
+						attributes,
+						"istransitive"
+					),
 				} as ManagesConnector;
 			} else if (connectorClass === "relates-to") {
 				connector = {
