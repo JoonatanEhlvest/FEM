@@ -3,6 +3,7 @@ import { InstanceDisplayStyle } from "../../types/InstanceDisplayStyle";
 import { BaseInstanceRenderer } from "../base/BaseInstanceRenderer";
 import { InstanceRendererProps } from "../../types/InstanceRendererTypes";
 import { isAssetInstance } from "@fem-viewer/types/Instance";
+import { IconRenderer } from "./icons/IconRenderer";
 
 export class AssetRenderer extends BaseInstanceRenderer {
 	private static readonly DEFAULT_STYLE: InstanceDisplayStyle = {
@@ -19,6 +20,26 @@ export class AssetRenderer extends BaseInstanceRenderer {
 		return { ...AssetRenderer.DEFAULT_STYLE };
 	}
 
+	// Add asset icon if available
+	private addAssetIcon(): React.ReactElement | null {
+		if (!isAssetInstance(this.instance) || !this.instance.icon) {
+			return null;
+		}
+
+		// For assets, position at top-left with some padding
+		const iconX = this.x + 15;
+		const iconY = this.y + 15;
+
+		return (
+			<IconRenderer
+				iconType={this.instance.icon}
+				iconSubType={this.instance.iconForArtefact}
+				x={iconX}
+				y={iconY}
+			/>
+		);
+	}
+
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
 		// Use rounded corners (rx=8, ry=8) for group instances, sharp corners (rx=0, ry=0) for regular assets
 		const cornerRadius = this.instance.isGroup ? 8 : 0;
@@ -30,21 +51,27 @@ export class AssetRenderer extends BaseInstanceRenderer {
 			strokeDasharray = "2,5,7,5";
 		}
 
+		// Render asset icon if available
+		const iconElement = this.addAssetIcon();
+
 		return (
-			<rect
-				x={this.x}
-				y={this.y}
-				width={this.width}
-				height={this.height}
-				fill={style.fill}
-				stroke={style.stroke}
-				strokeWidth={style.strokeWidth / this.zoom}
-				strokeDasharray={strokeDasharray}
-				opacity={style.opacity}
-				filter={style.filter}
-				rx={cornerRadius}
-				ry={cornerRadius}
-			/>
+			<>
+				<rect
+					x={this.x}
+					y={this.y}
+					width={this.width}
+					height={this.height}
+					fill={style.fill}
+					stroke={style.stroke}
+					strokeWidth={style.strokeWidth / this.zoom}
+					strokeDasharray={strokeDasharray}
+					opacity={style.opacity}
+					filter={style.filter}
+					rx={cornerRadius}
+					ry={cornerRadius}
+				/>
+				{iconElement}
+			</>
 		);
 	}
 }

@@ -342,6 +342,18 @@ class Parser {
 		return value.split(";").map((type) => type.trim());
 	}
 
+	/**
+	 * Parses an icon value from XML, treating "---" as undefined
+	 * @param value The icon value string from XML
+	 * @returns undefined if the value is "---", otherwise the original value
+	 */
+	private parseIconValue(value: string | undefined): string | undefined {
+		if (!value || value === "---") {
+			return undefined;
+		}
+		return value;
+	}
+
 	getInstances(
 		instances: Array<XMLObj>,
 		modelName: Model["name"]
@@ -447,7 +459,9 @@ class Parser {
 						attributes,
 						"issubprocessesgroup"
 					),
-					icon: this.tryGetStrAttr(attributes, "icon") || "",
+					icon: this.parseIconValue(
+						this.tryGetStrAttr(attributes, "icon")
+					),
 				} as ProcessInstance;
 			} else if (
 				classValue.startsWith("Asset") ||
@@ -489,9 +503,12 @@ class Parser {
 						"numberofunits"
 					),
 					unitName: this.tryGetStrAttr(attributes, "unitname") || "",
-					icon: this.tryGetStrAttr(attributes, "icon") || "",
-					iconForArtefact:
-						this.tryGetStrAttr(attributes, "iconforartefact") || "",
+					icon: this.parseIconValue(
+						this.tryGetStrAttr(attributes, "icon")
+					),
+					iconForArtefact: this.parseIconValue(
+						this.tryGetStrAttr(attributes, "iconforartefact")
+					),
 				} as AssetInstance;
 			} else if (
 				classValue.startsWith("External Actor") ||

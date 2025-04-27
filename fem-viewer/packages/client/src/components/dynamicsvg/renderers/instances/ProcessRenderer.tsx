@@ -3,6 +3,7 @@ import { InstanceDisplayStyle } from "../../types/InstanceDisplayStyle";
 import { BaseInstanceRenderer } from "../base/BaseInstanceRenderer";
 import { InstanceRendererProps } from "../../types/InstanceRendererTypes";
 import { isProcessInstance } from "@fem-viewer/types/Instance";
+import { IconRenderer } from "./icons/IconRenderer";
 
 export class ProcessRenderer extends BaseInstanceRenderer {
 	// Default styles for Process
@@ -18,6 +19,23 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 
 	protected getDefaultStyle(): InstanceDisplayStyle {
 		return { ...ProcessRenderer.DEFAULT_STYLE };
+	}
+
+	// Add process icon if available
+	private addProcessIcon(): React.ReactElement | null {
+		if (!isProcessInstance(this.instance) || !this.instance.icon) {
+			return null;
+		}
+
+		const paddedX = this.x + 15;
+
+		return (
+			<IconRenderer
+				iconType={this.instance.icon}
+				x={paddedX}
+				y={this.centerY}
+			/>
+		);
 	}
 
 	// Render simple arrow tips on the process borders
@@ -89,6 +107,9 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 	}
 
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
+		// Render process icon if available
+		const iconElement = this.addProcessIcon();
+
 		// Use a rounded rectangle for group processes, and ellipse for regular processes
 		if (this.instance.isGroup) {
 			const cornerRadius = 8;
@@ -120,6 +141,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 						ry={cornerRadius}
 					/>
 					{this.renderArrowTips({ ...style, strokeDasharray })}
+					{iconElement}
 				</>
 			);
 		} else {
@@ -157,6 +179,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 						/>
 					)}
 					{this.renderArrowTips(style)}
+					{iconElement}
 				</>
 			);
 		}

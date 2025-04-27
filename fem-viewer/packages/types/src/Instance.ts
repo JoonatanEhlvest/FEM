@@ -7,6 +7,7 @@ import {
 	InstanceSubclass,
 	BorderSubclass,
 } from "./InstanceClass";
+import { ProcessIcon, AssetIcon, ArtefactSubtypeIcon } from "./Icons";
 
 /**
  * Position and dimensions of an instance in the model.
@@ -97,7 +98,7 @@ export interface ProcessInstance extends BaseInstance {
 	isPrimaryProcess: boolean;
 	isStakeholderAcquireProcess: boolean;
 	isSubprocessesGroup: boolean;
-	icon: string;
+	icon?: ProcessIcon;
 }
 
 export interface AssetInstance extends BaseInstance {
@@ -108,8 +109,8 @@ export interface AssetInstance extends BaseInstance {
 	isTacit: boolean;
 	numberOfUnits: number;
 	unitName: string;
-	icon: string;
-	iconForArtefact: string;
+	icon?: AssetIcon;
+	iconForArtefact?: ArtefactSubtypeIcon;
 }
 
 export interface ExternalActorInstance extends BaseInstance {

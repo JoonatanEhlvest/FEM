@@ -1,60 +1,64 @@
 {
-  "name": "@fem-viewer/types",
-  "version": "0.1.0",
-  "description": "Core domain model type definitions for FEM Viewer - shared between frontend and backend",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/src/index.d.ts",
-      "default": "./dist/src/index.js"
-    },
-    "./Model": {
-      "types": "./dist/src/Model.d.ts",
-      "default": "./dist/src/Model.js"
-    },
-    "./Instance": {
-      "types": "./dist/src/Instance.d.ts",
-      "default": "./dist/src/Instance.js"
-    },
-    "./Connector": {
-      "types": "./dist/src/Connector.d.ts",
-      "default": "./dist/src/Connector.js"
-    },
-    "./ModelAttributes": {
-      "types": "./dist/src/ModelAttributes.d.ts",
-      "default": "./dist/src/ModelAttributes.js"
-    },
-    "./InstanceClass": {
-      "types": "./dist/src/InstanceClass.d.ts",
-      "default": "./dist/src/InstanceClass.js"
-    },
-    "./Reference": {
-      "types": "./dist/src/Reference.d.ts",
-      "default": "./dist/src/Reference.js"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "tsc",
-    "clean": "rimraf dist",
-    "dev": "tsc --watch",
-    "lint": "eslint src --ext .ts",
-    "test": "jest"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "typescript": "5.7.3",
-    "rimraf": "^5.0.5",
-    "eslint": "^8.57.0",
-    "@types/node": "22.13.4"
-  },
-  "peerDependencies": {
-    "typescript": ">=5.0.0"
-  },
-  "engines": {
-    "node": ">=22.0.0"
-  }
-} 
+	"name": "@fem-viewer/types",
+	"version": "0.1.0",
+	"description": "Core domain model type definitions for FEM Viewer - shared between frontend and backend",
+	"main": "dist/src/index.js",
+	"types": "dist/src/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/src/index.d.ts",
+			"default": "./dist/src/index.js"
+		},
+		"./Model": {
+			"types": "./dist/src/Model.d.ts",
+			"default": "./dist/src/Model.js"
+		},
+		"./Instance": {
+			"types": "./dist/src/Instance.d.ts",
+			"default": "./dist/src/Instance.js"
+		},
+		"./Connector": {
+			"types": "./dist/src/Connector.d.ts",
+			"default": "./dist/src/Connector.js"
+		},
+		"./ModelAttributes": {
+			"types": "./dist/src/ModelAttributes.d.ts",
+			"default": "./dist/src/ModelAttributes.js"
+		},
+		"./InstanceClass": {
+			"types": "./dist/src/InstanceClass.d.ts",
+			"default": "./dist/src/InstanceClass.js"
+		},
+		"./Reference": {
+			"types": "./dist/src/Reference.d.ts",
+			"default": "./dist/src/Reference.js"
+		},
+		"./Icons": {
+			"types": "./dist/src/Icons.d.ts",
+			"default": "./dist/src/Icons.js"
+		}
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "tsc",
+		"clean": "rimraf dist",
+		"dev": "tsc --watch",
+		"lint": "eslint src --ext .ts",
+		"test": "jest"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"typescript": "5.7.3",
+		"rimraf": "^5.0.5",
+		"eslint": "^8.57.0",
+		"@types/node": "22.13.4"
+	},
+	"peerDependencies": {
+		"typescript": ">=5.0.0"
+	},
+	"engines": {
+		"node": ">=22.0.0"
+	}
+}
