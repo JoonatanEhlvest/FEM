@@ -1,6 +1,9 @@
 import React from "react";
 import { Connector, Instance } from "@fem-viewer/types";
-import { CM_TO_PX } from "../../types/constants";
+import {
+	CM_TO_PX,
+	TRANSITIVE_DOUBLELINE_SPACING_PX,
+} from "../../types/constants";
 import {
 	ConnectorDisplayProperties,
 	CanvasPoint,
@@ -627,7 +630,7 @@ export abstract class BaseConnectorRenderer {
 		const dx = segment.to.x - segment.from.x;
 		const dy = segment.to.y - segment.from.y;
 		const length = Math.sqrt(dx * dx + dy * dy);
-		const offset = 1; // Half distance between the parallel lines
+		const offset = TRANSITIVE_DOUBLELINE_SPACING_PX / 2; // Half distance between the parallel lines
 
 		// Calculate perpendicular offset
 		const perpX = (-dy / length) * offset;
@@ -753,7 +756,7 @@ export abstract class BaseConnectorRenderer {
 						<text
 							key={`label-${labelIndex}-line-${lineIndex}`}
 							x={startX - lineIndex * lineHeight}
-							y={currentY}
+							y={currentY + labelStyle.fontSize}
 							fontSize={labelStyle.fontSize}
 							fontFamily={labelStyle.fontFamily}
 							fontStyle={labelStyle.fontStyle}
@@ -762,6 +765,7 @@ export abstract class BaseConnectorRenderer {
 							fill={labelStyle.fill}
 							opacity={labelStyle.opacity}
 							transform={`rotate(-90 ${middlePoint.x} ${middlePoint.y})`}
+							dominantBaseline="text-before-edge"
 						>
 							{line}
 						</text>
@@ -773,8 +777,11 @@ export abstract class BaseConnectorRenderer {
 			});
 		} else {
 			// For horizontal orientation (default)
+			// Calculate total height of all labels
+			const totalLabelHeight = wrappedLabels.flat().length * lineHeight;
+			// Position the top of the text box at the middle point, accounting for vertical centering
 			let currentY =
-				middlePoint.y - (wrappedLabels.flat().length * lineHeight) / 2;
+				middlePoint.y - totalLabelHeight / 2 + lineHeight / 2;
 
 			wrappedLabels.forEach((labelLines, labelIndex) => {
 				labelLines.forEach((line, lineIndex) => {
@@ -790,6 +797,7 @@ export abstract class BaseConnectorRenderer {
 							textAnchor="middle"
 							fill={labelStyle.fill}
 							opacity={labelStyle.opacity}
+							dominantBaseline="text-before-edge"
 						>
 							{line}
 						</text>
