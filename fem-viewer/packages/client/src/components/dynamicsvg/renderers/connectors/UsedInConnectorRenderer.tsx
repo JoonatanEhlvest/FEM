@@ -5,6 +5,11 @@ import {
 } from "../../types/ConnectorTypes";
 import { isUsedInConnector } from "@fem-viewer/types/Connector";
 import React from "react";
+import {
+	DEFAULT_CONNECTOR_STROKE_WIDTH_PX,
+	TRANSITIVE_HIGHLIGHTED_STROKE_WIDTH_PX,
+} from "../../types/constants";
+import { HIGHLIGHTED_CONNECTOR_STROKE_WIDTH_PX } from "../../types/constants";
 
 export class UsedInConnectorRenderer extends BaseConnectorRenderer {
 	protected getDisplayProperties(): ConnectorDisplayProperties {
@@ -13,10 +18,20 @@ export class UsedInConnectorRenderer extends BaseConnectorRenderer {
 			isUsedInConnector(connector) &&
 			connector.appearance === "Highlighted";
 
+		const isTransitive =
+			isUsedInConnector(connector) && connector.isTransitive;
+
+		let strokeWidth = DEFAULT_CONNECTOR_STROKE_WIDTH_PX;
+		if (isHighlighted) {
+			strokeWidth = isTransitive
+				? TRANSITIVE_HIGHLIGHTED_STROKE_WIDTH_PX
+				: HIGHLIGHTED_CONNECTOR_STROKE_WIDTH_PX;
+		}
+
 		return {
 			defaultStyle: {
 				stroke: "black",
-				strokeWidth: isHighlighted ? 2 : 1,
+				strokeWidth,
 				opacity: 1,
 				fill: "none",
 			},

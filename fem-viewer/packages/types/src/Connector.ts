@@ -93,6 +93,7 @@ export interface AssociationConnector extends BaseConnector {
 	class: "Association";
 	direction: "Unidirectional" | "Symmetric";
 	orientation: "Horizontal" | "Vertical";
+	appearance: "Default" | "Highlighted";
 	note: string;
 }
 
@@ -102,6 +103,7 @@ export interface AssociationConnector extends BaseConnector {
 export interface InspectsMonitorsConnector extends BaseConnector {
 	class: "Inspects/Monitors";
 	orientation: "Horizontal" | "Vertical";
+	appearance: "Default" | "Highlighted";
 	note: string;
 }
 
@@ -114,6 +116,7 @@ export interface DrawingAddingConnector extends BaseConnector {
 	thick: string;
 	note: string;
 	orientation: "Horizontal" | "Vertical";
+	appearance: "Default" | "Highlighted";
 }
 
 /**

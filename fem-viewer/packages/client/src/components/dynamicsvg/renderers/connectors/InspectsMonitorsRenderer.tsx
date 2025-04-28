@@ -2,13 +2,22 @@ import { BaseConnectorRenderer } from "../base/BaseConnectorRenderer";
 import { ConnectorDisplayProperties } from "../../types/ConnectorTypes";
 import { isInspectsMonitorsConnector } from "@fem-viewer/types/Connector";
 import React from "react";
+import { DEFAULT_BLUE_CONNECTOR_STROKE_WIDTH_PX } from "../../types/constants";
+import { HIGHLIGHTED_CONNECTOR_STROKE_WIDTH_PX } from "../../types/constants";
 
 export class InspectsMonitorsRenderer extends BaseConnectorRenderer {
 	protected getDisplayProperties(): ConnectorDisplayProperties {
+		const { connector } = this.props;
+		const isHighlighted =
+			isInspectsMonitorsConnector(connector) &&
+			connector.appearance === "Highlighted";
+
 		return {
 			defaultStyle: {
 				stroke: "blue",
-				strokeWidth: 1,
+				strokeWidth: isHighlighted
+					? HIGHLIGHTED_CONNECTOR_STROKE_WIDTH_PX
+					: DEFAULT_BLUE_CONNECTOR_STROKE_WIDTH_PX,
 				strokeDasharray: "10,5,2,5", // Dash, gap, dot, gap
 				opacity: 1,
 				fill: "none",

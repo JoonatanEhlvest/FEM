@@ -1,6 +1,11 @@
 import { BaseConnectorRenderer } from "../base/BaseConnectorRenderer";
 import { ConnectorDisplayProperties } from "../../types/ConnectorTypes";
 import { isManagesConnector } from "@fem-viewer/types/Connector";
+import {
+	DEFAULT_CONNECTOR_STROKE_WIDTH_PX,
+	HIGHLIGHTED_CONNECTOR_STROKE_WIDTH_PX,
+	TRANSITIVE_HIGHLIGHTED_STROKE_WIDTH_PX,
+} from "../../types/constants";
 
 export class ManagesConnectorRenderer extends BaseConnectorRenderer {
 	protected getDisplayProperties(): ConnectorDisplayProperties {
@@ -9,10 +14,20 @@ export class ManagesConnectorRenderer extends BaseConnectorRenderer {
 			isManagesConnector(connector) &&
 			connector.appearance === "Highlighted";
 
+		const isTransitive =
+			isManagesConnector(connector) && connector.isTransitive;
+
+		let strokeWidth = DEFAULT_CONNECTOR_STROKE_WIDTH_PX;
+		if (isHighlighted) {
+			strokeWidth = isTransitive
+				? TRANSITIVE_HIGHLIGHTED_STROKE_WIDTH_PX
+				: HIGHLIGHTED_CONNECTOR_STROKE_WIDTH_PX;
+		}
+
 		return {
 			defaultStyle: {
 				stroke: "black",
-				strokeWidth: isHighlighted ? 2 : 1,
+				strokeWidth,
 				strokeDasharray: "6,4",
 				opacity: 1,
 				fill: "none",

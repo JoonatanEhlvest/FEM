@@ -3,13 +3,22 @@ import { ConnectorDisplayProperties } from "../../types/ConnectorTypes";
 import { isAssociationConnector } from "@fem-viewer/types/Connector";
 import { Segment } from "../../types/ConnectorTypes";
 import React from "react";
+import { HIGHLIGHTED_CONNECTOR_STROKE_WIDTH_PX } from "../../types/constants";
+import { DEFAULT_BLUE_CONNECTOR_STROKE_WIDTH_PX } from "../../types/constants";
 
 export class AssociationRenderer extends BaseConnectorRenderer {
 	protected getDisplayProperties(): ConnectorDisplayProperties {
+		const { connector } = this.props;
+		const isHighlighted =
+			isAssociationConnector(connector) &&
+			connector.appearance === "Highlighted";
+
 		return {
 			defaultStyle: {
 				stroke: "blue",
-				strokeWidth: 1,
+				strokeWidth: isHighlighted
+					? HIGHLIGHTED_CONNECTOR_STROKE_WIDTH_PX
+					: DEFAULT_BLUE_CONNECTOR_STROKE_WIDTH_PX,
 				strokeDasharray: "2,3",
 				opacity: 1,
 				fill: "none",

@@ -646,6 +646,7 @@ class Parser {
 					orientation: this.tryGetStrAttr(attributes, "orientation"),
 					note: this.tryGetStrAttr(attributes, "note"),
 					direction: this.tryGetStrAttr(attributes, "direction"),
+					appearance: this.tryGetStrAttr(attributes, "appearance"),
 				} as AssociationConnector;
 			} else if (connectorClass === "Inspects/Monitors") {
 				connector = {
@@ -653,6 +654,7 @@ class Parser {
 					class: "Inspects/Monitors",
 					orientation: this.tryGetStrAttr(attributes, "orientation"),
 					note: this.tryGetStrAttr(attributes, "note"),
+					appearance: this.tryGetStrAttr(attributes, "appearance"),
 				} as InspectsMonitorsConnector;
 			} else if (connectorClass === "Drawing/Adding") {
 				connector = {
@@ -662,6 +664,7 @@ class Parser {
 					note: this.tryGetStrAttr(attributes, "note"),
 					thickness: this.tryGetNumAttr(attributes, "thickness"),
 					thick: this.tryGetStrAttr(attributes, "thick"),
+					appearance: this.tryGetStrAttr(attributes, "appearance"),
 				} as DrawingAddingConnector;
 			} else if (connectorClass === "Is inside") {
 				connector = {
