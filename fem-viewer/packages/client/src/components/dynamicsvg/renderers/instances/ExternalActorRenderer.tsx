@@ -7,19 +7,8 @@ export class ExternalActorRenderer extends BaseInstanceRenderer {
 	// Constant visual padding in pixels that we want to maintain
 	private static readonly VISUAL_PADDING = 4;
 
-	// Default styles for External Actor
-	private static readonly DEFAULT_STYLE: InstanceDisplayStyle = {
-		fill: "transparent",
-		stroke: "#000000",
-		strokeWidth: 1,
-	};
-
 	constructor(props: InstanceRendererProps) {
 		super(props);
-	}
-
-	protected getDefaultStyle(): InstanceDisplayStyle {
-		return { ...ExternalActorRenderer.DEFAULT_STYLE };
 	}
 
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {

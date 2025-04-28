@@ -6,18 +6,8 @@ import { isAssetInstance } from "@fem-viewer/types/Instance";
 import { IconRenderer } from "./icons/IconRenderer";
 
 export class AssetRenderer extends BaseInstanceRenderer {
-	private static readonly DEFAULT_STYLE: InstanceDisplayStyle = {
-		fill: "transparent",
-		stroke: "#000000",
-		strokeWidth: 1,
-	};
-
 	constructor(props: InstanceRendererProps) {
 		super(props);
-	}
-
-	protected getDefaultStyle(): InstanceDisplayStyle {
-		return { ...AssetRenderer.DEFAULT_STYLE };
 	}
 
 	// Add asset icon if available

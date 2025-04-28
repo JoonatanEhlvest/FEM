@@ -7,7 +7,11 @@ import {
 } from "@fem-viewer/types/Instance";
 import { InstanceDisplayStyle } from "../../types/InstanceDisplayStyle";
 import { InstanceRendererProps } from "../../types/InstanceRendererTypes";
-import { CM_TO_PX } from "../../types/constants";
+import {
+	CM_TO_PX,
+	DEFAULT_STROKE_WIDTH_PX,
+	CUSTOM_STROKE_WIDTH_PX,
+} from "../../types/constants";
 import { wrapText, calculateMaxCharsPerWidth } from "../../utils/textWrapUtils";
 
 // Font settings for instance text elements
@@ -30,7 +34,7 @@ export abstract class BaseInstanceRenderer {
 	// Common style modifiers for all instance types
 	protected static readonly BASE_GROUP_STYLE: Partial<InstanceDisplayStyle> =
 		{
-			strokeWidth: 2,
+			strokeWidth: DEFAULT_STROKE_WIDTH_PX,
 			strokeDasharray: "5,3",
 		};
 
@@ -40,16 +44,23 @@ export abstract class BaseInstanceRenderer {
 	protected static readonly BASE_SELECTED_STYLE: Partial<InstanceDisplayStyle> =
 		{
 			stroke: "#2196f3",
-			strokeWidth: 2.5,
+			strokeWidth: CUSTOM_STROKE_WIDTH_PX,
 			filter: "url(#blue-glow)",
 		};
 
 	protected static readonly BASE_HIGHLIGHTED_STYLE: Partial<InstanceDisplayStyle> =
 		{
 			stroke: "#FFDF00",
-			strokeWidth: 2.5,
+			strokeWidth: CUSTOM_STROKE_WIDTH_PX,
 			filter: "url(#yellow-glow)",
 		};
+
+	// Default style for most instances
+	protected static readonly DEFAULT_STYLE: InstanceDisplayStyle = {
+		fill: "transparent",
+		stroke: "#000000",
+		strokeWidth: DEFAULT_STROKE_WIDTH_PX,
+	};
 
 	protected instance: Instance;
 	protected model: Model;
@@ -103,7 +114,6 @@ export abstract class BaseInstanceRenderer {
 	}
 
 	// Abstract methods that must be implemented by specific renderers
-	protected abstract getDefaultStyle(): InstanceDisplayStyle;
 	protected abstract renderShape(
 		style: InstanceDisplayStyle
 	): React.ReactElement;
@@ -119,7 +129,12 @@ export abstract class BaseInstanceRenderer {
 		const customFill = this.getCustomFillColor();
 		const customBorder = this.getCustomBorderColor();
 		if (customFill) style.fill = customFill;
-		if (customBorder) style.stroke = customBorder;
+		if (customBorder) {
+			style.stroke = customBorder;
+			style.strokeWidth = CUSTOM_STROKE_WIDTH_PX;
+		} else {
+			style.strokeWidth = DEFAULT_STROKE_WIDTH_PX;
+		}
 
 		// Apply modifiers in order
 		if (this.instance.isGroup) {
@@ -347,5 +362,10 @@ export abstract class BaseInstanceRenderer {
 				{this.renderIndicators()}
 			</g>
 		);
+	}
+
+	// Default implementation of getDefaultStyle
+	protected getDefaultStyle(): InstanceDisplayStyle {
+		return { ...BaseInstanceRenderer.DEFAULT_STYLE };
 	}
 }

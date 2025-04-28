@@ -5,10 +5,10 @@ import { InstanceRendererProps } from "../../types/InstanceRendererTypes";
 import { CM_TO_PX } from "../../types/constants";
 
 export class NoteRenderer extends BaseInstanceRenderer {
-	private static readonly DEFAULT_STYLE: InstanceDisplayStyle = {
+	// Custom style for notes with light yellow background
+	protected static readonly DEFAULT_STYLE: InstanceDisplayStyle = {
+		...BaseInstanceRenderer.DEFAULT_STYLE,
 		fill: "#FFFCE8", // Light yellow default fill for notes
-		stroke: "#000000",
-		strokeWidth: 1,
 	};
 
 	constructor(props: InstanceRendererProps) {
@@ -27,10 +27,6 @@ export class NoteRenderer extends BaseInstanceRenderer {
 		// Calculate center point from top-left
 		this.centerX = this.x + this.width / 2;
 		this.centerY = this.y + this.height / 2;
-	}
-
-	protected getDefaultStyle(): InstanceDisplayStyle {
-		return { ...NoteRenderer.DEFAULT_STYLE };
 	}
 
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {

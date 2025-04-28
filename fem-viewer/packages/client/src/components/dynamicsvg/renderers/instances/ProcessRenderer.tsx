@@ -6,19 +6,8 @@ import { isProcessInstance } from "@fem-viewer/types/Instance";
 import { IconRenderer } from "./icons/IconRenderer";
 
 export class ProcessRenderer extends BaseInstanceRenderer {
-	// Default styles for Process
-	private static readonly DEFAULT_STYLE: InstanceDisplayStyle = {
-		fill: "transparent",
-		stroke: "#000000",
-		strokeWidth: 1,
-	};
-
 	constructor(props: InstanceRendererProps) {
 		super(props);
-	}
-
-	protected getDefaultStyle(): InstanceDisplayStyle {
-		return { ...ProcessRenderer.DEFAULT_STYLE };
 	}
 
 	// Add process icon if available

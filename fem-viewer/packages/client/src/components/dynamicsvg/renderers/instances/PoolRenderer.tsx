@@ -4,18 +4,8 @@ import { BaseInstanceRenderer } from "../base/BaseInstanceRenderer";
 import { InstanceRendererProps } from "../../types/InstanceRendererTypes";
 
 export class PoolRenderer extends BaseInstanceRenderer {
-	private static readonly DEFAULT_STYLE: InstanceDisplayStyle = {
-		fill: "transparent",
-		stroke: "#000000",
-		strokeWidth: 1,
-	};
-
 	constructor(props: InstanceRendererProps) {
 		super(props);
-	}
-
-	protected getDefaultStyle(): InstanceDisplayStyle {
-		return { ...PoolRenderer.DEFAULT_STYLE };
 	}
 
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
