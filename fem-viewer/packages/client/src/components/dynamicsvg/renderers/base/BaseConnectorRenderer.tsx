@@ -70,27 +70,10 @@ export abstract class BaseConnectorRenderer {
 		};
 	}
 
-	protected getInstanceCenter(instance: Instance): CanvasPoint {
+	protected getInstanceAnchor(instance: Instance): CanvasPoint {
 		if (!instance.position) {
 			throw new Error("Instance position is required");
 		}
-
-		const isNote =
-			instance.class === "Note" || instance.class === "Note_Subclass";
-
-		// For Notes, compute the center from the top-left position
-		if (isNote) {
-			return {
-				x:
-					instance.position.x * CM_TO_PX +
-					(instance.position.width * CM_TO_PX) / 2,
-				y:
-					instance.position.y * CM_TO_PX +
-					(instance.position.height * CM_TO_PX) / 2,
-			};
-		}
-
-		// For other instances, the position already represents the center point
 		return {
 			x: instance.position.x * CM_TO_PX,
 			y: instance.position.y * CM_TO_PX,
@@ -391,21 +374,21 @@ export abstract class BaseConnectorRenderer {
 	 */
 	protected getSegments(): Segment[] {
 		const pathPoints = this.getPathPoints();
-		const fromCenter = this.getInstanceCenter(this.props.fromInstance);
-		const toCenter = this.getInstanceCenter(this.props.toInstance);
+		const fromAnchor = this.getInstanceAnchor(this.props.fromInstance);
+		const toAnchor = this.getInstanceAnchor(this.props.toInstance);
 		const fromRect = this.getInstanceRect(this.props.fromInstance);
 		const toRect = this.getInstanceRect(this.props.toInstance);
 
 		// For direct connections with no path points, use standard center-based connection
 		if (pathPoints.length === 0) {
 			const startPoint = this.findBorderIntersection(
-				toCenter,
-				fromCenter,
+				toAnchor,
+				fromAnchor,
 				fromRect
 			);
 			const endPoint = this.findBorderIntersection(
-				fromCenter,
-				toCenter,
+				fromAnchor,
+				toAnchor,
 				toRect
 			);
 			return [{ from: startPoint, to: endPoint }];
@@ -430,7 +413,7 @@ export abstract class BaseConnectorRenderer {
 			// Otherwise use the standard center-based intersection
 			startPoint = this.findBorderIntersection(
 				firstPathPoint,
-				fromCenter,
+				fromAnchor,
 				fromRect
 			);
 		}
@@ -459,7 +442,7 @@ export abstract class BaseConnectorRenderer {
 			// Otherwise use the standard center-based intersection
 			endPoint = this.findBorderIntersection(
 				lastPathPoint,
-				toCenter,
+				toAnchor,
 				toRect
 			);
 		}
