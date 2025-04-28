@@ -9,8 +9,8 @@ import { InstanceDisplayStyle } from "../../types/InstanceDisplayStyle";
 import { InstanceRendererProps } from "../../types/InstanceRendererTypes";
 import {
 	CM_TO_PX,
-	DEFAULT_STROKE_WIDTH_PX,
-	CUSTOM_STROKE_WIDTH_PX,
+	CUSTOM_BORDER_STROKE_WIDTH_PX,
+	DEFAULT_BORDER_STROKE_WIDTH_PX,
 } from "../../types/constants";
 import { wrapText, calculateMaxCharsPerWidth } from "../../utils/textWrapUtils";
 
@@ -34,7 +34,7 @@ export abstract class BaseInstanceRenderer {
 	// Common style modifiers for all instance types
 	protected static readonly BASE_GROUP_STYLE: Partial<InstanceDisplayStyle> =
 		{
-			strokeWidth: DEFAULT_STROKE_WIDTH_PX,
+			strokeWidth: DEFAULT_BORDER_STROKE_WIDTH_PX,
 			strokeDasharray: "5,3",
 		};
 
@@ -44,14 +44,14 @@ export abstract class BaseInstanceRenderer {
 	protected static readonly BASE_SELECTED_STYLE: Partial<InstanceDisplayStyle> =
 		{
 			stroke: "#2196f3",
-			strokeWidth: CUSTOM_STROKE_WIDTH_PX,
+			strokeWidth: CUSTOM_BORDER_STROKE_WIDTH_PX,
 			filter: "url(#blue-glow)",
 		};
 
 	protected static readonly BASE_HIGHLIGHTED_STYLE: Partial<InstanceDisplayStyle> =
 		{
 			stroke: "#FFDF00",
-			strokeWidth: CUSTOM_STROKE_WIDTH_PX,
+			strokeWidth: CUSTOM_BORDER_STROKE_WIDTH_PX,
 			filter: "url(#yellow-glow)",
 		};
 
@@ -59,7 +59,7 @@ export abstract class BaseInstanceRenderer {
 	protected static readonly DEFAULT_STYLE: InstanceDisplayStyle = {
 		fill: "transparent",
 		stroke: "#000000",
-		strokeWidth: DEFAULT_STROKE_WIDTH_PX,
+		strokeWidth: DEFAULT_BORDER_STROKE_WIDTH_PX,
 	};
 
 	protected instance: Instance;
@@ -131,9 +131,9 @@ export abstract class BaseInstanceRenderer {
 		if (customFill) style.fill = customFill;
 		if (customBorder) {
 			style.stroke = customBorder;
-			style.strokeWidth = CUSTOM_STROKE_WIDTH_PX;
+			style.strokeWidth = CUSTOM_BORDER_STROKE_WIDTH_PX;
 		} else {
-			style.strokeWidth = DEFAULT_STROKE_WIDTH_PX;
+			style.strokeWidth = DEFAULT_BORDER_STROKE_WIDTH_PX;
 		}
 
 		// Apply modifiers in order
