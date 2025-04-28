@@ -9,7 +9,7 @@ export class InspectsMonitorsRenderer extends BaseConnectorRenderer {
 			defaultStyle: {
 				stroke: "blue",
 				strokeWidth: 1,
-				strokeDasharray: "10,5",
+				strokeDasharray: "10,5,2,5", // Dash, gap, dot, gap
 				opacity: 1,
 				fill: "none",
 			},
