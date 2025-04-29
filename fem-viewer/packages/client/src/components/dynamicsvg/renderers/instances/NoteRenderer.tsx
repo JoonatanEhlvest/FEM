@@ -49,7 +49,7 @@ export class NoteRenderer extends BaseInstanceRenderer {
 					d={path}
 					fill={style.fill}
 					stroke={style.stroke}
-					strokeWidth={style.strokeWidth / this.zoom}
+					strokeWidth={style.strokeWidth}
 					strokeDasharray={style.strokeDasharray}
 					opacity={style.opacity}
 					filter={style.filter}

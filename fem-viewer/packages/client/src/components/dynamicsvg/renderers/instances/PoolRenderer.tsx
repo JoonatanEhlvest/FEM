@@ -20,7 +20,7 @@ export class PoolRenderer extends BaseInstanceRenderer {
 					height={this.height}
 					fill={style.fill}
 					stroke={style.stroke}
-					strokeWidth={style.strokeWidth / this.zoom}
+					strokeWidth={style.strokeWidth}
 					strokeDasharray={style.strokeDasharray}
 					opacity={style.opacity}
 					filter={style.filter}
@@ -116,7 +116,7 @@ export class PoolRenderer extends BaseInstanceRenderer {
 					d={path}
 					fill={style.fill}
 					stroke={style.stroke}
-					strokeWidth={style.strokeWidth / this.zoom}
+					strokeWidth={style.strokeWidth}
 					strokeDasharray={style.strokeDasharray}
 					opacity={style.opacity}
 					filter={style.filter}

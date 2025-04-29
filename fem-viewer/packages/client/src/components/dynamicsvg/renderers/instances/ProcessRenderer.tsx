@@ -30,7 +30,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 	// Render simple arrow tips on the process borders
 	private renderArrowTips(style: InstanceDisplayStyle): React.ReactElement[] {
 		const arrows: React.ReactElement[] = [];
-		const strokeWidth = style.strokeWidth / this.zoom;
+		const strokeWidth = style.strokeWidth;
 
 		// Top arrow tip (slightly left of center)
 		const topX = this.centerX - this.width * 0.1;
@@ -122,7 +122,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 						height={this.height}
 						fill={style.fill}
 						stroke={style.stroke}
-						strokeWidth={style.strokeWidth / this.zoom}
+						strokeWidth={style.strokeWidth}
 						strokeDasharray={strokeDasharray}
 						opacity={style.opacity}
 						filter={style.filter}
@@ -147,7 +147,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 						ry={this.height / 2}
 						fill={style.fill}
 						stroke={style.stroke}
-						strokeWidth={style.strokeWidth / this.zoom}
+						strokeWidth={style.strokeWidth}
 						strokeDasharray={style.strokeDasharray}
 						opacity={style.opacity}
 						filter={style.filter}
@@ -161,7 +161,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 							ry={this.height / 2 - 4}
 							fill="none"
 							stroke={style.stroke}
-							strokeWidth={style.strokeWidth / this.zoom}
+							strokeWidth={style.strokeWidth}
 							strokeDasharray={style.strokeDasharray}
 							opacity={style.opacity}
 							filter={style.filter}

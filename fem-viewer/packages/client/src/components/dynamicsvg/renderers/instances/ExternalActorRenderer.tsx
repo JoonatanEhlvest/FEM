@@ -24,7 +24,7 @@ export class ExternalActorRenderer extends BaseInstanceRenderer {
 					height={this.height}
 					fill={style.fill}
 					stroke={style.stroke}
-					strokeWidth={style.strokeWidth / this.zoom}
+					strokeWidth={style.strokeWidth}
 					strokeDasharray={style.strokeDasharray}
 					opacity={style.opacity}
 					filter={style.filter}
@@ -39,7 +39,7 @@ export class ExternalActorRenderer extends BaseInstanceRenderer {
 					height={this.height - 2 * padding}
 					fill={style.fill}
 					stroke={style.stroke}
-					strokeWidth={style.strokeWidth / this.zoom}
+					strokeWidth={style.strokeWidth}
 					strokeDasharray={style.strokeDasharray}
 					opacity={style.opacity}
 					filter={style.filter}
