@@ -24,6 +24,20 @@ export class ManagesConnectorRenderer extends BaseConnectorRenderer {
 				: HIGHLIGHTED_CONNECTOR_STROKE_WIDTH_PX;
 		}
 
+		// Set font size to 12 for symbol labels
+		const labelStyle = {
+			...this.getDefaultLabelStyle(),
+			maxWidthCm: 2.5,
+		};
+
+		if (
+			isManagesConnector(connector) &&
+			connector.labelType === "Symbol" &&
+			connector.processTypes.length === 1
+		) {
+			labelStyle.fontSize = 12;
+		}
+
 		return {
 			defaultStyle: {
 				stroke: "black",
@@ -32,10 +46,7 @@ export class ManagesConnectorRenderer extends BaseConnectorRenderer {
 				opacity: 1,
 				fill: "none",
 			},
-			labelStyle: {
-				...this.getDefaultLabelStyle(),
-				maxWidthCm: 2.5,
-			},
+			labelStyle,
 		};
 	}
 
@@ -47,9 +58,31 @@ export class ManagesConnectorRenderer extends BaseConnectorRenderer {
 		const labels: string[] = [];
 
 		if (isManagesConnector(connector)) {
-			connector.processTypes.forEach((process) => {
-				labels.push(process);
-			});
+			// Only use symbols if there is exactly one process type and labelType is Symbol
+			if (
+				connector.labelType === "Symbol" &&
+				connector.processTypes.length === 1
+			) {
+				const process = connector.processTypes[0];
+				switch (process) {
+					case "Acquire":
+						labels.push("+");
+						break;
+					case "Maintain":
+						labels.push("≈");
+						break;
+					case "Retire":
+						labels.push("-");
+						break;
+					default:
+						labels.push(process);
+				}
+			} else {
+				// For text labels or multiple process types, use the process types as is
+				connector.processTypes.forEach((process) => {
+					labels.push(process);
+				});
+			}
 		}
 
 		return labels;
