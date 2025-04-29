@@ -610,8 +610,7 @@ export abstract class BaseConnectorRenderer {
 			let currentY = middlePoint.y;
 
 			wrappedLabels.forEach((labelLines, labelIndex) => {
-				const labelWidth = labelLines.length * lineHeight;
-				const startX = middlePoint.x + labelWidth / 2 - lineHeight / 2;
+				const startX = middlePoint.x;
 
 				labelLines.forEach((line, lineIndex) => {
 					labelElements.push(
@@ -627,7 +626,6 @@ export abstract class BaseConnectorRenderer {
 							fill={labelStyle.fill}
 							opacity={labelStyle.opacity}
 							transform={`rotate(-90 ${middlePoint.x} ${middlePoint.y})`}
-							dominantBaseline="text-before-edge"
 						>
 							{line}
 						</text>
