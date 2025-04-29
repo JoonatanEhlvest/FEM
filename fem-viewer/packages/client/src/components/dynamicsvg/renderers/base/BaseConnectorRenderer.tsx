@@ -9,7 +9,6 @@ import {
 	CanvasPoint,
 	CanvasRect,
 	Segment,
-	Intersection,
 	ConnectorDirectionInfo,
 } from "../../types/ConnectorTypes";
 import {
@@ -22,6 +21,17 @@ import {
 	isUsedInConnector,
 } from "@fem-viewer/types/Connector";
 import { wrapText, calculateMaxCharsPerWidth } from "../../utils/textWrapUtils";
+import {
+	getSegmentLength,
+	getSegmentUnitVector,
+	getSegmentDirectionInfo,
+	getOffsetPositionAlongSegment,
+	getPerpendicularOffset,
+} from "../../utils/segmentMath";
+import {
+	findBorderIntersection,
+	getAlignedEdgePoint,
+} from "../../utils/rectangleMath";
 
 export interface ConnectorRendererProps {
 	connector: Connector;
@@ -81,199 +91,6 @@ export abstract class BaseConnectorRenderer {
 			x: instance.position.x * CM_TO_PX,
 			y: instance.position.y * CM_TO_PX,
 		};
-	}
-
-	protected isPointInsideRect(point: CanvasPoint, rect: CanvasRect): boolean {
-		return (
-			point.x >= rect.x &&
-			point.x <= rect.x + rect.width &&
-			point.y >= rect.y &&
-			point.y <= rect.y + rect.height
-		);
-	}
-
-	/**
-	 * Calculates intersection with a vertical edge of the rectangle.
-	 *
-	 * The line is defined parametrically as:
-	 * x = p1.x + t * dx
-	 * y = p1.y + t * dy
-	 *
-	 * For a vertical edge at x-coordinate 'x':
-	 * t = (x - p1.x) / dx
-	 *
-	 * Then we check if the corresponding y-coordinate is within the rectangle's height.
-	 *
-	 * @param p1 - Starting point of the line
-	 * @param dx - Change in x from p1 to p2
-	 * @param dy - Change in y from p1 to p2
-	 * @param x - The x-coordinate of the vertical edge to check
-	 * @param rect - The rectangle to check intersection with
-	 * @returns The intersection point and its parameter t, or null if no valid intersection
-	 */
-	protected findVerticalEdgeIntersection(
-		p1: CanvasPoint,
-		dx: number,
-		dy: number,
-		x: number,
-		rect: CanvasRect
-	): Intersection | null {
-		// Calculate t where the line intersects the vertical edge
-		const t = (x - p1.x) / dx;
-
-		// Only consider intersections in the forward direction from p1
-		if (t >= 0) {
-			// Calculate the y-coordinate at this intersection
-			const y = p1.y + t * dy;
-
-			// Check if the y-coordinate is within the rectangle's height
-			if (y >= rect.y && y <= rect.y + rect.height) {
-				return { t, point: { x, y } };
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Calculates intersection with a horizontal edge of the rectangle.
-	 *
-	 * The line is defined parametrically as:
-	 * x = p1.x + t * dx
-	 * y = p1.y + t * dy
-	 *
-	 * For a horizontal edge at y-coordinate 'y':
-	 * t = (y - p1.y) / dy
-	 *
-	 * Then we check if the corresponding x-coordinate is within the rectangle's width.
-	 *
-	 * @param p1 - Starting point of the line
-	 * @param dx - Change in x from p1 to p2
-	 * @param dy - Change in y from p1 to p2
-	 * @param y - The y-coordinate of the horizontal edge to check
-	 * @param rect - The rectangle to check intersection with
-	 * @returns The intersection point and its parameter t, or null if no valid intersection
-	 */
-	protected findHorizontalEdgeIntersection(
-		p1: CanvasPoint,
-		dx: number,
-		dy: number,
-		y: number,
-		rect: CanvasRect
-	): Intersection | null {
-		// Calculate t where the line intersects the horizontal edge
-		const t = (y - p1.y) / dy;
-
-		// Only consider intersections in the forward direction from p1 (moving from p1 to p2)
-		if (t >= 0) {
-			// Calculate the x-coordinate at this intersection
-			const x = p1.x + t * dx;
-
-			// Check if the x-coordinate is within the rectangle's width
-			if (x >= rect.x && x <= rect.x + rect.width) {
-				return { t, point: { x, y } };
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Checks if a value is effectively zero (less than half a pixel)
-	 * Used to determine if a line is effectively vertical or horizontal
-	 */
-	protected isCloseToZero(value: number): boolean {
-		return Math.abs(value) < 0.0001;
-	}
-
-	/**
-	 * Finds the intersection point between a line segment and a rectangle's border.
-	 * The function will find the intersection closest to the outside point.
-	 *
-	 * @param outsidePoint - A point outside the rectangle
-	 * @param insidePoint - A point inside the rectangle
-	 * @param rect - The rectangle to find intersection with
-	 * @returns The intersection point on the rectangle's border
-	 * @throws Error if both points are inside or outside the rectangle
-	 */
-	protected findBorderIntersection(
-		outsidePoint: CanvasPoint,
-		insidePoint: CanvasPoint,
-		rect: CanvasRect
-	): CanvasPoint {
-		const dx = insidePoint.x - outsidePoint.x;
-		const dy = insidePoint.y - outsidePoint.y;
-
-		const outsidePointInside = this.isPointInsideRect(outsidePoint, rect);
-		const insidePointInside = this.isPointInsideRect(insidePoint, rect);
-
-		// If both points are inside, this is an invalid case for finding border intersections
-		if (outsidePointInside && insidePointInside) {
-			throw new Error(
-				"Both points are inside the rectangle. This is not a valid case for finding border intersections."
-			);
-		}
-
-		// If points are in wrong order, swap them
-		if (outsidePointInside && !insidePointInside) {
-			return this.findBorderIntersection(insidePoint, outsidePoint, rect);
-		}
-
-		// If both points are outside, this is an invalid case
-		if (!outsidePointInside && !insidePointInside) {
-			throw new Error(
-				"Both points are outside the rectangle. This is not a valid case for finding border intersections."
-			);
-		}
-
-		// Now we know outsidePoint is outside and insidePoint is inside
-		const intersections: Intersection[] = [];
-
-		// Check vertical edges if line is not vertical
-		if (!this.isCloseToZero(dx)) {
-			const leftIntersection = this.findVerticalEdgeIntersection(
-				outsidePoint,
-				dx,
-				dy,
-				rect.x,
-				rect
-			);
-			const rightIntersection = this.findVerticalEdgeIntersection(
-				outsidePoint,
-				dx,
-				dy,
-				rect.x + rect.width,
-				rect
-			);
-
-			if (leftIntersection) intersections.push(leftIntersection);
-			if (rightIntersection) intersections.push(rightIntersection);
-		}
-
-		// Check horizontal edges if line is not horizontal
-		if (!this.isCloseToZero(dy)) {
-			const topIntersection = this.findHorizontalEdgeIntersection(
-				outsidePoint,
-				dx,
-				dy,
-				rect.y,
-				rect
-			);
-			const bottomIntersection = this.findHorizontalEdgeIntersection(
-				outsidePoint,
-				dx,
-				dy,
-				rect.y + rect.height,
-				rect
-			);
-
-			if (topIntersection) intersections.push(topIntersection);
-			if (bottomIntersection) intersections.push(bottomIntersection);
-		}
-
-		// Sort intersections by distance from outside point (smallest t first)
-		intersections.sort((a, b) => a.t - b.t);
-
-		// Return the closest intersection, or insidePoint if no intersections found
-		return intersections.length > 0 ? intersections[0].point : insidePoint;
 	}
 
 	/**
@@ -342,37 +159,6 @@ export abstract class BaseConnectorRenderer {
 	}
 
 	/**
-	 * Checks if a point is horizontally or vertically aligned with a rectangle
-	 * Returns the aligned edge point if aligned, null otherwise
-	 */
-	protected getAlignedEdgePoint(
-		point: CanvasPoint,
-		rect: CanvasRect
-	): CanvasPoint | null {
-		// Check if point is horizontally aligned with the rectangle
-		if (point.x >= rect.x && point.x <= rect.x + rect.width) {
-			// If aligned horizontally, return the point on the top or bottom edge
-			if (point.y < rect.y) {
-				return { x: point.x, y: rect.y }; // Top edge
-			} else if (point.y > rect.y + rect.height) {
-				return { x: point.x, y: rect.y + rect.height }; // Bottom edge
-			}
-		}
-
-		// Check if point is vertically aligned with the rectangle
-		if (point.y >= rect.y && point.y <= rect.y + rect.height) {
-			// If aligned vertically, return the point on the left or right edge
-			if (point.x < rect.x) {
-				return { x: rect.x, y: point.y }; // Left edge
-			} else if (point.x > rect.x + rect.width) {
-				return { x: rect.x + rect.width, y: point.y }; // Right edge
-			}
-		}
-
-		return null; // Not aligned
-	}
-
-	/**
 	 * Calculates all segments of the connector path
 	 */
 	protected getSegments(): Segment[] {
@@ -384,16 +170,19 @@ export abstract class BaseConnectorRenderer {
 
 		// For direct connections with no path points, use standard center-based connection
 		if (pathPoints.length === 0) {
-			const startPoint = this.findBorderIntersection(
+			const startPoint = findBorderIntersection(
 				toAnchor,
 				fromAnchor,
 				fromRect
 			);
-			const endPoint = this.findBorderIntersection(
+			const endPoint = findBorderIntersection(
 				fromAnchor,
 				toAnchor,
 				toRect
 			);
+			if (!startPoint || !endPoint) {
+				return [];
+			}
 			return [{ from: startPoint, to: endPoint }];
 		}
 
@@ -402,23 +191,24 @@ export abstract class BaseConnectorRenderer {
 
 		// Handle start point connection
 		const firstPathPoint = pathPoints[0];
-		let startPoint: CanvasPoint;
+		let startPoint: CanvasPoint | undefined;
 
 		// Check if first path point aligns with the from instance
-		const startAlignedPoint = this.getAlignedEdgePoint(
-			firstPathPoint,
-			fromRect
-		);
+		const startAlignedPoint = getAlignedEdgePoint(firstPathPoint, fromRect);
 		if (startAlignedPoint) {
 			// If aligned, connect directly to the aligned edge point
 			startPoint = startAlignedPoint;
 		} else {
 			// Otherwise use the standard center-based intersection
-			startPoint = this.findBorderIntersection(
+			startPoint = findBorderIntersection(
 				firstPathPoint,
 				fromAnchor,
 				fromRect
 			);
+		}
+
+		if (!startPoint) {
+			return [];
 		}
 
 		// Add first segment
@@ -434,20 +224,20 @@ export abstract class BaseConnectorRenderer {
 
 		// Handle end point connection
 		const lastPathPoint = pathPoints[pathPoints.length - 1];
-		let endPoint: CanvasPoint;
+		let endPoint: CanvasPoint | undefined;
 
 		// Check if last path point aligns with the to instance
-		const endAlignedPoint = this.getAlignedEdgePoint(lastPathPoint, toRect);
+		const endAlignedPoint = getAlignedEdgePoint(lastPathPoint, toRect);
 		if (endAlignedPoint) {
 			// If aligned, connect directly to the aligned edge point
 			endPoint = endAlignedPoint;
 		} else {
 			// Otherwise use the standard center-based intersection
-			endPoint = this.findBorderIntersection(
-				lastPathPoint,
-				toAnchor,
-				toRect
-			);
+			endPoint = findBorderIntersection(lastPathPoint, toAnchor, toRect);
+		}
+
+		if (!endPoint) {
+			return [];
 		}
 
 		// Add final segment
@@ -460,56 +250,13 @@ export abstract class BaseConnectorRenderer {
 	}
 
 	/**
-	 * Calculates direction information for a given segment.
-	 */
-	protected getSegmentDirectionInfo(
-		segment: Segment
-	): ConnectorDirectionInfo {
-		const dx = segment.to.x - segment.from.x;
-		const dy = segment.to.y - segment.from.y;
-		const angleRad = Math.atan2(dy, dx);
-		const angleDeg = (angleRad * 180) / Math.PI;
-		const length = Math.sqrt(dx * dx + dy * dy);
-
-		// Handle zero length case to avoid division by zero
-		const unitX = length === 0 ? 0 : dx / length;
-		const unitY = length === 0 ? 0 : dy / length;
-
-		return {
-			startPoint: segment.from,
-			nextPoint: segment.to,
-			dx,
-			dy,
-			angleRad,
-			angleDeg,
-			length,
-			unitX,
-			unitY,
-		};
-	}
-
-	/**
-	 * Calculates a point offset along a segment's direction from its start point.
-	 */
-	protected getOffsetPositionAlongSegment(
-		segment: Segment,
-		distance: number
-	): CanvasPoint {
-		const directionInfo = this.getSegmentDirectionInfo(segment);
-		return {
-			x: directionInfo.startPoint.x + directionInfo.unitX * distance,
-			y: directionInfo.startPoint.y + directionInfo.unitY * distance,
-		};
-	}
-
-	/**
 	 * Convenience method to get direction info for the first segment.
 	 * Returns null if there are no segments.
 	 */
 	protected getFirstSegmentDirectionInfo(): ConnectorDirectionInfo | null {
 		const segments = this.getSegments();
 		if (segments.length === 0) return null;
-		return this.getSegmentDirectionInfo(segments[0]);
+		return getSegmentDirectionInfo(segments[0]);
 	}
 
 	/**
@@ -521,7 +268,7 @@ export abstract class BaseConnectorRenderer {
 		if (segments.length === 0) {
 			return { x: 0, y: 0 }; // Should not happen if called correctly
 		}
-		return this.getOffsetPositionAlongSegment(segments[0], distance);
+		return getOffsetPositionAlongSegment(segments[0], distance);
 	}
 
 	protected renderMarker(
@@ -577,71 +324,159 @@ export abstract class BaseConnectorRenderer {
 	}
 
 	/**
-	 * Override this method to add additional attributes to a segment
+	 * Creates offset segments for parallel lines
 	 */
-	protected getAdditionalSegmentAttributes(
-		segment: Segment,
-		index: number,
-		isFirstSegment: boolean,
-		isLastSegment: boolean
-	): React.SVGProps<SVGPathElement> {
-		return {};
+	protected createOffsetSegments(
+		segments: Segment[],
+		offset: number,
+		isUpper: boolean
+	): Segment[] {
+		const perpFactor = isUpper ? 1 : -1;
+
+		return segments.map((segment) => {
+			const { perpX, perpY } = getPerpendicularOffset(
+				segment,
+				offset * perpFactor
+			);
+
+			return {
+				from: {
+					x: segment.from.x + perpX,
+					y: segment.from.y + perpY,
+				},
+				to: {
+					x: segment.to.x + perpX,
+					y: segment.to.y + perpY,
+				},
+			};
+		});
 	}
 
-	protected renderSegment(
-		segment: Segment,
-		index: number,
-		markerId?: string
-	): React.ReactElement {
-		const segments = this.getSegments();
-		const isLastSegment = index === segments.length - 1;
-		const isFirstSegment = index === 0;
-		const { connector } = this.props;
-		const isTransitive =
-			(isManagesConnector(connector) || isUsedInConnector(connector)) &&
-			connector.isTransitive;
-
-		// Get additional attributes from subclass
-		const additionalAttributes = this.getAdditionalSegmentAttributes(
-			segment,
-			index,
-			isFirstSegment,
-			isLastSegment
-		);
-
-		if (!isTransitive) {
-			return (
-				<path
-					key={`segment-${index}`}
-					d={`M ${segment.from.x} ${segment.from.y} L ${segment.to.x} ${segment.to.y}`}
-					style={{
-						...this.displayProperties.defaultStyle,
-						markerEnd:
-							isLastSegment && markerId
-								? `url(#${markerId})`
-								: undefined,
-					}}
-					{...additionalAttributes}
-				/>
-			);
+	/**
+	 * Creates a path with rounded corners for segments
+	 * @param segments The segments to render
+	 * @param cornerRadius The radius of the rounded corners
+	 * @returns SVG path data string
+	 */
+	protected createRoundedCornerPath(
+		segments: Segment[],
+		cornerRadius: number = 8
+	): string {
+		if (segments.length <= 1) {
+			// If only one segment, return a straight line
+			const segment = segments[0];
+			return `M ${segment.from.x} ${segment.from.y} L ${segment.to.x} ${segment.to.y}`;
 		}
 
-		// For transitive connectors, render two parallel lines
-		const dx = segment.to.x - segment.from.x;
-		const dy = segment.to.y - segment.from.y;
-		const length = Math.sqrt(dx * dx + dy * dy);
-		const offset = TRANSITIVE_DOUBLELINE_SPACING_PX / 2; // Half distance between the parallel lines
+		// Start the path at the first point
+		let path = `M ${segments[0].from.x} ${segments[0].from.y}`;
 
-		// Calculate perpendicular offset
-		const perpX = (-dy / length) * offset;
-		const perpY = (dx / length) * offset;
+		for (let i = 0; i < segments.length - 1; i++) {
+			const currentSegment = segments[i];
+			const nextSegment = segments[i + 1];
+
+			// Get the current and next segments' lengths
+			const currentLength = getSegmentLength(currentSegment);
+			const nextLength = getSegmentLength(nextSegment);
+
+			// Limit the corner radius to the length of the shorter segment
+			const maxRadius = Math.min(currentLength, nextLength);
+			const limitedRadius = Math.min(cornerRadius, maxRadius);
+
+			// Calculate the direction vectors of current and next segments
+			const currentVector = getSegmentUnitVector(currentSegment);
+			const nextVector = getSegmentUnitVector(nextSegment);
+
+			// Calculate the points where the rounded corner should start and end
+			const cornerStartX =
+				currentSegment.to.x - currentVector.unitX * limitedRadius;
+			const cornerStartY =
+				currentSegment.to.y - currentVector.unitY * limitedRadius;
+			const cornerEndX =
+				nextSegment.from.x + nextVector.unitX * limitedRadius;
+			const cornerEndY =
+				nextSegment.from.y + nextVector.unitY * limitedRadius;
+
+			// Add the line to the start of the corner, then the quadratic curve
+			path += ` L ${cornerStartX} ${cornerStartY}`;
+			path += ` Q ${currentSegment.to.x} ${currentSegment.to.y}, ${cornerEndX} ${cornerEndY}`;
+		}
+
+		// Add the final line segment
+		const lastSegment = segments[segments.length - 1];
+		path += ` L ${lastSegment.to.x} ${lastSegment.to.y}`;
+
+		return path;
+	}
+
+	/**
+	 * Creates a parallel path with rounded corners for transitive connectors
+	 * @param segments The segments to render
+	 * @param offset The perpendicular offset from the center line
+	 * @param isUpper Whether this is the upper or lower parallel line
+	 * @returns SVG path data string
+	 */
+	protected createParallelRoundedPath(
+		segments: Segment[],
+		offset: number,
+		isUpper: boolean
+	): string {
+		const offsetSegments = this.createOffsetSegments(
+			segments,
+			offset,
+			isUpper
+		);
+		return this.createRoundedCornerPath(offsetSegments, 8);
+	}
+
+	/**
+	 * Renders a standard (non-transitive) connector path
+	 */
+	protected renderStandardPath(
+		segments: Segment[],
+		markerId?: string,
+		additionalAttributes: React.SVGProps<SVGPathElement> = {}
+	): React.ReactElement {
+		// For connectors with multiple segments, we use a rounded corner path
+		const pathData = this.createRoundedCornerPath(segments);
 
 		return (
-			<g key={`segment-${index}`}>
+			<path
+				key="connector-path"
+				d={pathData}
+				style={{
+					...this.displayProperties.defaultStyle,
+					markerEnd: markerId ? `url(#${markerId})` : undefined,
+				}}
+				{...additionalAttributes}
+			/>
+		);
+	}
+
+	/**
+	 * Renders a transitive connector with parallel paths
+	 */
+	protected renderTransitivePath(
+		segments: Segment[],
+		offset: number,
+		markerId?: string,
+		additionalAttributes: React.SVGProps<SVGPathElement> = {}
+	): React.ReactElement {
+		const upperPath = this.createParallelRoundedPath(
+			segments,
+			offset,
+			true
+		);
+		const lowerPath = this.createParallelRoundedPath(
+			segments,
+			offset,
+			false
+		);
+
+		return (
+			<g key="transitive-connector">
 				<path
-					d={`M ${segment.from.x + perpX} ${
-						segment.from.y + perpY
-					} L ${segment.to.x + perpX} ${segment.to.y + perpY}`}
+					d={upperPath}
 					style={{
 						...this.displayProperties.defaultStyle,
 						markerEnd: undefined,
@@ -649,18 +484,16 @@ export abstract class BaseConnectorRenderer {
 					{...additionalAttributes}
 				/>
 				<path
-					d={`M ${segment.from.x - perpX} ${
-						segment.from.y - perpY
-					} L ${segment.to.x - perpX} ${segment.to.y - perpY}`}
+					d={lowerPath}
 					style={{
 						...this.displayProperties.defaultStyle,
 						markerEnd: undefined,
 					}}
 					{...additionalAttributes}
 				/>
-				{isLastSegment && markerId && (
+				{markerId && (
 					<path
-						d={`M ${segment.from.x} ${segment.from.y} L ${segment.to.x} ${segment.to.y}`}
+						d={this.createRoundedCornerPath(segments)}
 						style={{
 							...this.displayProperties.defaultStyle,
 							markerEnd: `url(#${markerId})`,
@@ -670,6 +503,35 @@ export abstract class BaseConnectorRenderer {
 					/>
 				)}
 			</g>
+		);
+	}
+
+	protected getAdditionalConnectorAttributes(): React.SVGProps<SVGPathElement> {
+		return {};
+	}
+
+	protected renderConnector(markerId?: string): React.ReactElement {
+		const segments = this.getSegments();
+		const { connector } = this.props;
+		const isTransitive =
+			(isManagesConnector(connector) || isUsedInConnector(connector)) &&
+			connector.isTransitive;
+
+		const additionalAttributes = this.getAdditionalConnectorAttributes();
+
+		if (isTransitive) {
+			return this.renderTransitivePath(
+				segments,
+				TRANSITIVE_DOUBLELINE_SPACING_PX / 2,
+				markerId,
+				additionalAttributes
+			);
+		}
+
+		return this.renderStandardPath(
+			segments,
+			markerId,
+			additionalAttributes
 		);
 	}
 
@@ -841,7 +703,6 @@ export abstract class BaseConnectorRenderer {
 	}
 
 	public render(): React.ReactElement {
-		const segments = this.getSegments();
 		const markerId = `arrowhead-${this.props.connector.id}`;
 
 		const { visible: showArrow, viewBoxWidth } =
@@ -860,13 +721,7 @@ export abstract class BaseConnectorRenderer {
 						{this.renderAdditionalDefs()}
 					</defs>
 				)}
-				{segments.map((segment, index) =>
-					this.renderSegment(
-						segment,
-						index,
-						showArrow ? markerId : undefined
-					)
-				)}
+				{this.renderConnector(showArrow ? markerId : undefined)}
 				{this.renderLabel()}
 			</g>
 		);

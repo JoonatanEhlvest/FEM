@@ -45,12 +45,7 @@ export class AssociationRenderer extends BaseConnectorRenderer {
 		return null;
 	}
 
-	protected getAdditionalSegmentAttributes(
-		segment: Segment,
-		index: number,
-		isFirstSegment: boolean,
-		isLastSegment: boolean
-	): React.SVGProps<SVGPathElement> {
+	protected getAdditionalConnectorAttributes(): React.SVGProps<SVGPathElement> {
 		const { connector } = this.props;
 		if (
 			!isAssociationConnector(connector) ||
@@ -59,13 +54,9 @@ export class AssociationRenderer extends BaseConnectorRenderer {
 			return {};
 		}
 
-		if (isFirstSegment) {
-			return {
-				markerStart: `url(#start-marker-${connector.id})`,
-			};
-		}
-
-		return {};
+		return {
+			markerStart: `url(#start-marker-${connector.id})`,
+		};
 	}
 
 	/**
