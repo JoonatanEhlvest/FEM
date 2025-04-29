@@ -36,6 +36,7 @@ export class ManagesConnectorRenderer extends BaseConnectorRenderer {
 			connector.processTypes.length === 1
 		) {
 			labelStyle.fontSize = 12;
+			labelStyle.fontWeight = "bold";
 		}
 
 		return {
