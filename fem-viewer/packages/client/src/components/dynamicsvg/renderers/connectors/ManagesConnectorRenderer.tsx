@@ -47,7 +47,10 @@ export class ManagesConnectorRenderer extends BaseConnectorRenderer {
 				opacity: 1,
 				fill: "none",
 			},
-			labelStyle,
+			labelStyle: {
+				...this.getDefaultLabelStyle(),
+				fontStyle: "italic",
+			},
 		};
 	}
 
