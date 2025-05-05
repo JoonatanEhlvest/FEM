@@ -334,16 +334,7 @@ export abstract class BaseInstanceRenderer {
 			return <></>;
 		}
 
-		const displayText = (() => {
-			if (this.instance.class === "Note") {
-				return this.instance.description;
-			}
-			if (isSubclass(this.instance) || isBorderSubclass(this.instance)) {
-				return this.instance.name;
-			}
-			return this.instance.denomination;
-		})();
-
+		const displayText = this.getDisplayText();
 		const nameLines = this.formatNameForDisplay(displayText);
 		const style = this.getInstanceStyle();
 
@@ -367,5 +358,16 @@ export abstract class BaseInstanceRenderer {
 	// Default implementation of getDefaultStyle
 	protected getDefaultStyle(): InstanceDisplayStyle {
 		return { ...BaseInstanceRenderer.DEFAULT_STYLE };
+	}
+
+	/**
+	 * Returns the text to display for this instance.
+	 * Can be overridden by subclasses to customize the display text.
+	 */
+	protected getDisplayText(): string {
+		if (isSubclass(this.instance) || isBorderSubclass(this.instance)) {
+			return this.instance.name;
+		}
+		return this.instance.denomination;
 	}
 }

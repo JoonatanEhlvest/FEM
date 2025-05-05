@@ -57,4 +57,11 @@ export class NoteRenderer extends BaseInstanceRenderer {
 			</>
 		);
 	}
+
+	/**
+	 * Override getDisplayText for Notes to use the description instead of name/denomination
+	 */
+	protected getDisplayText(): string {
+		return this.instance.description;
+	}
 }
