@@ -2,6 +2,7 @@ import React from "react";
 import { Connector, Instance } from "@fem-viewer/types";
 import {
 	CM_TO_PX,
+	PT_TO_PX,
 	TRANSITIVE_DOUBLELINE_SPACING_PX,
 } from "../../types/constants";
 import {
@@ -541,7 +542,7 @@ export abstract class BaseConnectorRenderer {
 	 */
 	protected getDefaultLabelStyle() {
 		return {
-			fontSize: 8,
+			fontSize: 10,
 			fill: "black",
 			opacity: 1,
 			fontFamily: "Arial",
@@ -604,41 +605,41 @@ export abstract class BaseConnectorRenderer {
 		// Render elements
 		const labelElements: React.ReactElement[] = [];
 
-			// Calculate total height of all labels
-			const totalLabelHeight = wrappedLabels.flat().length * lineHeight;
-			// Position the top of the text box at the middle point, accounting for vertical centering
-		let currentY = middlePoint.y - totalLabelHeight / 2 + lineHeight / 2;
+		// Calculate total height of all labels
+		const totalLabelHeight = wrappedLabels.flat().length * lineHeight;
+		// Start from the middle point (top of text block)
+		let currentY = middlePoint.y;
 
-			wrappedLabels.forEach((labelLines, labelIndex) => {
-				labelLines.forEach((line, lineIndex) => {
-					labelElements.push(
-						<text
-							key={`label-${labelIndex}-line-${lineIndex}`}
-							x={middlePoint.x}
-							y={currentY + lineIndex * lineHeight}
-							fontSize={labelStyle.fontSize}
-							fontFamily={labelStyle.fontFamily}
-							fontStyle={labelStyle.fontStyle}
-							fontWeight={labelStyle.fontWeight}
-							textAnchor="middle"
-							fill={labelStyle.fill}
-							opacity={labelStyle.opacity}
-							dominantBaseline="text-before-edge"
+		wrappedLabels.forEach((labelLines, labelIndex) => {
+			labelLines.forEach((line, lineIndex) => {
+				labelElements.push(
+					<text
+						key={`label-${labelIndex}-line-${lineIndex}`}
+						x={middlePoint.x}
+						y={currentY + lineIndex * lineHeight}
+						fontSize={labelStyle.fontSize}
+						fontFamily={labelStyle.fontFamily}
+						fontStyle={labelStyle.fontStyle}
+						fontWeight={labelStyle.fontWeight}
+						textAnchor="middle"
+						fill={labelStyle.fill}
+						opacity={labelStyle.opacity}
+						dominantBaseline="hanging"
 						transform={
 							isVertical
 								? `rotate(-90 ${middlePoint.x} ${middlePoint.y})`
 								: undefined
 						}
-						>
-							{line}
-						</text>
-					);
-				});
-
-				// Move to next label position with spacing
-				currentY +=
-					labelLines.length * lineHeight + labelStyle.fontSize * 0.5;
+					>
+						{line}
+					</text>
+				);
 			});
+
+			// Move to next label position with spacing
+			currentY +=
+				labelLines.length * lineHeight + labelStyle.fontSize * 0.5;
+		});
 
 		return <>{labelElements}</>;
 	}
