@@ -34,18 +34,23 @@ export function wrapText(text: string, maxCharsPerLine: number): string[] {
 			}
 			// If the word itself is longer than the line length
 			else if (word.length > maxCharsPerLine) {
-				// For very long words, we may need to split them
-				// But we'll try to avoid it if possible
-				if (word.length > maxCharsPerLine * 2) {
-					// Split the word into chunks that fit on a line
-					for (let j = 0; j < word.length; j += maxCharsPerLine) {
-						lines.push(word.substring(j, j + maxCharsPerLine));
+				// Try to find a good split point at non-letter characters
+				let splitIndex = -1;
+				for (let j = maxCharsPerLine; j > 0; j--) {
+					if (!/[a-zA-Z]/.test(word[j])) {
+						splitIndex = j + 1;
+						break;
 					}
-				} else {
-					// Just put the long word on its own line
-					lines.push(word);
 				}
-				currentLine = "";
+
+				// If no good split point found, fall back to maxCharsPerLine
+				if (splitIndex === -1) {
+					splitIndex = maxCharsPerLine;
+				}
+
+				// Split the word at the found position
+				lines.push(word.substring(0, splitIndex));
+				currentLine = word.substring(splitIndex);
 			} else {
 				currentLine = word;
 			}
@@ -77,7 +82,10 @@ export function calculateMaxCharsPerWidth(
 	padding: number = 10
 ): number {
 	// Estimate average character width (approximately 0.6 of the font size)
-	const avgCharWidth = fontSize * 0.6;
+	const avgCharWidth = fontSize * 0.5;
 	// Calculate how many characters can fit in the available width
 	return Math.max(1, Math.floor((width - padding) / avgCharWidth));
 }
+
+// TODO: This should be reworked to create a tspan elements without having to estimate the average character width
+// https://www.petercollingridge.co.uk/tutorials/svg/multi-line-text-box/
