@@ -24,12 +24,13 @@ export class ManagesConnectorRenderer extends BaseConnectorRenderer {
 				: HIGHLIGHTED_CONNECTOR_STROKE_WIDTH_PX;
 		}
 
-		// Set font size to 12 for symbol labels
 		const labelStyle = {
 			...this.getDefaultLabelStyle(),
+			fontStyle: "italic",
 			maxWidthCm: 2.5,
 		};
 
+		// Set font size to 12 for symbol labels
 		if (
 			isManagesConnector(connector) &&
 			connector.labelType === "Symbol" &&
@@ -47,10 +48,7 @@ export class ManagesConnectorRenderer extends BaseConnectorRenderer {
 				opacity: 1,
 				fill: "none",
 			},
-			labelStyle: {
-				...this.getDefaultLabelStyle(),
-				fontStyle: "italic",
-			},
+			labelStyle,
 		};
 	}
 
@@ -73,7 +71,7 @@ export class ManagesConnectorRenderer extends BaseConnectorRenderer {
 						labels.push("+");
 						break;
 					case "Maintain":
-						labels.push("≈");
+						labels.push("~");
 						break;
 					case "Retire":
 						labels.push("-");
