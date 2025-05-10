@@ -1,5 +1,6 @@
 // Conversion factor from centimeters to pixels
 export const CM_TO_PX = 37.7952755906;
+export const PT_TO_PX = 1.33333333333;
 
 // Instance border stroke widths
 const DEFAULT_BORDER_STROKE_WIDTH_CM = 0.04;

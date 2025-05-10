@@ -1,10 +1,9 @@
 import { useEffect, RefObject, useState, useRef, useCallback } from "react";
 import * as d3 from "d3";
 
-// Zoom level constraints moved from constants.ts
 export const MIN_ZOOM = 0.1;
 export const MAX_ZOOM = 5;
-export const ZOOM_STEP = 0.1; // Added for completeness
+export const ZOOM_STEP = 0.1;
 export const DEFAULT_ZOOM = 1;
 
 // Animation duration constants in milliseconds

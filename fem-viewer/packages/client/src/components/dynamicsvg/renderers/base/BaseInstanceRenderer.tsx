@@ -11,6 +11,7 @@ import {
 	CM_TO_PX,
 	CUSTOM_BORDER_STROKE_WIDTH_PX,
 	DEFAULT_BORDER_STROKE_WIDTH_PX,
+	PT_TO_PX,
 } from "../../types/constants";
 import { wrapText, calculateMaxCharsPerWidth } from "../../utils/textWrapUtils";
 
@@ -27,7 +28,7 @@ const FONT_SETTINGS = {
 };
 
 // Default font size if not specified in the instance
-const DEFAULT_FONT_SIZE = 10;
+const DEFAULT_FONT_SIZE = 10 * PT_TO_PX;
 const DEFAULT_LINE_HEIGHT_SPACING = 1.2;
 
 export abstract class BaseInstanceRenderer {
@@ -238,9 +239,13 @@ export abstract class BaseInstanceRenderer {
 		return undefined;
 	}
 
+	protected getFontSize(): number {
+		return this.instance.fontSize * PT_TO_PX || DEFAULT_FONT_SIZE;
+	}
+
 	protected renderName(nameLines: string[]): React.ReactElement {
 		// Get font size from instance or use default
-		const fontSize = this.instance.fontSize || DEFAULT_FONT_SIZE;
+		const fontSize = this.getFontSize();
 		const lineHeightSpacing = DEFAULT_LINE_HEIGHT_SPACING;
 
 		// Padding from instance edge in px
@@ -315,7 +320,7 @@ export abstract class BaseInstanceRenderer {
 
 	protected formatNameForDisplay(name: string): string[] {
 		// Calculate approximate character capacity based on instance width and font size
-		const fontSize = this.instance.fontSize || DEFAULT_FONT_SIZE;
+		const fontSize = this.getFontSize();
 
 		// Calculate max chars that can fit per line using the utility function
 		const maxCharsPerLine = calculateMaxCharsPerWidth(
