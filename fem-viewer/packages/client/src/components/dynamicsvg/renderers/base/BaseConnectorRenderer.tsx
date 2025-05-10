@@ -599,49 +599,15 @@ export abstract class BaseConnectorRenderer {
 		const wrappedLabels = labels.map((label) =>
 			wrapText(label, maxCharsPerLine)
 		);
-		const lineHeight = labelStyle.fontSize * 1.2;
+		const lineHeight = labelStyle.fontSize;
 
 		// Render elements
 		const labelElements: React.ReactElement[] = [];
 
-		// Apply different label placement based on orientation
-		if (isVertical) {
-			// For vertical labels
-			let currentY = middlePoint.y;
-
-			wrappedLabels.forEach((labelLines, labelIndex) => {
-				const startX = middlePoint.x;
-
-				labelLines.forEach((line, lineIndex) => {
-					labelElements.push(
-						<text
-							key={`label-${labelIndex}-line-${lineIndex}`}
-							x={startX - lineIndex * lineHeight}
-							y={currentY + labelStyle.fontSize}
-							fontSize={labelStyle.fontSize}
-							fontFamily={labelStyle.fontFamily}
-							fontStyle={labelStyle.fontStyle}
-							fontWeight={labelStyle.fontWeight}
-							textAnchor="middle"
-							fill={labelStyle.fill}
-							opacity={labelStyle.opacity}
-							transform={`rotate(-90 ${middlePoint.x} ${middlePoint.y})`}
-						>
-							{line}
-						</text>
-					);
-				});
-
-				// Add spacing between different labels
-				currentY += labelStyle.fontSize * 1.5;
-			});
-		} else {
-			// For horizontal orientation (default)
 			// Calculate total height of all labels
 			const totalLabelHeight = wrappedLabels.flat().length * lineHeight;
 			// Position the top of the text box at the middle point, accounting for vertical centering
-			let currentY =
-				middlePoint.y - totalLabelHeight / 2 + lineHeight / 2;
+		let currentY = middlePoint.y - totalLabelHeight / 2 + lineHeight / 2;
 
 			wrappedLabels.forEach((labelLines, labelIndex) => {
 				labelLines.forEach((line, lineIndex) => {
@@ -658,6 +624,11 @@ export abstract class BaseConnectorRenderer {
 							fill={labelStyle.fill}
 							opacity={labelStyle.opacity}
 							dominantBaseline="text-before-edge"
+						transform={
+							isVertical
+								? `rotate(-90 ${middlePoint.x} ${middlePoint.y})`
+								: undefined
+						}
 						>
 							{line}
 						</text>
@@ -668,7 +639,6 @@ export abstract class BaseConnectorRenderer {
 				currentY +=
 					labelLines.length * lineHeight + labelStyle.fontSize * 0.5;
 			});
-		}
 
 		return <>{labelElements}</>;
 	}
