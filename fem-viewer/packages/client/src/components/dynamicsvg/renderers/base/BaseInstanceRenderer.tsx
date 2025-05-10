@@ -34,7 +34,6 @@ export abstract class BaseInstanceRenderer {
 	// Common style modifiers for all instance types
 	protected static readonly BASE_GROUP_STYLE: Partial<InstanceDisplayStyle> =
 		{
-			strokeWidth: DEFAULT_BORDER_STROKE_WIDTH_PX,
 			strokeDasharray: "5,3",
 		};
 
