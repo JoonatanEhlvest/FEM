@@ -16,29 +16,31 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 			return null;
 		}
 
-		const paddedX = this.x + 15;
+		const area = this.getPrimaryElementArea();
+		const paddedX = area.x + 15;
 
 		return (
 			<IconRenderer
 				iconType={this.instance.icon}
 				x={paddedX}
-				y={this.centerY}
+				y={area.centerY}
 			/>
 		);
 	}
 
 	// Render simple arrow tips on the process borders
 	private renderArrowTips(style: InstanceDisplayStyle): React.ReactElement[] {
+		const area = this.getPrimaryElementArea();
 		const arrows: React.ReactElement[] = [];
 		const strokeWidth = style.strokeWidth;
 
 		// Top arrow tip (slightly left of center)
-		const topX = this.centerX - this.width * 0.1;
-		const topY = this.y;
+		const topX = area.centerX - area.width * 0.1;
+		const topY = area.y;
 
 		// Bottom arrow tip (slightly right of center)
-		const bottomX = this.centerX + this.width * 0.1;
-		const bottomY = this.y + this.height;
+		const bottomX = area.centerX + area.width * 0.1;
+		const bottomY = area.y + area.height;
 
 		// Top arrow tip (V shape)
 		arrows.push(
@@ -98,6 +100,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
 		// Render process icon if available
 		const iconElement = this.addProcessIcon();
+		const area = this.getPrimaryElementArea();
 
 		// Use a rounded rectangle for group processes, and ellipse for regular processes
 		if (this.instance.isGroup) {
@@ -116,10 +119,10 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 			return (
 				<>
 					<rect
-						x={this.x}
-						y={this.y}
-						width={this.width}
-						height={this.height}
+						x={area.x}
+						y={area.y}
+						width={area.width}
+						height={area.height}
 						fill={style.fill}
 						stroke={style.stroke}
 						strokeWidth={style.strokeWidth}
@@ -141,10 +144,10 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 			return (
 				<>
 					<ellipse
-						cx={this.centerX}
-						cy={this.centerY}
-						rx={this.width / 2}
-						ry={this.height / 2}
+						cx={area.centerX}
+						cy={area.centerY}
+						rx={area.width / 2}
+						ry={area.height / 2}
 						fill={style.fill}
 						stroke={style.stroke}
 						strokeWidth={style.strokeWidth}
@@ -155,10 +158,10 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 					{/* Add second ellipse with smaller radius for primary processes */}
 					{isPrimary && (
 						<ellipse
-							cx={this.centerX}
-							cy={this.centerY}
-							rx={this.width / 2 - 4}
-							ry={this.height / 2 - 4}
+							cx={area.centerX}
+							cy={area.centerY}
+							rx={area.width / 2 - 4}
+							ry={area.height / 2 - 4}
 							fill="none"
 							stroke={style.stroke}
 							strokeWidth={style.strokeWidth}

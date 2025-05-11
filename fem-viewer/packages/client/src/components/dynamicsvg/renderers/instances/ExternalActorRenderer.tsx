@@ -13,15 +13,16 @@ export class ExternalActorRenderer extends BaseInstanceRenderer {
 
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
 		const padding = ExternalActorRenderer.VISUAL_PADDING;
+		const area = this.getPrimaryElementArea();
 
 		return (
 			<>
 				{/* Outer rectangle */}
 				<rect
-					x={this.x}
-					y={this.y}
-					width={this.width}
-					height={this.height}
+					x={area.x}
+					y={area.y}
+					width={area.width}
+					height={area.height}
 					fill={style.fill}
 					stroke={style.stroke}
 					strokeWidth={style.strokeWidth}
@@ -33,10 +34,10 @@ export class ExternalActorRenderer extends BaseInstanceRenderer {
 				/>
 				{/* Inner rectangle */}
 				<rect
-					x={this.x + padding}
-					y={this.y + padding}
-					width={this.width - 2 * padding}
-					height={this.height - 2 * padding}
+					x={area.x + padding}
+					y={area.y + padding}
+					width={area.width - 2 * padding}
+					height={area.height - 2 * padding}
 					fill={style.fill}
 					stroke={style.stroke}
 					strokeWidth={style.strokeWidth}

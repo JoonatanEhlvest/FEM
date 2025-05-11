@@ -4,6 +4,7 @@ import {
 	isSubclass,
 	isBorderSubclass,
 	isNoteInstance,
+	isProcessInstance,
 } from "@fem-viewer/types/Instance";
 import { InstanceDisplayStyle } from "../../types/InstanceDisplayStyle";
 import { InstanceRendererProps } from "../../types/InstanceRendererTypes";
@@ -30,6 +31,9 @@ const FONT_SETTINGS = {
 // Default font size if not specified in the instance
 const DEFAULT_FONT_SIZE = 10 * PT_TO_PX;
 const DEFAULT_LINE_HEIGHT_SPACING = 1.2;
+
+// Height in px to offset main area for ghost arrow-above layout
+const ARROW_HEIGHT = 16;
 
 export abstract class BaseInstanceRenderer {
 	// Common style modifiers for all instance types
@@ -243,6 +247,36 @@ export abstract class BaseInstanceRenderer {
 		return this.instance.fontSize * PT_TO_PX || DEFAULT_FONT_SIZE;
 	}
 
+	/**
+	 * Returns the area and position data for rendering the main instance element.
+	 * For ghost elements (except notes), offsets the area for arrow-above layout.
+	 * Subclasses should use this for all area/position data.
+	 */
+	protected getPrimaryElementArea() {
+		const isGhost = this.instance.isGhost;
+		const isGroup = this.instance.isGroup;
+		const isProcess = isProcessInstance(this.instance);
+		const isNote = isNoteInstance(this.instance);
+		if (isGhost && !isGroup && !isNote && !isProcess) {
+			return {
+				x: this.x,
+				y: this.y + ARROW_HEIGHT,
+				width: this.width,
+				height: this.height - ARROW_HEIGHT,
+				centerX: this.centerX,
+				centerY: this.centerY + ARROW_HEIGHT,
+			};
+		}
+		return {
+			x: this.x,
+			y: this.y,
+			width: this.width,
+			height: this.height,
+			centerX: this.centerX,
+			centerY: this.centerY,
+		};
+	}
+
 	protected renderName(nameLines: string[]): React.ReactElement {
 		// Get font size from instance or use default
 		const fontSize = this.getFontSize();
@@ -252,11 +286,14 @@ export abstract class BaseInstanceRenderer {
 		const padX = 1;
 		const padY = 1;
 
+		// Use getPrimaryElementArea for all position/dimension data
+		const area = this.getPrimaryElementArea();
+
 		// For group instances, position text at the top, but account for padding
 		const baseY = this.instance.isGroup
-			? this.y + padY + fontSize // Position at top with proper padding
-			: this.y +
-			  this.height / 2 -
+			? area.y + padY + fontSize // Position at top with proper padding
+			: area.y +
+			  area.height / 2 -
 			  ((nameLines.length - 1) * fontSize) / 2; // Center vertically accounting for multiple lines
 
 		// Create a unique clip path ID for this instance
@@ -268,10 +305,10 @@ export abstract class BaseInstanceRenderer {
 				<defs>
 					<clipPath id={clipId}>
 						<rect
-							x={this.x + padX}
-							y={this.y + padY}
-							width={this.width - 2 * padX}
-							height={this.height - 2 * padY}
+							x={area.x + padX}
+							y={area.y + padY}
+							width={area.width - 2 * padX}
+							height={area.height - 2 * padY}
 						/>
 					</clipPath>
 				</defs>
@@ -281,7 +318,7 @@ export abstract class BaseInstanceRenderer {
 					{nameLines.map((line, index) => (
 						<text
 							key={`line-${index}`}
-							x={this.x + this.width / 2}
+							x={area.x + area.width / 2}
 							y={baseY + index * fontSize * lineHeightSpacing}
 							textAnchor="middle"
 							dominantBaseline="central"
@@ -302,15 +339,34 @@ export abstract class BaseInstanceRenderer {
 			return null;
 		}
 
-		if (isNoteInstance(this.instance)) {
-			return null;
-		}
-
 		// Draw an arrow for ghost instances with the tip touching the right border
+		const h = ARROW_HEIGHT; // Height of the arrow
+		const w = h * 1.5; // Width proportional to height
+
+		const tailWidth = w / 2.5;
+
+		// Calculate points based on arrow height
+		const halfH = h / 2;
+		const quarterH = h / 4;
+
+		// Define path based on arrow height
+		const path = `
+			M ${-w} ${-quarterH} 
+			L ${-tailWidth} ${-quarterH} 
+			L ${-tailWidth} ${-halfH} 
+			L 0 0 
+			L ${-tailWidth} ${halfH} 
+			L ${-tailWidth} ${quarterH} 
+			L ${-w} ${quarterH} 
+			Z
+		`;
+
 		return (
 			<path
-				d="M -20 -4 L -8 -4 L -8 -8 L 0 0 L -8 8 L -8 4 L -20 4 Z"
-				transform={`translate(${this.x + this.width}, ${this.y + 15})`}
+				d={path}
+				transform={`translate(${this.x + this.width}, ${
+					this.y + ARROW_HEIGHT / 2
+				})`}
 				stroke={this.getInstanceStyle().stroke}
 				strokeWidth="1.5"
 				fill="none"

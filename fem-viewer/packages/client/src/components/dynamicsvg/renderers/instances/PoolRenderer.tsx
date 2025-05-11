@@ -9,15 +9,16 @@ export class PoolRenderer extends BaseInstanceRenderer {
 	}
 
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
+		const area = this.getPrimaryElementArea();
 		// Use a rounded rectangle for group pools, and cloud shape for regular pools
 		if (this.instance.isGroup) {
 			const cornerRadius = 8;
 			return (
 				<rect
-					x={this.x}
-					y={this.y}
-					width={this.width}
-					height={this.height}
+					x={area.x}
+					y={area.y}
+					width={area.width}
+					height={area.height}
 					fill={style.fill}
 					stroke={style.stroke}
 					strokeWidth={style.strokeWidth}
@@ -30,68 +31,68 @@ export class PoolRenderer extends BaseInstanceRenderer {
 			);
 		} else {
 			// Calculate dimensions and positions for the cloud bubbles
-			const bubbleRadius = Math.min(this.width, this.height) * 0.25;
+			const bubbleRadius = Math.min(area.width, area.height) * 0.25;
 
 			// Create cloud bubbles positions with more extension
 			const bubbles = [
 				{
-					cx: this.x + bubbleRadius * 0.6,
-					cy: this.y + this.height * 0.3,
+					cx: area.x + bubbleRadius * 0.6,
+					cy: area.y + area.height * 0.3,
 					r: bubbleRadius * 1.1,
 				},
 				{
-					cx: this.x + this.width * 0.3,
-					cy: this.y + bubbleRadius * 0.6,
+					cx: area.x + area.width * 0.3,
+					cy: area.y + bubbleRadius * 0.6,
 					r: bubbleRadius,
 				},
 				{
-					cx: this.centerX,
-					cy: this.y + bubbleRadius * 0.5,
+					cx: area.centerX,
+					cy: area.y + bubbleRadius * 0.5,
 					r: bubbleRadius * 1.2,
 				},
 				{
-					cx: this.x + this.width * 0.7,
-					cy: this.y + bubbleRadius * 0.6,
+					cx: area.x + area.width * 0.7,
+					cy: area.y + bubbleRadius * 0.6,
 					r: bubbleRadius,
 				},
 				{
-					cx: this.x + this.width - bubbleRadius * 0.6,
-					cy: this.y + this.height * 0.3,
+					cx: area.x + area.width - bubbleRadius * 0.6,
+					cy: area.y + area.height * 0.3,
 					r: bubbleRadius * 1.1,
 				},
 				{
-					cx: this.x + this.width - bubbleRadius * 0.5,
-					cy: this.centerY,
+					cx: area.x + area.width - bubbleRadius * 0.5,
+					cy: area.centerY,
 					r: bubbleRadius * 1.2,
 				},
 				{
-					cx: this.x + this.width - bubbleRadius * 0.6,
-					cy: this.y + this.height * 0.7,
+					cx: area.x + area.width - bubbleRadius * 0.6,
+					cy: area.y + area.height * 0.7,
 					r: bubbleRadius * 1.1,
 				},
 				{
-					cx: this.x + this.width * 0.7,
-					cy: this.y + this.height - bubbleRadius * 0.6,
+					cx: area.x + area.width * 0.7,
+					cy: area.y + area.height - bubbleRadius * 0.6,
 					r: bubbleRadius,
 				},
 				{
-					cx: this.centerX,
-					cy: this.y + this.height - bubbleRadius * 0.5,
+					cx: area.centerX,
+					cy: area.y + area.height - bubbleRadius * 0.5,
 					r: bubbleRadius * 1.2,
 				},
 				{
-					cx: this.x + this.width * 0.3,
-					cy: this.y + this.height - bubbleRadius * 0.6,
+					cx: area.x + area.width * 0.3,
+					cy: area.y + area.height - bubbleRadius * 0.6,
 					r: bubbleRadius,
 				},
 				{
-					cx: this.x + bubbleRadius * 0.6,
-					cy: this.y + this.height * 0.7,
+					cx: area.x + bubbleRadius * 0.6,
+					cy: area.y + area.height * 0.7,
 					r: bubbleRadius * 1.1,
 				},
 				{
-					cx: this.x + bubbleRadius * 0.5,
-					cy: this.centerY,
+					cx: area.x + bubbleRadius * 0.5,
+					cy: area.centerY,
 					r: bubbleRadius * 1.2,
 				},
 			];

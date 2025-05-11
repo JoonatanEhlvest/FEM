@@ -17,8 +17,9 @@ export class AssetRenderer extends BaseInstanceRenderer {
 		}
 
 		// For assets, position at top-left with some padding
-		const iconX = this.x + 15;
-		const iconY = this.y + 15;
+		const area = this.getPrimaryElementArea();
+		const iconX = area.x + 15;
+		const iconY = area.y + 15;
 
 		return (
 			<IconRenderer
@@ -43,14 +44,15 @@ export class AssetRenderer extends BaseInstanceRenderer {
 
 		// Render asset icon if available
 		const iconElement = this.addAssetIcon();
+		const area = this.getPrimaryElementArea();
 
 		return (
 			<>
 				<rect
-					x={this.x}
-					y={this.y}
-					width={this.width}
-					height={this.height}
+					x={area.x}
+					y={area.y}
+					width={area.width}
+					height={area.height}
 					fill={style.fill}
 					stroke={style.stroke}
 					strokeWidth={style.strokeWidth}

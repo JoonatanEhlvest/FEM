@@ -15,6 +15,10 @@ export class NoteRenderer extends BaseInstanceRenderer {
 		super(props);
 	}
 
+	protected renderIndicators(): React.ReactElement | null {
+		return null;
+	}
+
 	/**
 	 * Override setupCoordinates for Notes
 	 * For Notes, x,y represent the top-left corner in the model
@@ -33,13 +37,15 @@ export class NoteRenderer extends BaseInstanceRenderer {
 		// Create a path for a note shape with sharp corners and a folded top-right corner
 		const foldSize = 15;
 
+		const area = this.getPrimaryElementArea();
+
 		// Define the path for the note shape
 		const path = `
-			M ${this.x},${this.y}
-			H ${this.x + this.width - foldSize}
-			L ${this.x + this.width},${this.y + foldSize}
-			V ${this.y + this.height}
-			H ${this.x}
+			M ${area.x},${area.y}
+			H ${area.x + area.width - foldSize}
+			L ${area.x + area.width},${area.y + foldSize}
+			V ${area.y + area.height}
+			H ${area.x}
 			Z
 		`;
 
