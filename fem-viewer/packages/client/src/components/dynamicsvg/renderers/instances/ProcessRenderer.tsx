@@ -113,7 +113,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 				this.instance.isGroup &&
 				this.instance.isSubprocessesGroup
 			) {
-				strokeDasharray = "2,2";
+				strokeDasharray = "3,6";
 			}
 
 			return (

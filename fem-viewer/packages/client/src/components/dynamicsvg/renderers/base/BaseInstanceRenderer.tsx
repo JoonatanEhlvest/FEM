@@ -39,7 +39,7 @@ export abstract class BaseInstanceRenderer {
 	// Common style modifiers for all instance types
 	protected static readonly BASE_GROUP_STYLE: Partial<InstanceDisplayStyle> =
 		{
-			strokeDasharray: "5,3",
+			strokeDasharray: "8,8",
 		};
 
 	protected static readonly BASE_GHOST_STYLE: Partial<InstanceDisplayStyle> =
