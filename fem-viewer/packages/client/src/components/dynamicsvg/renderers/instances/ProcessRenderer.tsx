@@ -5,9 +5,29 @@ import { InstanceRendererProps } from "../../types/InstanceRendererTypes";
 import { isProcessInstance } from "@fem-viewer/types/Instance";
 import { IconRenderer } from "./icons/IconRenderer";
 
+// Constants for process arrow decorations
+const ARROW_TIP_WIDTH = 12; // Width of arrow tip in px
+const ARROW_TIP_HEIGHT = 5; // Height of half of the arrow tip in px
+
 export class ProcessRenderer extends BaseInstanceRenderer {
 	constructor(props: InstanceRendererProps) {
 		super(props);
+	}
+
+	/**
+	 * Override getPrimaryElementArea to account for arrow tip space
+	 * This ensures the whole process (shape + arrows) fits in the instance area
+	 */
+	protected getPrimaryElementArea() {
+		const baseArea = super.getPrimaryElementArea();
+		// Calculate adjusted dimensions to accommodate arrow tips
+		return {
+			...baseArea,
+			x: baseArea.x + ARROW_TIP_WIDTH / 2,
+			y: baseArea.y + ARROW_TIP_HEIGHT,
+			width: baseArea.width - ARROW_TIP_WIDTH,
+			height: baseArea.height - ARROW_TIP_HEIGHT * 2,
+		};
 	}
 
 	// Add process icon if available
@@ -36,18 +56,18 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 
 		// Top arrow tip (slightly left of center)
 		const topX = area.centerX - area.width * 0.1;
-		const topY = area.y;
+		const topY = area.y; // Top edge of the adjusted area
 
 		// Bottom arrow tip (slightly right of center)
 		const bottomX = area.centerX + area.width * 0.1;
-		const bottomY = area.y + area.height;
+		const bottomY = area.y + area.height; // Bottom edge of the adjusted area
 
 		// Top arrow tip (V shape)
 		arrows.push(
 			<React.Fragment key="top-arrow-tip">
 				<line
-					x1={topX - 12}
-					y1={topY - 5}
+					x1={topX - ARROW_TIP_WIDTH}
+					y1={topY - ARROW_TIP_HEIGHT}
 					x2={topX}
 					y2={topY}
 					stroke={style.stroke}
@@ -56,8 +76,8 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 					opacity={style.opacity || 1}
 				/>
 				<line
-					x1={topX - 12}
-					y1={topY + 5}
+					x1={topX - ARROW_TIP_WIDTH}
+					y1={topY + ARROW_TIP_HEIGHT}
 					x2={topX}
 					y2={topY}
 					stroke={style.stroke}
@@ -72,8 +92,8 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 		arrows.push(
 			<React.Fragment key="bottom-arrow-tip">
 				<line
-					x1={bottomX + 12}
-					y1={bottomY - 5}
+					x1={bottomX + ARROW_TIP_WIDTH}
+					y1={bottomY - ARROW_TIP_HEIGHT}
 					x2={bottomX}
 					y2={bottomY}
 					stroke={style.stroke}
@@ -82,8 +102,8 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 					opacity={style.opacity || 1}
 				/>
 				<line
-					x1={bottomX + 12}
-					y1={bottomY + 5}
+					x1={bottomX + ARROW_TIP_WIDTH}
+					y1={bottomY + ARROW_TIP_HEIGHT}
 					x2={bottomX}
 					y2={bottomY}
 					stroke={style.stroke}
