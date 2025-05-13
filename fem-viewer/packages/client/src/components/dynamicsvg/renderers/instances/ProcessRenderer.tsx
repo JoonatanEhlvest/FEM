@@ -16,7 +16,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 
 	protected getInstanceStyle(): InstanceDisplayStyle {
 		const style = super.getInstanceStyle();
-		style.textWidthPadding = 14;
+		style.textWidthPadding = 40;
 		return style;
 	}
 
@@ -43,7 +43,7 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 		}
 
 		const area = this.getPrimaryElementArea();
-		const paddedX = area.x + 15;
+		const paddedX = area.x + 10;
 
 		return (
 			<IconRenderer
