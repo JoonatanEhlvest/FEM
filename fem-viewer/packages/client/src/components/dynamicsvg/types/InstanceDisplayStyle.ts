@@ -5,4 +5,5 @@ export interface InstanceDisplayStyle {
 	strokeDasharray?: string;
 	opacity?: number;
 	filter?: string;
+	textWidthPadding?: number; // Padding to reduce available width for text wrapping
 }

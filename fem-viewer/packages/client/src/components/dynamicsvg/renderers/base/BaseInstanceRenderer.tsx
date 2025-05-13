@@ -14,7 +14,7 @@ import {
 	DEFAULT_BORDER_STROKE_WIDTH_PX,
 	PT_TO_PX,
 } from "../../types/constants";
-import { wrapText, calculateMaxCharsPerWidth } from "../../utils/textWrapUtils";
+import { wrapText } from "../../utils/textWrapUtils";
 
 // Font settings for instance text elements
 const FONT_SETTINGS = {
@@ -31,6 +31,8 @@ const FONT_SETTINGS = {
 // Default font size if not specified in the instance
 const DEFAULT_FONT_SIZE = 10 * PT_TO_PX;
 const DEFAULT_LINE_HEIGHT_SPACING = 1.2;
+
+const DEFAULT_TEXT_WIDTH_PADDING = 4; // Default padding for text wrapping
 
 // Height in px to offset main area for ghost arrow-above layout
 const ARROW_HEIGHT = 16;
@@ -64,6 +66,7 @@ export abstract class BaseInstanceRenderer {
 		fill: "transparent",
 		stroke: "#000000",
 		strokeWidth: DEFAULT_BORDER_STROKE_WIDTH_PX,
+		textWidthPadding: DEFAULT_TEXT_WIDTH_PADDING, // Padding for text wrapping
 	};
 
 	protected instance: Instance;
@@ -375,18 +378,16 @@ export abstract class BaseInstanceRenderer {
 	}
 
 	protected formatNameForDisplay(name: string): string[] {
-		// Calculate approximate character capacity based on instance width and font size
+		// Get font size and family
 		const fontSize = this.getFontSize();
+		const fontFamily = FONT_SETTINGS.INSTANCE_NAME.fontFamily;
 
-		// Calculate max chars that can fit per line using the utility function
-		const maxCharsPerLine = calculateMaxCharsPerWidth(
-			this.width,
-			fontSize,
-			10
-		);
+		// Get instance style for text width padding
+		const style = this.getInstanceStyle();
+		const padding = style.textWidthPadding ?? DEFAULT_TEXT_WIDTH_PADDING;
 
-		// Use the text wrapping utility function
-		return wrapText(name, maxCharsPerLine);
+		// Use the text wrapping utility function with adjusted width for wrapping
+		return wrapText(name, this.width, fontFamily, fontSize, padding);
 	}
 
 	render(): React.ReactElement {

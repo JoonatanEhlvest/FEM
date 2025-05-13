@@ -21,7 +21,7 @@ import {
 	isManagesConnector,
 	isUsedInConnector,
 } from "@fem-viewer/types/Connector";
-import { wrapText, calculateMaxCharsPerWidth } from "../../utils/textWrapUtils";
+import { wrapText } from "../../utils/textWrapUtils";
 import {
 	getSegmentLength,
 	getSegmentUnitVector,
@@ -579,11 +579,6 @@ export abstract class BaseConnectorRenderer {
 
 		// Calculate max width for text wrapping
 		const maxWidthPx = labelStyle.maxWidthCm * CM_TO_PX;
-		// Calculate max chars that can fit in the width
-		const maxCharsPerLine = calculateMaxCharsPerWidth(
-			maxWidthPx,
-			labelStyle.fontSize
-		);
 
 		// Check if connector has orientation property and it's set to Vertical
 		const { connector } = this.props;
@@ -596,9 +591,14 @@ export abstract class BaseConnectorRenderer {
 			isVertical = connector.orientation === "Vertical";
 		}
 
-		// Wrap each label and calculate total height
+		// Wrap each label using the new canvas-based text wrapping
 		const wrappedLabels = labels.map((label) =>
-			wrapText(label, maxCharsPerLine)
+			wrapText(
+				label,
+				maxWidthPx,
+				labelStyle.fontFamily || "Arial",
+				labelStyle.fontSize
+			)
 		);
 		const lineHeight = labelStyle.fontSize;
 

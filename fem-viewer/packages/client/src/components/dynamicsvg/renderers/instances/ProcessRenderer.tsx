@@ -14,6 +14,12 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 		super(props);
 	}
 
+	protected getInstanceStyle(): InstanceDisplayStyle {
+		const style = super.getInstanceStyle();
+		style.textWidthPadding = 14;
+		return style;
+	}
+
 	/**
 	 * Override getPrimaryElementArea to account for arrow tip space
 	 * This ensures the whole process (shape + arrows) fits in the instance area
