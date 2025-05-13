@@ -294,7 +294,7 @@ export abstract class BaseInstanceRenderer {
 
 		// For group instances, position text at the top, but account for padding
 		const baseY = this.instance.isGroup
-			? area.y + padY + fontSize // Position at top with proper padding
+			? area.y + padY + fontSize / 2 // Position at top with proper padding
 			: area.y +
 			  area.height / 2 -
 			  ((nameLines.length - 1) * fontSize) / 2; // Center vertically accounting for multiple lines
