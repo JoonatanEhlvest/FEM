@@ -18,8 +18,8 @@ export class AssetRenderer extends BaseInstanceRenderer {
 
 		// For assets, position at top-left with some padding
 		const area = this.getPrimaryElementArea();
-		const iconX = area.x + 15;
-		const iconY = area.y + 15;
+		const iconX = area.x + 10;
+		const iconY = area.y + 10;
 
 		return (
 			<IconRenderer
