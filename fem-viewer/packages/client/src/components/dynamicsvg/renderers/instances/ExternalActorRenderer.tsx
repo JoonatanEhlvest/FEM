@@ -74,6 +74,7 @@ export class ExternalActorRenderer extends BaseInstanceRenderer {
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
 		const padding = ExternalActorRenderer.VISUAL_PADDING;
 		const area = this.getPrimaryElementArea();
+		const isGroup = this.instance.isGroup;
 
 		return (
 			<>
@@ -93,20 +94,22 @@ export class ExternalActorRenderer extends BaseInstanceRenderer {
 					ry={3}
 				/>
 				{/* Inner rectangle */}
-				<rect
-					x={area.x + padding}
-					y={area.y + padding}
-					width={area.width - 2 * padding}
-					height={area.height - 2 * padding}
-					fill={style.fill}
-					stroke={style.stroke}
-					strokeWidth={style.strokeWidth}
-					strokeDasharray={style.strokeDasharray}
-					opacity={style.opacity}
-					filter={style.filter}
-					rx={2}
-					ry={2}
-				/>
+				{!isGroup && (
+					<rect
+						x={area.x + padding}
+						y={area.y + padding}
+						width={area.width - 2 * padding}
+						height={area.height - 2 * padding}
+						fill={style.fill}
+						stroke={style.stroke}
+						strokeWidth={style.strokeWidth}
+						strokeDasharray={style.strokeDasharray}
+						opacity={style.opacity}
+						filter={style.filter}
+						rx={2}
+						ry={2}
+					/>
+				)}
 			</>
 		);
 	}
