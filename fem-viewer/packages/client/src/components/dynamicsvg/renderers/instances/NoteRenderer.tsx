@@ -40,6 +40,10 @@ export class NoteRenderer extends BaseInstanceRenderer {
 		this.centerY = this.y + this.height / 2;
 	}
 
+	protected renderIndicators(): React.ReactElement | null {
+		return null;
+	}
+
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
 		// Create a path for a note shape with sharp corners and a folded top-right corner
 		const foldSize = 15;
