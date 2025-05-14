@@ -32,6 +32,7 @@ import {
 import {
 	findBorderIntersection,
 	getAlignedEdgePoint,
+	doRectanglesIntersect,
 } from "../../utils/rectangleMath";
 
 export interface ConnectorRendererProps {
@@ -85,9 +86,6 @@ export abstract class BaseConnectorRenderer {
 	}
 
 	protected getInstanceAnchor(instance: Instance): CanvasPoint {
-		if (!instance.position) {
-			throw new Error("Instance position is required");
-		}
 		return {
 			x: instance.position.x * CM_TO_PX,
 			y: instance.position.y * CM_TO_PX,
@@ -169,6 +167,13 @@ export abstract class BaseConnectorRenderer {
 		const fromRect = this.getInstanceRect(this.props.fromInstance);
 		const toRect = this.getInstanceRect(this.props.toInstance);
 
+		const rectanglesIntersect = doRectanglesIntersect(fromRect, toRect);
+
+		// If the rectangles intersect, and there are no path points, connect the anchor points directly
+		if (rectanglesIntersect && pathPoints.length === 0) {
+			return [{ from: fromAnchor, to: toAnchor }];
+		}
+
 		// For direct connections with no path points, use standard center-based connection
 		if (pathPoints.length === 0) {
 			const startPoint = findBorderIntersection(
@@ -181,8 +186,9 @@ export abstract class BaseConnectorRenderer {
 				toAnchor,
 				toRect
 			);
+			// If the anchor points are inside the instance rectangles, we need to connect the anchor points directly
 			if (!startPoint || !endPoint) {
-				return [];
+				return [{ from: fromAnchor, to: toAnchor }];
 			}
 			return [{ from: startPoint, to: endPoint }];
 		}
@@ -209,7 +215,8 @@ export abstract class BaseConnectorRenderer {
 		}
 
 		if (!startPoint) {
-			return [];
+			// If something goes wrong, connect the anchor points directly to avoid errors
+			return [{ from: fromAnchor, to: toAnchor }];
 		}
 
 		// Add first segment
@@ -238,7 +245,8 @@ export abstract class BaseConnectorRenderer {
 		}
 
 		if (!endPoint) {
-			return [];
+			// If something goes wrong, connect the anchor points directly to avoid errors
+			return [{ from: fromAnchor, to: toAnchor }];
 		}
 
 		// Add final segment

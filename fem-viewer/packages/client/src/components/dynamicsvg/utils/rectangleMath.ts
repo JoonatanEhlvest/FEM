@@ -108,7 +108,6 @@ export function findHorizontalEdgeIntersection(
  * @param insidePoint - A point inside the rectangle
  * @param rect - The rectangle to find intersection with
  * @returns The intersection point on the rectangle's border
- * @throws Error if both points are inside or outside the rectangle
  */
 export function findBorderIntersection(
 	outsidePoint: CanvasPoint,
@@ -218,4 +217,29 @@ export function getAlignedEdgePoint(
 	}
 
 	return null; // Not aligned
+}
+
+/**
+ * Checks if two rectangles intersect (overlap)
+ * @param rect1 First rectangle
+ * @param rect2 Second rectangle
+ * @returns True if the rectangles intersect, false otherwise
+ */
+export function doRectanglesIntersect(
+	rect1: CanvasRect,
+	rect2: CanvasRect
+): boolean {
+	// Two rectangles intersect if they overlap in both x and y directions
+	// Check if one rectangle is to the left of the other
+	if (rect1.x + rect1.width < rect2.x || rect2.x + rect2.width < rect1.x) {
+		return false;
+	}
+
+	// Check if one rectangle is above the other
+	if (rect1.y + rect1.height < rect2.y || rect2.y + rect2.height < rect1.y) {
+		return false;
+	}
+
+	// If we get here, the rectangles intersect
+	return true;
 }
