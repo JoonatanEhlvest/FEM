@@ -25,14 +25,14 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 	 * This ensures the whole process (shape + arrows) fits in the instance area
 	 */
 	protected getPrimaryElementArea() {
-		const baseArea = super.getPrimaryElementArea();
 		// Calculate adjusted dimensions to accommodate arrow tips
 		return {
-			...baseArea,
-			x: baseArea.x + ARROW_TIP_WIDTH / 2,
-			y: baseArea.y + ARROW_TIP_HEIGHT,
-			width: baseArea.width - ARROW_TIP_WIDTH,
-			height: baseArea.height - ARROW_TIP_HEIGHT * 2,
+			x: this.x + ARROW_TIP_WIDTH / 2,
+			y: this.y + ARROW_TIP_HEIGHT,
+			width: this.width - ARROW_TIP_WIDTH,
+			height: this.height - ARROW_TIP_HEIGHT * 2,
+			centerX: this.centerX,
+			centerY: this.centerY,
 		};
 	}
 

@@ -11,6 +11,66 @@ export class ExternalActorRenderer extends BaseInstanceRenderer {
 		super(props);
 	}
 
+	/**
+	 * Override getArrowHeight to make the arrow height scale with external actor height
+	 */
+	protected getArrowHeight(): number {
+		return this.height * 0.1;
+	}
+
+	/**
+	 * Override getArrowWidth to make the arrow width scale with external actor width
+	 */
+	protected getArrowWidth(): number {
+		return this.width * 0.15;
+	}
+
+	/**
+	 * Override getArrowPosition to position the arrow correctly for ghost pools
+	 * This implementation preserves the center point of the element
+	 */
+	protected getArrowPosition(): { x: number; y: number } {
+		// Get the default x position (right edge of element)
+		const x = this.x + this.width;
+
+		// For pools, we need to adjust the Y position to maintain the center point
+		const h = this.getArrowHeight();
+
+		// Calculate Y position to maintain the center point
+		const y = this.y - h / 2;
+
+		return { x, y };
+	}
+
+	/**
+	 * Override getPrimaryElementArea to handle ghost pools
+	 * This implementation preserves the center point of the element
+	 */
+	protected getPrimaryElementArea() {
+		const isGhost = this.instance.isGhost;
+		const isGroup = this.instance.isGroup;
+
+		if (isGhost && !isGroup) {
+			const arrowHeight = this.getArrowHeight();
+
+			// Shift the entire element (arrow + shape) up by half the arrow height
+			// so that the combined element stays centered at the original centerY
+			const adjustedY = this.y - arrowHeight / 2;
+
+			return {
+				x: this.x,
+				y: adjustedY + arrowHeight, // Main shape starts after the arrow
+				width: this.width,
+				height: this.height - arrowHeight, // Reduced height to account for arrow
+				centerX: this.centerX,
+				centerY: this.centerY, // Maintain the original center point
+			};
+		}
+
+		// Use default behavior for non-ghost elements
+		return super.getPrimaryElementArea();
+	}
+
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
 		const padding = ExternalActorRenderer.VISUAL_PADDING;
 		const area = this.getPrimaryElementArea();

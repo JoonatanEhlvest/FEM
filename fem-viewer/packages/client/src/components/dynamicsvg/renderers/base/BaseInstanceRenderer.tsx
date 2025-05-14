@@ -34,8 +34,10 @@ const DEFAULT_LINE_HEIGHT_SPACING = 1.2;
 
 const DEFAULT_TEXT_WIDTH_PADDING = 4; // Default padding for text wrapping
 
-// Height in px to offset main area for ghost arrow-above layout
-const ARROW_HEIGHT = 16;
+// Default height in px for ghost arrow
+const DEFAULT_ARROW_HEIGHT = 16;
+// Default width multiplier for ghost arrow
+const DEFAULT_ARROW_WIDTH_MULTIPLIER = 1.5;
 
 export abstract class BaseInstanceRenderer {
 	// Common style modifiers for all instance types
@@ -118,6 +120,37 @@ export abstract class BaseInstanceRenderer {
 		// Calculate top-left corner for rendering
 		this.x = this.centerX - this.width / 2;
 		this.y = this.centerY - this.height / 2;
+	}
+
+	/**
+	 * Gets the arrow height for ghost instances
+	 * By default, returns a fixed height
+	 * Can be overridden by subclasses for dynamic sizing
+	 */
+	protected getArrowHeight(): number {
+		return DEFAULT_ARROW_HEIGHT;
+	}
+
+	/**
+	 * Gets the arrow width for ghost instances
+	 * By default, proportional to the arrow height
+	 * Can be overridden by subclasses for dynamic sizing
+	 */
+	protected getArrowWidth(): number {
+		return this.getArrowHeight() * DEFAULT_ARROW_WIDTH_MULTIPLIER;
+	}
+
+	/**
+	 * Gets the position for the ghost arrow
+	 * By default, it's positioned at the right edge, centered vertically
+	 * Can be overridden by subclasses for custom positioning
+	 */
+	protected getArrowPosition(): { x: number; y: number } {
+		// Default position: right edge of the element, at standard y position
+		return {
+			x: this.x + this.width,
+			y: this.y + this.getArrowHeight() / 2,
+		};
 	}
 
 	// Abstract methods that must be implemented by specific renderers
@@ -252,24 +285,25 @@ export abstract class BaseInstanceRenderer {
 
 	/**
 	 * Returns the area and position data for rendering the main instance element.
-	 * For ghost elements (except notes), offsets the area for arrow-above layout.
-	 * Subclasses should use this for all area/position data.
+	 * Default implementation just returns the basic area. For ghost elements,
+	 * subclasses should override this method to provide specialized positioning.
 	 */
 	protected getPrimaryElementArea() {
 		const isGhost = this.instance.isGhost;
 		const isGroup = this.instance.isGroup;
-		const isProcess = isProcessInstance(this.instance);
-		const isNote = isNoteInstance(this.instance);
-		if (isGhost && !isGroup && !isNote && !isProcess) {
+
+		if (isGhost && !isGroup) {
+			const arrowHeight = this.getArrowHeight();
 			return {
 				x: this.x,
-				y: this.y + ARROW_HEIGHT,
+				y: this.y + arrowHeight,
 				width: this.width,
-				height: this.height - ARROW_HEIGHT,
+				height: this.height - arrowHeight,
 				centerX: this.centerX,
-				centerY: this.centerY + ARROW_HEIGHT,
+				centerY: this.centerY + arrowHeight,
 			};
 		}
+
 		return {
 			x: this.x,
 			y: this.y,
@@ -342,9 +376,9 @@ export abstract class BaseInstanceRenderer {
 			return null;
 		}
 
-		// Draw an arrow for ghost instances with the tip touching the right border
-		const h = ARROW_HEIGHT; // Height of the arrow
-		const w = h * 1.5; // Width proportional to height
+		// Get arrow dimensions
+		const h = this.getArrowHeight();
+		const w = this.getArrowWidth();
 
 		const tailWidth = w / 2.5;
 
@@ -364,12 +398,13 @@ export abstract class BaseInstanceRenderer {
 			Z
 		`;
 
+		// Get arrow position from the getArrowPosition method
+		const arrowPos = this.getArrowPosition();
+
 		return (
 			<path
 				d={path}
-				transform={`translate(${this.x + this.width}, ${
-					this.y + ARROW_HEIGHT / 2
-				})`}
+				transform={`translate(${arrowPos.x}, ${arrowPos.y})`}
 				stroke={this.getInstanceStyle().stroke}
 				strokeWidth="1.5"
 				fill="none"

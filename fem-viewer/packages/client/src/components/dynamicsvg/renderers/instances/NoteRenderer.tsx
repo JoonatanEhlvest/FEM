@@ -15,8 +15,15 @@ export class NoteRenderer extends BaseInstanceRenderer {
 		super(props);
 	}
 
-	protected renderIndicators(): React.ReactElement | null {
-		return null;
+	protected getPrimaryElementArea() {
+		return {
+			x: this.x,
+			y: this.y,
+			width: this.width,
+			height: this.height,
+			centerX: this.centerX,
+			centerY: this.centerY,
+		};
 	}
 
 	/**
