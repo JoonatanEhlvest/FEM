@@ -28,10 +28,11 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 	 */
 	protected getPrimaryElementArea() {
 		// Calculate adjusted dimensions to accommodate arrow tips
+		// Arrows are at top and bottom, so we need to reduce height, not width
 		return {
-			x: this.x + ARROW_TIP_WIDTH / 2,
+			x: this.x,
 			y: this.y + ARROW_TIP_HEIGHT,
-			width: this.width - ARROW_TIP_WIDTH,
+			width: this.width,
 			height: this.height - ARROW_TIP_HEIGHT * 2,
 			centerX: this.centerX,
 			centerY: this.centerY,
