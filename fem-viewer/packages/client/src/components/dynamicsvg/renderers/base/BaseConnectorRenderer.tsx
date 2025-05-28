@@ -646,7 +646,7 @@ export abstract class BaseConnectorRenderer {
 
 			// Move to next label position with spacing
 			currentY +=
-				labelLines.length * lineHeight + labelStyle.fontSize * 0.5;
+				labelLines.length * lineHeight + labelStyle.fontSize * 0.2;
 		});
 
 		return <>{labelElements}</>;
