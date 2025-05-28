@@ -16,7 +16,9 @@ export class ProcessRenderer extends BaseInstanceRenderer {
 
 	protected getInstanceStyle(): InstanceDisplayStyle {
 		const style = super.getInstanceStyle();
-		style.textWidthPadding = 40;
+		if (!this.instance.isGroup) {
+			style.textWidthPadding = 40;
+		}
 		return style;
 	}
 
