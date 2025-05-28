@@ -50,18 +50,13 @@ export class PoolRenderer extends BaseInstanceRenderer {
 
 		if (isGhost && !isGroup) {
 			const arrowHeight = this.getArrowHeight();
-
-			// Shift the entire element (arrow + shape) up by half the arrow height
-			// so that the combined element stays centered at the original centerY
-			const adjustedY = this.y - arrowHeight / 2;
-
 			return {
 				x: this.x,
-				y: adjustedY + arrowHeight, // Main shape starts after the arrow
+				y: this.y + arrowHeight,
 				width: this.width,
-				height: this.height - arrowHeight, // Reduced height to account for arrow
+				height: this.height - arrowHeight * 2,
 				centerX: this.centerX,
-				centerY: this.centerY, // Maintain the original center point
+				centerY: this.centerY + arrowHeight,
 			};
 		}
 
@@ -69,9 +64,46 @@ export class PoolRenderer extends BaseInstanceRenderer {
 		return super.getPrimaryElementArea();
 	}
 
+	private drawScallopedEdge(
+		pathParts: string[],
+		startX: number,
+		startY: number,
+		numScallops: number,
+		isHorizontal: boolean,
+		direction: 1 | -1,
+		lobeSize: number,
+		lobeDepthFactor: number
+	): { x: number; y: number } {
+		let currentX = startX;
+		let currentY = startY;
+
+		for (let i = 0; i < numScallops; i++) {
+			const displacement = lobeSize * lobeDepthFactor;
+			const peakX = isHorizontal
+				? currentX + (lobeSize / 2) * direction
+				: currentX + displacement * direction;
+			const peakY = isHorizontal
+				? currentY - displacement * direction
+				: currentY + (lobeSize / 2) * direction;
+			const nextX = isHorizontal
+				? currentX + lobeSize * direction
+				: currentX;
+			const nextY = isHorizontal
+				? currentY
+				: currentY + lobeSize * direction;
+
+			pathParts.push(`Q ${peakX} ${peakY} ${nextX} ${nextY}`);
+
+			currentX = nextX;
+			currentY = nextY;
+		}
+
+		return { x: currentX, y: currentY };
+	}
+
 	protected renderShape(style: InstanceDisplayStyle): React.ReactElement {
 		const area = this.getPrimaryElementArea();
-		// Use a rounded rectangle for group pools, and cloud shape for regular pools
+
 		if (this.instance.isGroup) {
 			const cornerRadius = 8;
 			return (
@@ -91,87 +123,94 @@ export class PoolRenderer extends BaseInstanceRenderer {
 				/>
 			);
 		} else {
-			// Calculate dimensions and positions for the cloud bubbles
-			const bubbleRadius = Math.min(area.width, area.height) * 0.25;
+			const pathParts: string[] = [];
+			const numHorizontalLobes = 7;
+			const numVerticalLobes = 5;
+			const hLobeWidth = area.width / numHorizontalLobes;
+			const vLobeHeight = area.height / numVerticalLobes;
+			const lobeDepthFactor = 0.3;
 
-			// Create cloud bubbles positions with more extension
-			const bubbles = [
-				{
-					cx: area.x + bubbleRadius * 0.6,
-					cy: area.y + area.height * 0.3,
-					r: bubbleRadius * 1.1,
-				},
-				{
-					cx: area.x + area.width * 0.3,
-					cy: area.y + bubbleRadius * 0.6,
-					r: bubbleRadius,
-				},
-				{
-					cx: area.centerX,
-					cy: area.y + bubbleRadius * 0.5,
-					r: bubbleRadius * 1.2,
-				},
-				{
-					cx: area.x + area.width * 0.7,
-					cy: area.y + bubbleRadius * 0.6,
-					r: bubbleRadius,
-				},
-				{
-					cx: area.x + area.width - bubbleRadius * 0.6,
-					cy: area.y + area.height * 0.3,
-					r: bubbleRadius * 1.1,
-				},
-				{
-					cx: area.x + area.width - bubbleRadius * 0.5,
-					cy: area.centerY,
-					r: bubbleRadius * 1.2,
-				},
-				{
-					cx: area.x + area.width - bubbleRadius * 0.6,
-					cy: area.y + area.height * 0.7,
-					r: bubbleRadius * 1.1,
-				},
-				{
-					cx: area.x + area.width * 0.7,
-					cy: area.y + area.height - bubbleRadius * 0.6,
-					r: bubbleRadius,
-				},
-				{
-					cx: area.centerX,
-					cy: area.y + area.height - bubbleRadius * 0.5,
-					r: bubbleRadius * 1.2,
-				},
-				{
-					cx: area.x + area.width * 0.3,
-					cy: area.y + area.height - bubbleRadius * 0.6,
-					r: bubbleRadius,
-				},
-				{
-					cx: area.x + bubbleRadius * 0.6,
-					cy: area.y + area.height * 0.7,
-					r: bubbleRadius * 1.1,
-				},
-				{
-					cx: area.x + bubbleRadius * 0.5,
-					cy: area.centerY,
-					r: bubbleRadius * 1.2,
-				},
-			];
+			const Dh = hLobeWidth * lobeDepthFactor; // Vertical displacement for horizontal lobes
+			const Dv = vLobeHeight * lobeDepthFactor; // Horizontal displacement for vertical lobes
 
-			// Create SVG path for the cloud
-			let path = `M ${bubbles[0].cx},${bubbles[0].cy}`;
+			const scallopsTopBottom = Math.max(0, numHorizontalLobes - 2);
+			const scallopsLeftRight = Math.max(0, numVerticalLobes - 2);
 
-			for (let i = 0; i < bubbles.length; i++) {
-				const current = bubbles[i];
-				const next = bubbles[(i + 1) % bubbles.length];
+			// Start at top-left (inset)
+			let currentPos = { x: area.x + hLobeWidth, y: area.y + Dh };
+			pathParts.push(`M ${currentPos.x} ${currentPos.y}`);
 
-				// Create a curve between current and next bubble
-				path += ` A ${current.r},${current.r} 0 0,1 ${
-					(current.cx + next.cx) / 2
-				},${(current.cy + next.cy) / 2}`;
-			}
+			// Top edge
+			currentPos = this.drawScallopedEdge(
+				pathParts,
+				currentPos.x,
+				currentPos.y,
+				scallopsTopBottom,
+				true,
+				1,
+				hLobeWidth,
+				lobeDepthFactor
+			);
 
-			path += " Z"; // Close the path
+			// Line to start of right edge (inset)
+			currentPos = {
+				x: area.x + area.width - Dv,
+				y: area.y + vLobeHeight,
+			};
+			pathParts.push(`L ${currentPos.x} ${currentPos.y}`);
+
+			// Right edge
+			currentPos = this.drawScallopedEdge(
+				pathParts,
+				currentPos.x,
+				currentPos.y,
+				scallopsLeftRight,
+				false,
+				1,
+				vLobeHeight,
+				lobeDepthFactor
+			);
+
+			// Line to start of bottom edge (inset)
+			currentPos = {
+				x: area.x + area.width - hLobeWidth,
+				y: area.y + area.height - Dh,
+			};
+			pathParts.push(`L ${currentPos.x} ${currentPos.y}`);
+
+			// Bottom edge
+			currentPos = this.drawScallopedEdge(
+				pathParts,
+				currentPos.x,
+				currentPos.y,
+				scallopsTopBottom,
+				true,
+				-1,
+				hLobeWidth,
+				lobeDepthFactor
+			);
+
+			// Line to start of left edge (inset)
+			currentPos = {
+				x: area.x + Dv,
+				y: area.y + area.height - vLobeHeight,
+			};
+			pathParts.push(`L ${currentPos.x} ${currentPos.y}`);
+
+			// Left edge
+			currentPos = this.drawScallopedEdge(
+				pathParts,
+				currentPos.x,
+				currentPos.y,
+				scallopsLeftRight,
+				false,
+				-1,
+				vLobeHeight,
+				lobeDepthFactor
+			);
+
+			pathParts.push("Z"); // Close the path
+			const path = pathParts.join(" ");
 
 			return (
 				<path

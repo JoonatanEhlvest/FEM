@@ -52,18 +52,13 @@ export class ExternalActorRenderer extends BaseInstanceRenderer {
 
 		if (isGhost && !isGroup) {
 			const arrowHeight = this.getArrowHeight();
-
-			// Shift the entire element (arrow + shape) up by half the arrow height
-			// so that the combined element stays centered at the original centerY
-			const adjustedY = this.y - arrowHeight / 2;
-
 			return {
 				x: this.x,
-				y: adjustedY + arrowHeight, // Main shape starts after the arrow
+				y: this.y + arrowHeight,
 				width: this.width,
-				height: this.height - arrowHeight, // Reduced height to account for arrow
+				height: this.height - arrowHeight * 2,
 				centerX: this.centerX,
-				centerY: this.centerY, // Maintain the original center point
+				centerY: this.centerY + arrowHeight,
 			};
 		}
 
