@@ -63,15 +63,15 @@ To share a model enter the username of the user you wish to share the model with
 
 ![image](https://user-images.githubusercontent.com/55451470/167419940-e4f2dd77-de51-4430-853e-5cc06fbc1925.png)
 
+## Exporting models
+
+To download a model click on the downward pointing arrow icon next to the view model button. 
+
 ## Viewing models
 
 To view a model click the eye-shaped icon to the left of a listed model.
 
 ![image](https://github.com/user-attachments/assets/8202d34f-7695-43c5-a686-2e44af245a2b)
-
-## Exporting models
-
-To download a model click on the downward pointing arrow icon next to the view model button. 
 
 ### Selecting models
 
@@ -96,6 +96,12 @@ Original instances can have a list of all occurrences where they have been refer
 Elements that reference other elements provide navigation back to the originals in their details popup.
 
 ![image](https://user-images.githubusercontent.com/55451470/167421292-d403e2aa-450f-49a5-9399-46ef815debe5.png)
+
+### Editing models
+Clicking on an element opens a menu that can contain the Description, Subclass and Border Subclass fields. Clicking on the edit icon ![image](https://github.com/user-attachments/assets/124c365c-1aa9-4ce7-8eaf-fb98b6fca70a) will allow you to edit these fields. To assign a subclass to the element, click on the Subclass option and then select a subclass you want to apply to the element from the dropdown (this will change the elements background or border color to that of the subclass). Select the Default or Individual options to remove the subclass from the element. Click on the Update or Save button to apply you changes, or click the Cancel button to discard them. Note that if the model is shared with other people or shared to you, the changes made will affect the other users as well.
+
+![image](https://github.com/user-attachments/assets/b7e2cd2b-9fd6-4414-b5e7-5679b4a22904)
+
 
 ## Deleting model groups
 
