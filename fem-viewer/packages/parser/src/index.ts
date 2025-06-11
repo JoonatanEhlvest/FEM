@@ -239,7 +239,7 @@ class Parser {
 	}
 
 	extractHexColor(s: string): string {
-		const pattern = /val:"(\$?[a-zA-Z0-9]+)"/;
+		const pattern = /val:"(\$?#?[a-zA-Z0-9]+)"/;
 		const match = s.match(pattern);
 
 		if (match == null || match.length < 2) {
