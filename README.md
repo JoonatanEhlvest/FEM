@@ -99,4 +99,4 @@ yarn build:server
 
 MIT
 
-Link to user manual: https://github.com/siimlangel/FEM/tree/master/fem-viewer
+Link to user manual: https://github.com/JoonatanEhlvest/FEM/blob/master/fem-viewer/docs/user_manual.md
