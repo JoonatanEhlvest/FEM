@@ -25,6 +25,7 @@
 		"test": "yarn workspaces run test",
 		"test:setup": "yarn workspace @fem-viewer/server test:setup",
 		"test:teardown": "yarn workspace @fem-viewer/server test:teardown",
+		"user:create": "yarn workspace @fem-viewer/server user:create",
 		"dependency-graph": "madge --image dependency-graph.svg --extensions ts,tsx packages/client/src/ packages/server/src/ packages/types/src/ packages/parser/src/",
 		"prisma:generate": "yarn workspace @fem-viewer/server prisma generate"
 	},

@@ -31,7 +31,7 @@
 		"build": "tsc --p .",
 		"start:dev": "ts-node-dev --respawn --watch --exit-child --files server.ts",
 		"start": "node build/server/server.js",
-		"user:create": "node build/server/src/scripts/createUser.js createuser",
+		"user:create": "node ./build/server/src/scripts/createUser.js createuser",
 		"dtm": "dependency-time-machine --update --install --install-script 'yarn install' --auto --test-script 'yarn test'",
 		"db:start": "docker compose -f docker-compose.yml up -d",
 		"db:stop": "docker compose -f docker-compose.yml down",
