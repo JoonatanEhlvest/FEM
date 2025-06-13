@@ -78,11 +78,13 @@ $ yarn db:start
 
 ## Creating an initial user
 
-To create an initial admin user, in the **fem-viewer/packages/server** directory run:
+To create an initial admin user, run
 
 ```console
 $ yarn user:create -u [username] -p [password] -r ADMIN
 ```
+
+in the **fem-viewer** directory.
 
 ## Development Workflow
 
