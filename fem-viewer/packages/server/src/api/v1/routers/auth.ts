@@ -15,10 +15,14 @@ router.post(
 		try {
 			const { username, password, role } = req.body;
 
-			if (userRole === "DEVELOPER" && (role as UserRole) !== "VIEWER") {
+			if (
+				userRole === "DEVELOPER" &&
+				(role as UserRole) !== "VIEWER" &&
+				(role as UserRole) !== "EXPERT"
+			) {
 				return res.status(422).json({
 					message:
-						"Developer accounts can only create Viewer accounts",
+						"Developer accounts can only create Viewer or Expert accounts",
 				});
 			}
 
@@ -110,19 +114,19 @@ router.get("/session", async (req, res) => {
 	console.log("Session", req.user);
 	if (req.isAuthenticated()) {
 		res.json({ user: req.user });
-		return 
+		return;
 	}
 	res.json({ user: null });
-	return 
-	});
+	return;
+});
 
 router.get("/authenticated", async (req, res, next) => {
 	if (req.isAuthenticated()) {
 		res.json({ session: req.session, user: req.user });
-		return 
+		return;
 	} else {
 		res.status(401).json({ message: "Unauthenticated" });
-		return 
+		return;
 	}
 });
 

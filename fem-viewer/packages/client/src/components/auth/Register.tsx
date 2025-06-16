@@ -91,7 +91,8 @@ const Register = () => {
 							/>
 						</div>
 					)}
-					{user?.role === UserRole.ADMIN && (
+					{(user?.role === UserRole.ADMIN ||
+						user?.role === UserRole.DEVELOPER) && (
 						<div className={styles["form-checkbox"]}>
 							<label>Expert</label>
 							<input
