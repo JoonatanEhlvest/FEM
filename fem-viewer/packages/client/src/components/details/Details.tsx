@@ -22,6 +22,7 @@ import {
 } from "@fem-viewer/types/InstanceClass";
 import attrConfig from "../../assets/instanceAttrConfig.json";
 import { UserRole } from "../dashboard/Dashboard";
+import { getModelNameWithVersion } from "@fem-viewer/types/Model";
 
 interface SubclassEditorProps<T extends ColorPicker | BorderColorPicker> {
 	title: string;
@@ -331,12 +332,17 @@ const resolveSubclassReference = (
 		? getBorderSubclassTypeFromBaseInstanceClass(baseClass)
 		: getSubclassTypeFromBaseInstanceClass(baseClass);
 
-	// Find the subclass instance by name and class
-	const subclassInstance = models
-		.flatMap((model) => model.instances)
-		.find(
-			(inst) => inst.name === subclassName && inst.class === subclassType
-		);
+	// Find the model that matches the combined name
+	const targetModel = models.find(
+		(model) => getModelNameWithVersion(model) === ref.tmodelname
+	);
+	if (!targetModel) return "";
+
+	// Find the subclass instance by name and class in the correct model
+	const subclassInstance = targetModel.instances.find(
+		(inst: Instance) =>
+			inst.name === subclassName && inst.class === subclassType
+	);
 
 	return subclassInstance?.id || "";
 };

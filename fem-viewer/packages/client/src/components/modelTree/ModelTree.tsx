@@ -4,7 +4,7 @@ import useFEM from "../../state/useFEM";
 import Header from "../header/Header";
 import styles from "./modelTree.module.css";
 
-import { Model } from "@fem-viewer/types";
+import { Model, getModelNameWithVersion } from "@fem-viewer/types/Model";
 
 const ModelTree = () => {
 	const {
@@ -66,7 +66,7 @@ const ModelTree = () => {
 								getClassIfSelected("item-selected", model)
 							}
 						>
-							{model.name}
+							{getModelNameWithVersion(model)}
 						</p>
 					</div>
 				))}

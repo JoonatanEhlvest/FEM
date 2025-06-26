@@ -10,7 +10,7 @@ import BaseInstanceUpdateService, {
 import ApplicationError from "../../../../../../error/ApplicationError";
 import { XMLEditor, EditResult } from "@fem-viewer/parser/src/editor";
 import createParser from "@fem-viewer/parser";
-import { Model } from "@fem-viewer/types/Model";
+import { Model, getModelNameWithVersion } from "@fem-viewer/types/Model";
 import {
 	BaseInstanceClass,
 	BorderSubclass,
@@ -157,7 +157,7 @@ abstract class BaseSubclassUpdateService extends BaseInstanceUpdateService {
 		}
 
 		// Extract all the needed information
-		const tmodelname = subclassModel.name;
+		const tmodelname = getModelNameWithVersion(subclassModel);
 		const tmodeltype = subclassModel.modeltype;
 		const tmodelver = subclassModel.version;
 		const tclassname = exactSubclassInstance.class;

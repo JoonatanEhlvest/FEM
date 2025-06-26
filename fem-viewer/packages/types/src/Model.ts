@@ -13,3 +13,7 @@ export interface Model {
 	attributes: Partial<ModelAttributes>;
 	instances: Array<Instance>;
 }
+
+export function getModelNameWithVersion(model: Model): string {
+	return model.version ? `${model.name} ${model.version}` : model.name;
+}

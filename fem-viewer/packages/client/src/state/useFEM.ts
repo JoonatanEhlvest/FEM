@@ -15,6 +15,7 @@ import {
 } from "@fem-viewer/types/Instance";
 import { InstanceClass } from "@fem-viewer/types";
 import { UserRole } from "../components/dashboard/Dashboard";
+import { getModelNameWithVersion } from "@fem-viewer/types/Model";
 
 const useFEM = () => {
 	const [state, setState] = useContext(FEMContext);
@@ -187,7 +188,7 @@ const useFEM = () => {
 	const goToReference = (reference: Reference) => {
 		const models = state.models;
 		const referencedModel = models.find(
-			(m) => m.name === reference.referencedByModel
+			(m) => getModelNameWithVersion(m) === reference.referencedByModel
 		);
 		if (referencedModel) {
 			const referencedInstance = referencedModel.instances.find(
