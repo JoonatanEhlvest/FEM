@@ -392,7 +392,8 @@ const useFEM = () => {
 				return false;
 			return (
 				ref.referencedInstanceName === instance.name &&
-				ref.referencedClass === instance.class
+				ref.referencedClass === instance.class &&
+				ref.modelName === getCurrentModel()?.name
 			);
 		});
 	};
