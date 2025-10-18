@@ -362,6 +362,7 @@ const Details = () => {
 		updateInstanceSubclass,
 		updateInstanceBSubclass,
 		getCurrentModelGroup,
+		getCurrentModel,
 		getUser,
 		state,
 	} = useFEM();
@@ -666,9 +667,17 @@ const Details = () => {
 								<div
 									key={modelName}
 									className={styles["ref-item"]}
-									onClick={() =>
-										goToAllOccurrences(modelName, modelRefs)
-									}
+									onClick={() => {
+										const currentModel = getCurrentModel();
+										goToAllOccurrences(modelName, modelRefs);
+										// Close dropdown if navigating to a different model
+										if (currentModel && currentModel.name !== modelName) {
+											setDropdowns((prev) => ({
+												...prev,
+												interrefsOpen: false,
+											}));
+										}
+									}}
 								>
 									<img
 										className={styles["ref-item-model-img"]}
@@ -711,6 +720,8 @@ const Details = () => {
 		getInstancesThatReference,
 		goToAllOccurrences,
 		toggleDropdown,
+		getCurrentModel,
+		setDropdowns,
 	]);
 
 	const renderInstanceSpecificReference = () => {
