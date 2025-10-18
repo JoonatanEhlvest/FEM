@@ -314,6 +314,25 @@ export abstract class BaseInstanceRenderer {
 		};
 	}
 
+	/**
+	 * Returns the text anchor for the instance text.
+	 * Can be overridden by subclasses to customize text alignment.
+	 */
+	protected getTextAnchor(): "start" | "middle" | "end" {
+		return "middle";
+	}
+
+	/**
+	 * Returns the x coordinate for the instance text.
+	 * Can be overridden by subclasses to customize text positioning.
+	 */
+	protected getTextX(
+		area: { x: number; width: number },
+		padX: number
+	): number {
+		return area.x + area.width / 2; // Center by default
+	}
+
 	protected renderName(nameLines: string[]): React.ReactElement {
 		// Get font size from instance or use default
 		const fontSize = this.getFontSize();
@@ -355,9 +374,9 @@ export abstract class BaseInstanceRenderer {
 					{nameLines.map((line, index) => (
 						<text
 							key={`line-${index}`}
-							x={area.x + area.width / 2}
+							x={this.getTextX(area, padX)}
 							y={baseY + index * fontSize * lineHeightSpacing}
-							textAnchor="middle"
+							textAnchor={this.getTextAnchor()}
 							dominantBaseline="central"
 							fontFamily={FONT_SETTINGS.INSTANCE_NAME.fontFamily}
 							fontSize={`${fontSize}px`}

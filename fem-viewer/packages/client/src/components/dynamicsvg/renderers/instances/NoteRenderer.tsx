@@ -81,4 +81,21 @@ export class NoteRenderer extends BaseInstanceRenderer {
 	protected getDisplayText(): string {
 		return this.instance.description;
 	}
+
+	/**
+	 * Override text anchor for Notes to left-align the text
+	 */
+	protected getTextAnchor(): "start" | "middle" | "end" {
+		return "start";
+	}
+
+	/**
+	 * Override text x position for Notes to align text to the left edge
+	 */
+	protected getTextX(
+		area: { x: number; width: number },
+		padX: number
+	): number {
+		return area.x + padX;
+	}
 }
