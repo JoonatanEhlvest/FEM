@@ -49,6 +49,7 @@ interface DescriptionEditorProps {
 	isUpdating: boolean;
 	updateError: string;
 	hasEditPermission: boolean;
+	isGhost: boolean;
 	onEdit: () => void;
 	onCancel: () => void;
 	onSave: () => Promise<void>;
@@ -62,6 +63,7 @@ const DescriptionEditor: React.FC<DescriptionEditorProps> = ({
 	isUpdating,
 	updateError,
 	hasEditPermission,
+	isGhost,
 	onEdit,
 	onCancel,
 	onSave,
@@ -112,8 +114,8 @@ const DescriptionEditor: React.FC<DescriptionEditorProps> = ({
 						<div className={styles["description-text"]}>
 							{description || "No description"}
 						</div>
-						{/* Only show edit icon if user has permission */}
-						{hasEditPermission && (
+						{/* Only show edit icon if user has permission and instance is not a ghost */}
+						{hasEditPermission && !isGhost && (
 							<img
 								src={editIcon}
 								alt="Edit"
@@ -819,6 +821,7 @@ const Details = () => {
 				isUpdating={isUpdating}
 				updateError={updateError}
 				hasEditPermission={hasEditPermission}
+				isGhost={instance?.isGhost || false}
 				onEdit={handleEditDescription}
 				onCancel={handleCancelEdit}
 				onSave={handleSaveDescription}

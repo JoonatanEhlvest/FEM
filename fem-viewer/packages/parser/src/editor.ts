@@ -306,6 +306,34 @@ export class XMLEditor {
 	}
 
 	/**
+	 * Helper method to check if an instance is a ghost using the raw XML structure
+	 * @param instanceId The ID of the instance to check
+	 * @returns True if the instance is a ghost, false otherwise
+	 */
+	private isInstanceGhost(instanceId: string): boolean {
+		const instance = this.findInstanceById(instanceId);
+		if (!instance || !instance.ATTRIBUTE) {
+			return false;
+		}
+
+		const attributes = Array.isArray(instance.ATTRIBUTE)
+			? instance.ATTRIBUTE
+			: [instance.ATTRIBUTE];
+		
+		// Work with raw XML structure - look for the exact attribute name as it appears in XML
+		const isGhostAttr = attributes.find(
+			(attr: any) => attr.name === "isGhost"
+		);
+		
+		// Check if the attribute exists and has the value "Yes"
+		if (isGhostAttr && isGhostAttr["#text"] === "Yes") {
+			return true;
+		}
+		
+		return false;
+	}
+
+	/**
 	 * Updates an instance description in the XML
 	 * @param instanceId The ID of the instance to update
 	 * @param description The new description
@@ -315,6 +343,14 @@ export class XMLEditor {
 		instanceId: string,
 		description: string
 	): EditResult {
+		// Check if the instance is a ghost
+		if (this.isInstanceGhost(instanceId)) {
+			return {
+				success: false,
+				error: "Cannot update description of ghost instances",
+			};
+		}
+
 		return this.updateInstanceAttribute(
 			instanceId,
 			"Description",
