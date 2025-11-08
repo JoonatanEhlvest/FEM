@@ -50,19 +50,33 @@ export type IconKey =
 	| keyof typeof ArtefactSubtypeIcon;
 
 /**
- * Find the key (filename) for a given icon value
+ * Normalize icon values to handle typos from FEM Toolkit programs
+ * @param value The icon value string
+ * @returns Normalized value
  */
-export function getKeyFromValue(value: IconValue): IconKey | undefined {
+function normalizeIconValue(value: string): string {
+	// Handle typo: "recruting" -> "recruiting" in acquisition icon
+	return value.replace(/recruting/gi, "recruiting");
+}
+
+/**
+ * Find the key (filename) for a given icon value
+ * Accepts string to handle typos from external programs
+ */
+export function getKeyFromValue(value: IconValue | string): IconKey | undefined {
+	// First try exact match
+	let normalizedValue = normalizeIconValue(value);
+
 	// Check process icons
 	for (const key in ProcessIcon) {
-		if (ProcessIcon[key as keyof typeof ProcessIcon] === value) {
+		if (ProcessIcon[key as keyof typeof ProcessIcon] === normalizedValue) {
 			return key as keyof typeof ProcessIcon;
 		}
 	}
 
 	// Check asset icons
 	for (const key in AssetIcon) {
-		if (AssetIcon[key as keyof typeof AssetIcon] === value) {
+		if (AssetIcon[key as keyof typeof AssetIcon] === normalizedValue) {
 			return key as keyof typeof AssetIcon;
 		}
 	}
@@ -71,7 +85,7 @@ export function getKeyFromValue(value: IconValue): IconKey | undefined {
 	for (const key in ArtefactSubtypeIcon) {
 		if (
 			ArtefactSubtypeIcon[key as keyof typeof ArtefactSubtypeIcon] ===
-			value
+			normalizedValue
 		) {
 			return key as keyof typeof ArtefactSubtypeIcon;
 		}
